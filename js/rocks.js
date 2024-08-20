@@ -1,10 +1,9 @@
 import { PerlinNoise } from './perlin-noise.js';
 
-console.log("10:17 AM");
+console.log("10:27 AM");
 
 const ROCK_HP = 1000;
 const ROCK_RADIUS = 0.4;
-const NO_ROCK_RADIUS = 5;
 
 export class Rock {
   constructor(x, y, z, hp, radius) {
@@ -45,12 +44,10 @@ export class Rocks {
       const rockGrid = Array(this.gridSize).fill(null).map(() => Array(this.gridSize).fill(null));
       for (let y = 0; y < this.gridSize; y++) {
         for (let x = 0; x < this.gridSize; x++) {
-          if (z > 0 || (x >= NO_ROCK_RADIUS && x < this.gridSize - NO_ROCK_RADIUS && y >= NO_ROCK_RADIUS && y < this.gridSize - NO_ROCK_RADIUS)) {
             const noiseValue = this.perlinNoise.get(x, y, z);
             if (noiseValue > 0.5) {
-              rockGrid[y][x] = new Rock(x, y, z, ROCK_HP, ROCK_RADIUS);
+            rockGrid[y][x] = new Rock(x, y, z, ROCK_HP, ROCK_RADIUS);
             }
-          }
         }
       }
       this.rockLocations.set(z, rockGrid);
