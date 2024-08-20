@@ -1,5 +1,7 @@
 import { PerlinNoise } from './perlin-noise.js';
 
+console.log("10:07 AM");
+
 const ROCK_HP = 1000;
 const ROCK_RADIUS = 0.4;
 const NO_ROCK_RADIUS = 5;
@@ -40,7 +42,7 @@ export class Rocks {
   }
 }
 
-class Rock {
+export class Rock {
   constructor(x, y, z, hp, radius) {
     this.x = x;
     this.y = y;
