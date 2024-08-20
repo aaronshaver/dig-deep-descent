@@ -18,14 +18,14 @@ export class Player {
         ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
         ctx.fill();
 
-        // Top rotor
+        // Top
         ctx.fillStyle = '#66AAFF';
         ctx.fillRect(x + 4, y + 2, cellSize - 8, 3);
 
-        // Bottom rotor
+        // Bottom
         ctx.fillRect(x + 4, y + cellSize - 5, cellSize - 8, 3);
 
-        // Center dot
+        // Center
         ctx.fillStyle = '#FFFFFF';
         ctx.beginPath();
         ctx.arc(centerX, centerY, 2, 0, Math.PI * 2);
