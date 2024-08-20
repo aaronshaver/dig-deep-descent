@@ -1,8 +1,6 @@
 export class PerlinNoise {
     constructor() {
-      this.p = Array(256)
-        .fill(0)
-        .map((_, i) => i);
+      this.p = this.generatePermutationTable();
       this.permutation = this.p.slice().concat(this.p);
       this.gradients = [
         [1, 1, 0], [-1, 1, 0], [1, -1, 0], [-1, -1, 0],
@@ -11,8 +9,18 @@ export class PerlinNoise {
       ];
     }
 
+    generatePermutationTable() {
+      const p = Array.from({length: 256}, (_, i) => i);
+      for (let i = 255; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [p[i], p[j]] = [p[j], p[i]];
+      }
+      return p;
+    }
+
     dotGridGradient(ix, iy, iz, x, y, z) {
-      const gradient = this.gradients[this.permutation[(this.permutation[ix] + iy) % 256] ^ iz];
+      const index = this.permutation[(this.permutation[ix] + iy) % 256] ^ iz;
+      const gradient = this.gradients[index % 12];
       return gradient[0] * x + gradient[1] * y + gradient[2] * z;
     }
 
