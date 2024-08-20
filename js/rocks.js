@@ -45,7 +45,7 @@ export class Rocks {
     for (let y = 0; y < this.gridSize; y++) {
         for (let x = 0; x < this.gridSize; x++) {
             // const noiseValue = this.perlinNoise.get(x, y, z);
-            noiseValue = Math.random();
+            let noiseValue = Math.random();
             if (noiseValue > 0.5) {
                 rockGrid[y][x] = new Rock(x, y, z, ROCK_HP, ROCK_RADIUS);
             }
