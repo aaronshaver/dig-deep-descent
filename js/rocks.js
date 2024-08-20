@@ -40,18 +40,17 @@ export class Rocks {
   }
 
   generateRocks() {
-    for (let z = 0; z < this.gridSize; z++) {
-      const rockGrid = Array(this.gridSize).fill(null).map(() => Array(this.gridSize).fill(null));
-      for (let y = 0; y < this.gridSize; y++) {
+    const rockGrid = Array(this.gridSize).fill(null).map(() => Array(this.gridSize).fill(null));
+    const z = 0;
+    for (let y = 0; y < this.gridSize; y++) {
         for (let x = 0; x < this.gridSize; x++) {
             const noiseValue = this.perlinNoise.get(x, y, z);
             if (noiseValue > 0.5) {
             rockGrid[y][x] = new Rock(x, y, z, ROCK_HP, ROCK_RADIUS);
             }
         }
-      }
-      this.rockLocations.set(z, rockGrid);
     }
+    this.rockLocations.set(z, rockGrid);
     console.log(this.rockLocations);
   }
 
