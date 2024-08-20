@@ -1,10 +1,37 @@
 import { PerlinNoise } from './perlin-noise.js';
 
-console.log("10:07 AM");
+
+console.log("10:11 AM");
 
 const ROCK_HP = 1000;
 const ROCK_RADIUS = 0.4;
 const NO_ROCK_RADIUS = 5;
+
+export class Rock {
+  constructor(x, y, z, hp, radius) {
+    this.x = x;
+    this.y = y;
+    this.z = z;
+    this.hp = hp;
+    this.radius = radius;
+  }
+
+  draw(ctx, cellSize, gridGap) {
+    const x = this.x * (cellSize + gridGap);
+    const y = this.y * (cellSize + gridGap);
+    const centerX = x + cellSize / 2;
+    const centerY = y + cellSize / 2;
+
+    ctx.fillStyle = '#C2B280';
+    ctx.beginPath();
+    ctx.moveTo(centerX, y);
+    ctx.lineTo(x + cellSize * this.radius, y + cellSize / 2);
+    ctx.lineTo(centerX, y + cellSize);
+    ctx.lineTo(x + cellSize * (1 - this.radius), y + cellSize / 2);
+    ctx.closePath();
+    ctx.fill();
+  }
+}
 
 export class Rocks {
   constructor(gridSize) {
@@ -39,31 +66,5 @@ export class Rocks {
         }
       });
     });
-  }
-}
-
-export class Rock {
-  constructor(x, y, z, hp, radius) {
-    this.x = x;
-    this.y = y;
-    this.z = z;
-    this.hp = hp;
-    this.radius = radius;
-  }
-
-  draw(ctx, cellSize, gridGap) {
-    const x = this.x * (cellSize + gridGap);
-    const y = this.y * (cellSize + gridGap);
-    const centerX = x + cellSize / 2;
-    const centerY = y + cellSize / 2;
-
-    ctx.fillStyle = '#C2B280';
-    ctx.beginPath();
-    ctx.moveTo(centerX, y);
-    ctx.lineTo(x + cellSize * this.radius, y + cellSize / 2);
-    ctx.lineTo(centerX, y + cellSize);
-    ctx.lineTo(x + cellSize * (1 - this.radius), y + cellSize / 2);
-    ctx.closePath();
-    ctx.fill();
   }
 }
