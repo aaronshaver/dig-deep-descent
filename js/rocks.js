@@ -1,7 +1,6 @@
 import { PerlinNoise } from './perlin-noise.js';
 
-
-console.log("10:11 AM");
+console.log("10:17 AM");
 
 const ROCK_HP = 1000;
 const ROCK_RADIUS = 0.4;
@@ -61,7 +60,7 @@ export class Rocks {
   drawRocks(ctx, cellSize, gridGap) {
     this.rockLocations.forEach((rockGrid, z) => {
       rockGrid.forEach((rock) => {
-        if (rock) {
+        if (rock instanceof Rock) {
           rock.draw(ctx, cellSize, gridGap);
         }
       });
