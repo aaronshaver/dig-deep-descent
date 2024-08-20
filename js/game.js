@@ -1,5 +1,6 @@
 import { Player } from './player.js';
 import { Grid } from './grid.js';
+import { Rocks } from './rocks.js';
 
 export class Game {
     constructor() {
@@ -20,7 +21,6 @@ export class Game {
         this.levels.get(this.currentLevel)[13][13] = this.player;
 
         this.depthDisplay = document.getElementById('depthDisplay');
-
         this.rocks = new Rocks(this.gridSize);
         this.rocks.generateRocks();
 

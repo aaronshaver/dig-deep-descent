@@ -9,6 +9,7 @@ export class Rocks {
     this.gridSize = gridSize;
     this.perlinNoise = new PerlinNoise();
     this.rockLocations = new Map();
+    this.generateRocks();
   }
 
   generateRocks() {
