@@ -1,12 +1,7 @@
-class Player {
-    constructor(x, y, z) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
-    }
-}
+import { Player } from './player.js';
+import { Grid } from './grid.js';
 
-class Game {
+export class Game {
     constructor() {
         this.canvas = document.getElementById('gameCanvas');
         this.ctx = this.canvas.getContext('2d');
@@ -16,6 +11,7 @@ class Game {
         this.canvas.width = this.gridSize * (this.cellSize + this.gridGap) - this.gridGap;
         this.canvas.height = this.canvas.width;
 
+        this.grid = new Grid(this.gridSize, this.cellSize, this.gridGap);
         this.levels = new Map();
         this.currentLevel = 0;
         this.initLevel(this.currentLevel);
@@ -23,34 +19,17 @@ class Game {
         this.player = new Player(13, 13, this.currentLevel);
         this.levels.get(this.currentLevel)[13][13] = this.player;
 
+        this.depthDisplay = document.getElementById('depthDisplay');
+
         this.setupEventListeners();
         this.gameLoop();
     }
 
     initLevel(level) {
-        const grid = Array(this.gridSize).fill(null).map(() => Array(this.gridSize).fill(null));
-        this.levels.set(level, grid);
-    }
-
-    drawGrid() {
-        this.ctx.fillStyle = '#333';
-        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-
-        this.ctx.fillStyle = '#222';
-        for (let row = 0; row < this.gridSize; row++) {
-            for (let col = 0; col < this.gridSize; col++) {
-                const x = col * (this.cellSize + this.gridGap);
-                const y = row * (this.cellSize + this.gridGap);
-                this.ctx.fillRect(x, y, this.cellSize, this.cellSize);
-            }
+        if (!this.levels.has(level)) {
+            const grid = Array(this.gridSize).fill(null).map(() => Array(this.gridSize).fill(null));
+            this.levels.set(level, grid);
         }
-    }
-
-    drawPlayer() {
-        const x = this.player.x * (this.cellSize + this.gridGap);
-        const y = this.player.y * (this.cellSize + this.gridGap);
-        this.ctx.fillStyle = '#4477AA';
-        this.ctx.fillRect(x + 2, y + 2, this.cellSize - 4, this.cellSize - 4);
     }
 
     movePlayer(dx, dy) {
@@ -62,6 +41,17 @@ class Game {
             this.player.x = newX;
             this.player.y = newY;
             this.levels.get(this.currentLevel)[newY][newX] = this.player;
+        }
+    }
+
+    changeLevel(delta) {
+        const newLevel = this.currentLevel + delta;
+        if (newLevel <= 0) {
+            this.levels.get(this.currentLevel)[this.player.y][this.player.x] = null;
+            this.currentLevel = newLevel;
+            this.initLevel(this.currentLevel);
+            this.levels.get(this.currentLevel)[this.player.y][this.player.x] = this.player;
+            this.player.z = this.currentLevel;
         }
     }
 
@@ -84,18 +74,26 @@ class Game {
                 case 'd':
                     this.movePlayer(1, 0);
                     break;
+                case 'c':
+                    this.changeLevel(-1);
+                    break;
+                case ' ':
+                    this.changeLevel(1);
+                    break;
             }
         });
     }
 
+    updateDepthDisplay() {
+        const depth = Math.abs(this.currentLevel) * 10;
+        this.depthDisplay.textContent = `Meters deep: ${depth}`;
+    }
+
     gameLoop() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        this.drawGrid();
-        this.drawPlayer();
+        this.grid.draw(this.ctx, this.canvas.width, this.canvas.height);
+        this.player.draw(this.ctx, this.cellSize, this.gridGap);
+        this.updateDepthDisplay();
         requestAnimationFrame(() => this.gameLoop());
     }
 }
-
-document.addEventListener('DOMContentLoaded', () => {
-    new Game();
-});
