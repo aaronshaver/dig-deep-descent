@@ -55,6 +55,7 @@ export class Rocks {
       }
       this.rockLocations.set(z, rockGrid);
     }
+    console.log(this.rockLocations);
   }
 
   drawRocks(ctx, cellSize, gridGap) {
