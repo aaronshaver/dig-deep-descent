@@ -1,3 +1,5 @@
+import { Rocks } from './rocks.js';
+
 export class Grid {
     constructor(size, cellSize, gridGap) {
         this.size = size;
@@ -17,5 +19,6 @@ export class Grid {
                 ctx.fillRect(x, y, this.cellSize, this.cellSize);
             }
         }
+        this.rocks.drawRocks(ctx, this.cellSize, this.gridGap);
     }
 }

@@ -21,6 +21,9 @@ export class Game {
 
         this.depthDisplay = document.getElementById('depthDisplay');
 
+        this.rocks = new Rocks(this.gridSize);
+        this.rocks.generateRocks();
+
         this.setupEventListeners();
         this.gameLoop();
     }
@@ -93,6 +96,7 @@ export class Game {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.grid.draw(this.ctx, this.canvas.width, this.canvas.height);
         this.player.draw(this.ctx, this.cellSize, this.gridGap);
+        this.rocks.drawRocks(this.ctx, this.cellSize, this.gridGap);
         this.updateDepthDisplay();
         requestAnimationFrame(() => this.gameLoop());
     }
