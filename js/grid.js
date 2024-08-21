@@ -28,7 +28,11 @@ export class Grid {
     this.grid.get(z)[y][x] = null;
   }
 
-  draw(ctx, canvasWidth, canvasHeight) {
+  levelExists(z) {
+    return this.grid.has(z);
+  }
+
+  draw(ctx, canvasWidth, canvasHeight, currentZ) {
     ctx.fillStyle = '#333';
     ctx.fillRect(0, 0, canvasWidth, canvasHeight);
 
@@ -41,8 +45,9 @@ export class Grid {
       }
     }
 
-    // Draw objects
-    this.grid.forEach((level, z) => {
+    // Draw objects only for the current z-level
+    const level = this.grid.get(currentZ);
+    if (level) {
       level.forEach((row, y) => {
         row.forEach((object, x) => {
           if (object && typeof object.draw === 'function') {
@@ -50,6 +55,6 @@ export class Grid {
           }
         });
       });
-    });
+    }
   }
 }

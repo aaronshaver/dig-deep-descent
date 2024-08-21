@@ -1,5 +1,5 @@
 const ROCK_HP = 1000;
-const ROCK_RADIUS = 0.45;  // Adjusted to make hexagons larger
+const ROCK_RADIUS = 0.45;
 
 export class Rock {
   constructor(x, y, z, hp, radius) {
@@ -32,7 +32,6 @@ export class Rock {
     ctx.closePath();
     ctx.fill();
 
-    // Add a slight shadow/highlight effect
     ctx.strokeStyle = '#A09070';
     ctx.lineWidth = 2;
     ctx.stroke();
@@ -43,11 +42,10 @@ export class Rocks {
   constructor(gridSize, grid) {
     this.gridSize = gridSize;
     this.grid = grid;
-    this.generateRocks();
+    this.generateRocks(0);
   }
 
-  generateRocks() {
-    const z = 0;
+  generateRocks(z) {
     for (let y = 0; y < this.gridSize; y++) {
       for (let x = 0; x < this.gridSize; x++) {
         if (Math.random() > 0.5 && !this.grid.getObject(x, y, z)) {

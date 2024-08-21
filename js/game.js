@@ -44,6 +44,9 @@ export class Game {
         if (newLevel <= 0) {
             this.grid.removeObject(this.player.x, this.player.y, this.currentLevel);
             this.currentLevel = newLevel;
+            if (!this.grid.levelExists(this.currentLevel)) {
+                this.rocks.generateRocks(this.currentLevel);
+            }
             this.grid.setObject(this.player.x, this.player.y, this.currentLevel, this.player);
             this.player.z = this.currentLevel;
         }
@@ -85,7 +88,7 @@ export class Game {
 
     gameLoop() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        this.grid.draw(this.ctx, this.canvas.width, this.canvas.height);
+        this.grid.draw(this.ctx, this.canvas.width, this.canvas.height, this.currentLevel);
         this.updateDepthDisplay();
         requestAnimationFrame(() => this.gameLoop());
     }
