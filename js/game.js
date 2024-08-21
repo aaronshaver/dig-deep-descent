@@ -88,7 +88,7 @@ export class Game {
 
     gameLoop() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        this.grid.draw(this.ctx, this.canvas.width, this.canvas.height, this.currentLevel);
+        this.grid.draw(this.ctx, this.canvas.width, this.canvas.height, this.currentLevel, this.player);
         this.updateDepthDisplay();
         requestAnimationFrame(() => this.gameLoop());
     }
