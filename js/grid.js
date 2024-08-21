@@ -1,11 +1,31 @@
-import { Rocks } from './rocks.js';
-
 export class Grid {
   constructor(size, cellSize, gridGap) {
     this.size = size;
     this.cellSize = cellSize;
     this.gridGap = gridGap;
-    this.rocks = new Rocks(size);
+    this.grid = new Map();
+    this.initLevel(0);
+  }
+
+  initLevel(z) {
+    if (!this.grid.has(z)) {
+      this.grid.set(z, Array(this.size).fill().map(() => Array(this.size).fill(null)));
+    }
+  }
+
+  getObject(x, y, z) {
+    this.initLevel(z);
+    return this.grid.get(z)[y][x];
+  }
+
+  setObject(x, y, z, object) {
+    this.initLevel(z);
+    this.grid.get(z)[y][x] = object;
+  }
+
+  removeObject(x, y, z) {
+    this.initLevel(z);
+    this.grid.get(z)[y][x] = null;
   }
 
   draw(ctx, canvasWidth, canvasHeight) {
@@ -21,6 +41,15 @@ export class Grid {
       }
     }
 
-    this.rocks.drawRocks(ctx, this.cellSize, this.gridGap);
+    // Draw objects
+    this.grid.forEach((level, z) => {
+      level.forEach((row, y) => {
+        row.forEach((object, x) => {
+          if (object && typeof object.draw === 'function') {
+            object.draw(ctx, this.cellSize, this.gridGap);
+          }
+        });
+      });
+    });
   }
 }

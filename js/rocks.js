@@ -1,7 +1,3 @@
-import { PerlinNoise } from './perlin-noise.js';
-
-console.log("10:40 AM");
-
 const ROCK_HP = 1000;
 const ROCK_RADIUS = 0.4;
 
@@ -32,36 +28,21 @@ export class Rock {
 }
 
 export class Rocks {
-  constructor(gridSize) {
+  constructor(gridSize, grid) {
     this.gridSize = gridSize;
-    this.perlinNoise = new PerlinNoise();
-    this.rockLocations = new Map();
+    this.grid = grid;
     this.generateRocks();
   }
 
   generateRocks() {
-    const rockGrid = Array(this.gridSize).fill(null).map(() => Array(this.gridSize).fill(null));
     const z = 0;
     for (let y = 0; y < this.gridSize; y++) {
-        for (let x = 0; x < this.gridSize; x++) {
-            // const noiseValue = this.perlinNoise.get(x, y, z);
-            let noiseValue = Math.random();
-            if (noiseValue > 0.5) {
-                rockGrid[y][x] = new Rock(x, y, z, ROCK_HP, ROCK_RADIUS);
-            }
+      for (let x = 0; x < this.gridSize; x++) {
+        if (Math.random() > 0.5 && !this.grid.getObject(x, y, z)) {
+          const rock = new Rock(x, y, z, ROCK_HP, ROCK_RADIUS);
+          this.grid.setObject(x, y, z, rock);
         }
+      }
     }
-    this.rockLocations.set(z, rockGrid);
-    console.log(this.rockLocations);
-  }
-
-  drawRocks(ctx, cellSize, gridGap) {
-    this.rockLocations.forEach((rockGrid, z) => {
-      rockGrid.forEach((rock) => {
-        if (rock instanceof Rock) {
-          rock.draw(ctx, cellSize, gridGap);
-        }
-      });
-    });
   }
 }
