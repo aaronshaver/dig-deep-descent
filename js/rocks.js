@@ -1,3 +1,5 @@
+import { PerlinNoise } from './perlin-noise.js';
+
 const ROCK_HP = 1000;
 const ROCK_RADIUS = 0.45;
 
@@ -42,13 +44,16 @@ export class Rocks {
   constructor(gridSize, grid) {
     this.gridSize = gridSize;
     this.grid = grid;
+    this.perlin = new PerlinNoise();
     this.generateRocks(0);
   }
 
   generateRocks(z) {
+    const scale = 0.1;
     for (let y = 0; y < this.gridSize; y++) {
       for (let x = 0; x < this.gridSize; x++) {
-        if (Math.random() > 0.5 && !this.grid.getObject(x, y, z)) {
+        const noiseValue = this.perlin.noise(x * scale, y * scale, z * scale);
+        if (noiseValue > 0.2 && !this.grid.getObject(x, y, z)) {
           const rock = new Rock(x, y, z, ROCK_HP, ROCK_RADIUS);
           this.grid.setObject(x, y, z, rock);
         }
