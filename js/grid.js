@@ -56,5 +56,12 @@ export class Grid {
         });
       });
     }
+
+    // Draw 1 pixel thick medium green border only at z-level 0
+    if (currentZ === 0) {
+      ctx.strokeStyle = '#00ff00';
+      ctx.lineWidth = 1;
+      ctx.strokeRect(0, 0, canvasWidth, canvasHeight);
+    }
   }
 }

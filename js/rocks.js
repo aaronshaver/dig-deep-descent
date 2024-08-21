@@ -33,10 +33,6 @@ export class Rock {
     }
     ctx.closePath();
     ctx.fill();
-
-    ctx.strokeStyle = '#A09070';
-    ctx.lineWidth = 2;
-    ctx.stroke();
   }
 }
 
