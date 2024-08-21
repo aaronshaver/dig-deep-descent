@@ -1,5 +1,5 @@
 const ROCK_HP = 1000;
-const ROCK_RADIUS = 0.4;
+const ROCK_RADIUS = 0.45;  // Adjusted to make hexagons larger
 
 export class Rock {
   constructor(x, y, z, hp, radius) {
@@ -15,15 +15,27 @@ export class Rock {
     const y = this.y * (cellSize + gridGap);
     const centerX = x + cellSize / 2;
     const centerY = y + cellSize / 2;
+    const radius = cellSize * this.radius;
 
     ctx.fillStyle = '#C2B280';
     ctx.beginPath();
-    ctx.moveTo(centerX, y);
-    ctx.lineTo(x + cellSize * this.radius, y + cellSize / 2);
-    ctx.lineTo(centerX, y + cellSize);
-    ctx.lineTo(x + cellSize * (1 - this.radius), y + cellSize / 2);
+    for (let i = 0; i < 6; i++) {
+      const angle = (Math.PI / 3) * i;
+      const pointX = centerX + radius * Math.cos(angle);
+      const pointY = centerY + radius * Math.sin(angle);
+      if (i === 0) {
+        ctx.moveTo(pointX, pointY);
+      } else {
+        ctx.lineTo(pointX, pointY);
+      }
+    }
     ctx.closePath();
     ctx.fill();
+
+    // Add a slight shadow/highlight effect
+    ctx.strokeStyle = '#A09070';
+    ctx.lineWidth = 2;
+    ctx.stroke();
   }
 }
 
