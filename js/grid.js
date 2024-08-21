@@ -58,6 +58,7 @@ export class Grid {
 
     this.drawMask(ctx, player);
 
+    // green border to indicate safe surface-level of asteroid
     if (currentZ === 0) {
       ctx.strokeStyle = '#00ff00';
       ctx.lineWidth = 1;
@@ -65,6 +66,7 @@ export class Grid {
     }
   }
 
+  // simulates darkness outside a radius
   drawMask(ctx, player) {
     for (let y = 0; y < this.size; y++) {
       for (let x = 0; x < this.size; x++) {

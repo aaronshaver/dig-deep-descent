@@ -45,7 +45,12 @@ export class Rocks {
   }
 
   generateRocks(z) {
-    const scale = 0.15;
+    this._generateRocksAtScale(z, 0.1);
+    this._generateRocksAtScale(z, 0.4);
+    this._generateRocksAtScale(z, 0.8);
+  }
+
+  _generateRocksAtScale(z, scale) {
     for (let y = 0; y < this.gridSize; y++) {
       for (let x = 0; x < this.gridSize; x++) {
         const noiseValue = this.perlin.noise(x * scale, y * scale, z * scale);
