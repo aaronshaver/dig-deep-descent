@@ -12,15 +12,22 @@ export class Player {
         const centerY = y + cellSize / 2;
         const radius = cellSize / 2 - 2;
 
+        // Body
         ctx.fillStyle = '#4477AA';
         ctx.beginPath();
         ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
         ctx.fill();
 
+        // Armor
         ctx.fillStyle = '#66AAFF';
-        ctx.fillRect(x + 4, y + 2, cellSize - 8, 3);
-        ctx.fillRect(x + 4, y + cellSize - 5, cellSize - 8, 3);
+        const armorWidth = cellSize - 10;
+        const armorThickness = 2;
+        ctx.fillRect(x + 5, y + 2, armorWidth, armorThickness);
+        ctx.fillRect(x + 5, y + cellSize - 4, armorWidth, armorThickness);
+        ctx.fillRect(x + 2, y + 5, armorThickness, armorWidth);
+        ctx.fillRect(x + cellSize - 4, y + 5, armorThickness, armorWidth);
 
+        // Drill
         ctx.fillStyle = '#FFFFFF';
         ctx.beginPath();
         ctx.arc(centerX, centerY, 2, 0, Math.PI * 2);
