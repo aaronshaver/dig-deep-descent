@@ -1,15 +1,12 @@
 import { PerlinNoise } from './perlin-noise.js';
 
-const ROCK_HP = 1000;
-const ROCK_RADIUS = 0.45;
-
 export class Rock {
-  constructor(x, y, z, hp, radius) {
+  constructor(x, y, z) {
     this.x = x;
     this.y = y;
     this.z = z;
-    this.hp = hp;
-    this.radius = radius;
+    this.hp = 3;
+    this.size = 0.45;
   }
 
   draw(ctx, cellSize, gridGap) {
@@ -17,9 +14,9 @@ export class Rock {
     const y = this.y * (cellSize + gridGap);
     const centerX = x + cellSize / 2;
     const centerY = y + cellSize / 2;
-    const radius = cellSize * this.radius;
+    const radius = cellSize * this.size;
 
-    ctx.fillStyle = '#C2B280';
+    ctx.fillStyle = '#6F4E37';
     ctx.beginPath();
     for (let i = 0; i < 6; i++) {
       const angle = (Math.PI / 3) * i;
@@ -55,7 +52,7 @@ export class Rocks {
       for (let x = 0; x < this.gridSize; x++) {
         const noiseValue = this.perlin.noise(x * scale, y * scale, z * scale);
         if (noiseValue > 0.2 && !this.grid.getObject(x, y, z)) {
-          const rock = new Rock(x, y, z, ROCK_HP, ROCK_RADIUS);
+          const rock = new Rock(x, y, z);
           this.grid.setObject(x, y, z, rock);
         }
       }
