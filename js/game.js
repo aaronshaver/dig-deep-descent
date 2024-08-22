@@ -19,6 +19,8 @@ export class Game {
         this.grid.setObject(13, 13, this.currentLevel, this.player);
 
         this.depthDisplay = document.getElementById('depthDisplay');
+        this.batteryDisplay = document.getElementById('batteryDisplay');
+
         this.rocks = new Rocks(this.gridSize, this.grid);
 
         this.setupEventListeners();
@@ -86,10 +88,16 @@ export class Game {
         this.depthDisplay.textContent = `Meters deep: ${depth}`;
     }
 
+    updateBatteryDisplay() {
+        const battery = 1000;
+        this.batteryDisplay.textContent = `Battery level: ${battery}`;
+    }
+
     gameLoop() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.grid.draw(this.ctx, this.canvas.width, this.canvas.height, this.currentLevel, this.player);
         this.updateDepthDisplay();
+        this.updateBatteryDisplay();
         requestAnimationFrame(() => this.gameLoop());
     }
 }
