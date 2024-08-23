@@ -9,6 +9,14 @@ export class Rock {
     this.size = 0.45;
   }
 
+  take_damage(damage) {
+    this.hp -= damage;
+  }
+
+  get_hp() {
+    return this.hp;
+  }
+
   draw(ctx, cellSize, gridGap) {
     const x = this.x * (cellSize + gridGap);
     const y = this.y * (cellSize + gridGap);

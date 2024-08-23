@@ -1,6 +1,6 @@
 import { Player } from './player.js';
 import { Grid } from './grid.js';
-import { Rocks } from './rocks.js';
+import { Rocks, Rock } from './rocks.js';
 
 export class Game {
     constructor() {
@@ -13,13 +13,12 @@ export class Game {
         this.canvas.height = this.canvas.width;
 
         this.grid = new Grid(this.gridSize, this.cellSize, this.gridGap);
-        this.currentLevel = 0;
-
-        this.player = new Player(13, 13, this.currentLevel);
-        this.grid.setObject(13, 13, this.currentLevel, this.player);
+        this.player = new Player(13, 13, 0);
+        this.grid.setObject(13, 13, this.player.z, this.player);
 
         this.depthDisplay = document.getElementById('depthDisplay');
         this.batteryDisplay = document.getElementById('batteryDisplay');
+        this.drillPowerDisplay = document.getElementById('drillPowerDisplay');
 
         this.rocks = new Rocks(this.gridSize, this.grid);
 
@@ -32,25 +31,35 @@ export class Game {
         const newY = this.player.y + dy;
 
         if (newX >= 0 && newX < this.gridSize && newY >= 0 && newY < this.gridSize) {
-            if (!this.grid.getObject(newX, newY, this.currentLevel)) {
-                this.grid.removeObject(this.player.x, this.player.y, this.currentLevel);
-                this.player.x = newX;
-                this.player.y = newY;
-                this.grid.setObject(newX, newY, this.currentLevel, this.player);
+            const object = this.grid.getObject(newX, newY, this.player.z);
+            if (!object) {
+                this._updatePlayerPosition(newX, newY);
+            } else if (object instanceof Rock) {
+                object.take_damage(this.player.drill_power);
+                if (object.get_hp() <= 0) {
+                    this.grid.removeObject(newX, newY, this.player.z);
+                    this._updatePlayerPosition(newX, newY);
+                }
             }
         }
     }
 
+    _updatePlayerPosition(newX, newY) {
+        this.grid.removeObject(this.player.x, this.player.y, this.player.z);
+        this.player.x = newX;
+        this.player.y = newY;
+        this.grid.setObject(newX, newY, this.player.z, this.player);
+    }
+
     changeLevel(delta) {
-        const newLevel = this.currentLevel + delta;
-        if (newLevel <= 0) {
-            this.grid.removeObject(this.player.x, this.player.y, this.currentLevel);
-            this.currentLevel = newLevel;
-            if (!this.grid.levelExists(this.currentLevel)) {
-                this.rocks.generateRocks(this.currentLevel);
+        const newZ = this.player.z + delta;
+        if (newZ <= 0) {
+            this.grid.removeObject(this.player.x, this.player.y, this.player.z);
+            this.player.z = newZ;
+            if (!this.grid.levelExists(this.player.z)) {
+                this.rocks.generateRocks(this.player.z);
             }
-            this.grid.setObject(this.player.x, this.player.y, this.currentLevel, this.player);
-            this.player.z = this.currentLevel;
+            this.grid.setObject(this.player.x, this.player.y, this.player.z, this.player);
         }
     }
 
@@ -83,21 +92,26 @@ export class Game {
         });
     }
 
-    updateDepthDisplay() {
-        const depth = Math.abs(this.currentLevel) * 10;
-        this.depthDisplay.textContent = `Depth in meters: ${depth}`;
-    }
+    updateDisplay() {
+        if (this.depthDisplay) {
+            const depth = Math.abs(this.player.z) * 10;
+            this.depthDisplay.textContent = `Depth in meters: ${depth}`;
+        }
 
-    updateBatteryDisplay() {
-        const battery = 1000;
-        this.batteryDisplay.textContent = `Battery remaining: ${battery}`;
+        if (this.batteryDisplay) {
+            const battery = 1000;
+            this.batteryDisplay.textContent = `Battery remaining: ${battery}`;
+        }
+
+        if (this.drillPowerDisplay) {
+            this.drillPowerDisplay.textContent = `Drill power: ${this.player.drill_power}`;
+        }
     }
 
     gameLoop() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        this.grid.draw(this.ctx, this.canvas.width, this.canvas.height, this.currentLevel, this.player);
-        this.updateDepthDisplay();
-        this.updateBatteryDisplay();
+        this.grid.draw(this.ctx, this.canvas.width, this.canvas.height, this.player.z, this.player);
+        this.updateDisplay();
         requestAnimationFrame(() => this.gameLoop());
     }
 }

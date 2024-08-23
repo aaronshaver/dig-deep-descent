@@ -3,6 +3,7 @@ export class Player {
         this.x = x;
         this.y = y;
         this.z = z;
+        this.drill_power = 100;
     }
 
     draw(ctx, cellSize, gridGap) {
