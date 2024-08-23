@@ -85,12 +85,12 @@ export class Game {
 
     updateDepthDisplay() {
         const depth = Math.abs(this.currentLevel) * 10;
-        this.depthDisplay.textContent = `Meters deep: ${depth}`;
+        this.depthDisplay.textContent = `Depth in meters: ${depth}`;
     }
 
     updateBatteryDisplay() {
         const battery = 1000;
-        this.batteryDisplay.textContent = `Battery level: ${battery}`;
+        this.batteryDisplay.textContent = `Battery remaining: ${battery}`;
     }
 
     gameLoop() {

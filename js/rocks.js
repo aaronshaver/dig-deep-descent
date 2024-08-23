@@ -5,7 +5,7 @@ export class Rock {
     this.x = x;
     this.y = y;
     this.z = z;
-    this.hp = 3;
+    this.hp = 600;
     this.size = 0.45;
   }
 
