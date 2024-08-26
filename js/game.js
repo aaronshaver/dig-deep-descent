@@ -1,4 +1,4 @@
-import { Player } from './player.js';
+import { Ship } from './ship.js';
 import { Grid } from './grid.js';
 import { Rocks, Rock } from './rocks.js';
 
@@ -13,7 +13,7 @@ export class Game {
         this.canvas.height = this.canvas.width;
 
         this.grid = new Grid(this.gridSize, this.cellSize, this.gridGap);
-        this.player = new Player(13, 13, 0);
+        this.player = new Ship(13, 13, 0);
         this.grid.setObject(13, 13, this.player.z, this.player);
 
         this.depthDisplay = document.getElementById('depthDisplay');
@@ -115,3 +115,7 @@ export class Game {
         requestAnimationFrame(() => this.gameLoop());
     }
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+    new Game();
+});
