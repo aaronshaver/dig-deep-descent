@@ -24,7 +24,6 @@ export class Grid {
   }
 
   removeObject(x, y, z) {
-    this.initLevel(z);
     this.grid.get(z)[y][x] = null;
   }
 
@@ -32,7 +31,7 @@ export class Grid {
     return this.grid.has(z);
   }
 
-  draw(ctx, canvasWidth, canvasHeight, currentZ, player) {
+  draw(ctx, canvasWidth, canvasHeight, ship) {
     ctx.fillStyle = '#333';
     ctx.fillRect(0, 0, canvasWidth, canvasHeight);
 
@@ -45,21 +44,19 @@ export class Grid {
       }
     }
 
-    const level = this.grid.get(currentZ);
-    if (level) {
-      level.forEach((row, y) => {
-        row.forEach((object, x) => {
-          if (object && typeof object.draw === 'function') {
-            object.draw(ctx, this.cellSize, this.gridGap);
-          }
-        });
+    const allObjectsAtCurrentZLevel = this.grid.get(ship.getZ());
+    allObjectsAtCurrentZLevel.forEach((row, y) => {
+      row.forEach((object) => {
+        if (object && typeof object.draw === 'function') {
+          object.draw(ctx, this.cellSize, this.gridGap);
+        }
       });
-    }
+    });
 
-    this.drawMask(ctx, player);
+    this.#drawMask(ctx, ship);
 
-    // green border to indicate safe surface-level of asteroid
-    if (currentZ === 0) {
+    // green border to indicate ship is at the safe, surface-level of world
+    if (ship.getZ() === 0) {
       ctx.strokeStyle = '#00ff00';
       ctx.lineWidth = 1;
       ctx.strokeRect(0, 0, canvasWidth, canvasHeight);
@@ -67,11 +64,11 @@ export class Grid {
   }
 
   // simulates darkness outside a radius
-  drawMask(ctx, player) {
+  #drawMask(ctx, ship) {
     for (let y = 0; y < this.size; y++) {
       for (let x = 0; x < this.size; x++) {
-        const distance = Math.sqrt(Math.pow(x - player.x, 2) + Math.pow(y - player.y, 2));
-        const opacity = this.getOpacity(distance);
+        const distance = Math.sqrt(Math.pow(x - ship.getX(), 2) + Math.pow(y - ship.getY(), 2));
+        const opacity = this.#getOpacity(distance);
 
         if (opacity < 1) {
           const drawX = x * (this.cellSize + this.gridGap);
@@ -85,7 +82,7 @@ export class Grid {
     ctx.globalAlpha = 1;
   }
 
-  getOpacity(distance) {
+  #getOpacity(distance) {
     if (distance <= 2.5) return 1;
     if (distance <= 4.5) return 0.75;
     if (distance <= 6.5) return 0.5;

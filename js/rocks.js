@@ -5,16 +5,16 @@ export class Rock {
     this.x = x;
     this.y = y;
     this.z = z;
-    this.hp = 600;
-    this.size = 0.45;
+    this.hitPoints = 800;
+    this.percentOfGridCellSize = 0.45;
   }
 
-  take_damage(damage) {
-    this.hp -= damage;
+  applyDamage(damage) {
+    this.hitPoints -= damage;
   }
 
-  get_hp() {
-    return this.hp;
+  getHitPoints() {
+    return this.hitPoints;
   }
 
   draw(ctx, cellSize, gridGap) {
@@ -22,7 +22,7 @@ export class Rock {
     const y = this.y * (cellSize + gridGap);
     const centerX = x + cellSize / 2;
     const centerY = y + cellSize / 2;
-    const radius = cellSize * this.size;
+    const radius = cellSize * this.percentOfGridCellSize;
 
     ctx.fillStyle = '#6F4E37';
     ctx.beginPath();
@@ -50,15 +50,15 @@ export class Rocks {
   }
 
   generateRocks(z) {
-    this._generateRocksAtScale(z, 0.1);
-    this._generateRocksAtScale(z, 0.4);
-    this._generateRocksAtScale(z, 0.8);
+    this.#generateRocksAtScale(z, 0.1);
+    this.#generateRocksAtScale(z, 0.4);
+    this.#generateRocksAtScale(z, 0.8);
   }
 
-  _generateRocksAtScale(z, scale) {
+  #generateRocksAtScale(z, scale) {
     for (let y = 0; y < this.gridSize; y++) {
       for (let x = 0; x < this.gridSize; x++) {
-        const noiseValue = this.perlin.noise(x * scale, y * scale, z * scale);
+        const noiseValue = this.perlin.getNoise(x * scale, y * scale, z * scale);
         if (noiseValue > 0.2 && !this.grid.getObject(x, y, z)) {
           const rock = new Rock(x, y, z);
           this.grid.setObject(x, y, z, rock);

@@ -13,8 +13,8 @@ export class Game {
         this.canvas.height = this.canvas.width;
 
         this.grid = new Grid(this.gridSize, this.cellSize, this.gridGap);
-        this.player = new Ship(13, 13, 0);
-        this.grid.setObject(13, 13, this.player.z, this.player);
+        this.ship = new Ship(13, 13, 0);
+        this.grid.setObject(this.ship.getX(), this.ship.getY(), this.ship.getZ(), this.ship);
 
         this.depthDisplay = document.getElementById('depthDisplay');
         this.batteryDisplay = document.getElementById('batteryDisplay');
@@ -22,79 +22,86 @@ export class Game {
 
         this.rocks = new Rocks(this.gridSize, this.grid);
 
-        this.setupEventListeners();
-        this.gameLoop();
+        this.#setupEventListeners();
+        this.#gameLoop();
     }
 
-    movePlayer(dx, dy) {
-        const newX = this.player.x + dx;
-        const newY = this.player.y + dy;
+    #moveShip(dx, dy) {
+        const newX = this.ship.getX() + dx;
+        const newY = this.ship.getY() + dy;
+        const currentZ = this.ship.getZ();
 
         if (newX >= 0 && newX < this.gridSize && newY >= 0 && newY < this.gridSize) {
-            const object = this.grid.getObject(newX, newY, this.player.z);
-            if (!object) {
-                this._updatePlayerPosition(newX, newY);
-            } else if (object instanceof Rock) {
-                object.take_damage(this.player.drill_power);
-                if (object.get_hp() <= 0) {
-                    this.grid.removeObject(newX, newY, this.player.z);
-                    this._updatePlayerPosition(newX, newY);
+            const neighboringObject = this.grid.getObject(newX, newY, currentZ);
+
+            if (neighboringObject && neighboringObject instanceof Rock) {
+                // if space we want to move into is a Rock, apply drill damage
+                neighboringObject.applyDamage(this.ship.getDrillPower());
+                if (neighboringObject.getHitPoints() <= 0) {
+                    // drill damage destroyed Rock; remove Rock
+                    this.grid.removeObject(newX, newY, currentZ);
+                    // move ship into newly empty space
+                    this.#updateShipPosition(newX, newY);
                 }
             }
-        }
-    }
-
-    _updatePlayerPosition(newX, newY) {
-        this.grid.removeObject(this.player.x, this.player.y, this.player.z);
-        this.player.x = newX;
-        this.player.y = newY;
-        this.grid.setObject(newX, newY, this.player.z, this.player);
-    }
-
-    changeLevel(delta) {
-        const newZ = this.player.z + delta;
-        if (newZ <= 0) {
-            this.grid.removeObject(this.player.x, this.player.y, this.player.z);
-            this.player.z = newZ;
-            if (!this.grid.levelExists(this.player.z)) {
-                this.rocks.generateRocks(this.player.z);
+            else {
+                // the grid cell space was already empty; ship can move freely
+                this.#updateShipPosition(newX, newY);
             }
-            this.grid.setObject(this.player.x, this.player.y, this.player.z, this.player);
         }
     }
 
-    setupEventListeners() {
+    #updateShipPosition(newX, newY) {
+        this.grid.removeObject(this.ship.getX(), this.ship.getY(), this.ship.getZ());
+        this.ship.setX(newX);
+        this.ship.setY(newY);
+        this.grid.setObject(this.ship.getX(), this.ship.getY(), this.ship.getZ(), this.ship);
+    }
+
+    #changeLevel(delta) {
+        const newZ = this.ship.getZ() + delta;
+        if (newZ > 0) return; // never rise above the surface
+
+        this.grid.removeObject(this.ship.getX(), this.ship.getY(), this.ship.getZ());
+        this.ship.setZ(newZ);
+        if (!this.grid.levelExists(this.ship.getZ())) {
+            this.rocks.generateRocks(this.ship.getZ());
+        }
+        this.grid.setObject(this.ship.getX(), this.ship.getY(), this.ship.getZ(), this.ship);
+    }
+
+    #setupEventListeners() {
         document.addEventListener('keydown', (e) => {
             switch(e.key) {
                 case 'ArrowUp':
                 case 'w':
-                    this.movePlayer(0, -1);
+                    this.#moveShip(0, -1);
                     break;
                 case 'ArrowDown':
                 case 's':
-                    this.movePlayer(0, 1);
+                    this.#moveShip(0, 1);
                     break;
                 case 'ArrowLeft':
                 case 'a':
-                    this.movePlayer(-1, 0);
+                    this.#moveShip(-1, 0);
                     break;
                 case 'ArrowRight':
                 case 'd':
-                    this.movePlayer(1, 0);
+                    this.#moveShip(1, 0);
                     break;
                 case 'c':
-                    this.changeLevel(-1);
+                    this.#changeLevel(-1);
                     break;
                 case ' ':
-                    this.changeLevel(1);
+                    this.#changeLevel(1);
                     break;
             }
         });
     }
 
-    updateDisplay() {
+    #updateDisplay() {
         if (this.depthDisplay) {
-            const depth = Math.abs(this.player.z) * 10;
+            const depth = Math.abs(this.ship.getZ()) * 10;
             this.depthDisplay.textContent = `Depth in meters: ${depth}`;
         }
 
@@ -104,15 +111,15 @@ export class Game {
         }
 
         if (this.drillPowerDisplay) {
-            this.drillPowerDisplay.textContent = `Drill power: ${this.player.drill_power}`;
+            this.drillPowerDisplay.textContent = `Drill power: ${this.ship.getDrillPower()}`;
         }
     }
 
-    gameLoop() {
+    #gameLoop() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        this.grid.draw(this.ctx, this.canvas.width, this.canvas.height, this.player.z, this.player);
-        this.updateDisplay();
-        requestAnimationFrame(() => this.gameLoop());
+        this.grid.draw(this.ctx, this.canvas.width, this.canvas.height, this.ship);
+        this.#updateDisplay();
+        requestAnimationFrame(() => this.#gameLoop());
     }
 }
 
