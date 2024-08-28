@@ -1,11 +1,13 @@
 import { Ship } from './ship.js';
 import { Grid } from './grid.js';
 import { Rocks, Rock } from './rocks.js';
+import { Graphics } from './graphics.js';
 
 export class Game {
     constructor() {
         this.canvas = document.getElementById('gameCanvas');
         this.ctx = this.canvas.getContext('2d');
+        this.graphics = new Graphics()
         this.gridSize = 27;
         this.cellSize = 30;
         this.gridGap = 1;
@@ -16,9 +18,6 @@ export class Game {
         this.ship = new Ship(13, 13, 0);
         this.grid.setObject(this.ship.getX(), this.ship.getY(), this.ship.getZ(), this.ship);
 
-        this.depthDisplay = document.getElementById('depthDisplay');
-        this.batteryDisplay = document.getElementById('batteryDisplay');
-        this.drillPowerDisplay = document.getElementById('drillPowerDisplay');
 
         this.rocks = new Rocks(this.gridSize, this.grid);
 
@@ -99,26 +98,10 @@ export class Game {
         });
     }
 
-    #updateDisplay() {
-        if (this.depthDisplay) {
-            const depth = Math.abs(this.ship.getZ()) * 10;
-            this.depthDisplay.textContent = `Depth in meters: ${depth}`;
-        }
-
-        if (this.batteryDisplay) {
-            const battery = 1000;
-            this.batteryDisplay.textContent = `Battery remaining: ${battery}`;
-        }
-
-        if (this.drillPowerDisplay) {
-            this.drillPowerDisplay.textContent = `Drill power: ${this.ship.getDrillPower()}`;
-        }
-    }
-
     #gameLoop() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.grid.draw(this.ctx, this.canvas.width, this.canvas.height, this.ship);
-        this.#updateDisplay();
+        this.graphics.updateStats(this.ship);
         requestAnimationFrame(() => this.#gameLoop());
     }
 }
