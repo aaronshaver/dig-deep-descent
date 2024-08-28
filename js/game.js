@@ -26,7 +26,7 @@ export class Game {
         this.#gameLoop();
     }
 
-    #moveShip(dx, dy) {
+    #moveShipLaterally(dx, dy) {
         const newX = this.ship.getX() + dx;
         const newY = this.ship.getY() + dy;
         const currentZ = this.ship.getZ();
@@ -75,19 +75,19 @@ export class Game {
             switch(e.key) {
                 case 'ArrowUp':
                 case 'w':
-                    this.#moveShip(0, -1);
+                    this.#moveShipLaterally(0, -1);
                     break;
                 case 'ArrowDown':
                 case 's':
-                    this.#moveShip(0, 1);
+                    this.#moveShipLaterally(0, 1);
                     break;
                 case 'ArrowLeft':
                 case 'a':
-                    this.#moveShip(-1, 0);
+                    this.#moveShipLaterally(-1, 0);
                     break;
                 case 'ArrowRight':
                 case 'd':
-                    this.#moveShip(1, 0);
+                    this.#moveShipLaterally(1, 0);
                     break;
                 case 'c':
                     this.#changeLevel(-1);
