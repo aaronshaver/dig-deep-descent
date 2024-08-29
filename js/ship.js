@@ -1,38 +1,20 @@
+import Position from './position.js';
+
 export class Ship {
-    #x;
-    #y;
-    #z;
+    #position;
     #drillPower;
 
     constructor(x, y, z) {
-        this.#x = x;
-        this.#y = y;
-        this.#z = z;
+        this.#position = new Position(x, y, z);
         this.#drillPower = 100;
     }
 
-    getX() {
-        return this.#x;
+    getPosition() {
+        return this.#position;
     }
 
-    getY() {
-        return this.#y;
-    }
-
-    getZ() {
-        return this.#z;
-    }
-
-    setX(newValue) {
-        this.#x = newValue;
-    }
-
-    setY(newValue) {
-        this.#y = newValue;
-    }
-
-    setZ(newValue) {
-        this.#z = newValue;
+    setPosition(position) {
+        this.#position = position;
     }
 
     getDrillPower() {
@@ -40,8 +22,8 @@ export class Ship {
     }
 
     draw(ctx, cellSize, gridGap) {
-        const x = this.#x * (cellSize + gridGap);
-        const y = this.#y * (cellSize + gridGap);
+        const x = this.#position.x * (cellSize + gridGap);
+        const y = this.#position.y * (cellSize + gridGap);
         const centerX = x + cellSize / 2;
         const centerY = y + cellSize / 2;
         const radius = cellSize / 2 - 2;

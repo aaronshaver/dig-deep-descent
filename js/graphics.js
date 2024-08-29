@@ -6,7 +6,7 @@ export class Graphics {
     }
 
     updateStats(ship) {
-        const depth = Math.abs(ship.getZ()) * 10;
+        const depth = Math.abs(ship.getPosition().z) * 10;
         this.depthStat.textContent = `Depth in meters: ${depth}`;
 
         const battery = 1000;

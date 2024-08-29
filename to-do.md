@@ -10,3 +10,4 @@
 * feature: add first mineral, and be sure to replace rocks with minerals rather than placing them on empty ground
 * feature: mouseover objects == show short description
 * feature: local storage of game data + New Game button which resets everything
+* feature: new class: VerticalHole and graphics to indicate it

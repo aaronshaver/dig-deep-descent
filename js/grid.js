@@ -13,18 +13,18 @@ export class Grid {
     }
   }
 
-  getObject(x, y, z) {
-    this.initLevel(z);
-    return this.grid.get(z)[y][x];
+  getObject(position) {
+    this.initLevel(position.z);
+    return this.grid.get(position.z)[position.y][position.x];
   }
 
-  setObject(x, y, z, object) {
-    this.initLevel(z);
-    this.grid.get(z)[y][x] = object;
+  setObject(position, object) {
+    this.initLevel(position.z);
+    this.grid.get(position.z)[position.y][position.x] = object;
   }
 
-  removeObject(x, y, z) {
-    this.grid.get(z)[y][x] = null;
+  removeObject(position) {
+    this.grid.get(position.z)[position.y][position.x] = null;
   }
 
   levelExists(z) {
@@ -44,7 +44,7 @@ export class Grid {
       }
     }
 
-    const allObjectsAtCurrentZLevel = this.grid.get(ship.getZ());
+    const allObjectsAtCurrentZLevel = this.grid.get(ship.getPosition().z);
     allObjectsAtCurrentZLevel.forEach((row, y) => {
       row.forEach((object) => {
         if (object && typeof object.draw === 'function') {
@@ -56,7 +56,7 @@ export class Grid {
     this.#drawMask(ctx, ship);
 
     // green border to indicate ship is at the safe, surface-level of world
-    if (ship.getZ() === 0) {
+    if (ship.getPosition().z === 0) {
       ctx.strokeStyle = '#00ff00';
       ctx.lineWidth = 1;
       ctx.strokeRect(0, 0, canvasWidth, canvasHeight);
@@ -67,7 +67,7 @@ export class Grid {
   #drawMask(ctx, ship) {
     for (let y = 0; y < this.size; y++) {
       for (let x = 0; x < this.size; x++) {
-        const distance = Math.sqrt(Math.pow(x - ship.getX(), 2) + Math.pow(y - ship.getY(), 2));
+        const distance = Math.sqrt(Math.pow(x - ship.getPosition().x, 2) + Math.pow(y - ship.getPosition().y, 2));
         const opacity = this.#getOpacity(distance);
 
         if (opacity < 1) {

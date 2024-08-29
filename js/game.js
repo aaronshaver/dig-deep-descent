@@ -2,12 +2,14 @@ import { Ship } from './ship.js';
 import { Grid } from './grid.js';
 import { Rocks, Rock } from './rocks.js';
 import { Graphics } from './graphics.js';
+import Position from './position.js';
 
 export class Game {
     constructor() {
+        this.graphics = new Graphics()
+
         this.canvas = document.getElementById('gameCanvas');
         this.ctx = this.canvas.getContext('2d');
-        this.graphics = new Graphics()
         this.gridSize = 27;
         this.cellSize = 30;
         this.gridGap = 1;
@@ -16,8 +18,8 @@ export class Game {
 
         this.grid = new Grid(this.gridSize, this.cellSize, this.gridGap);
         this.ship = new Ship(13, 13, 0);
-        this.grid.setObject(this.ship.getX(), this.ship.getY(), this.ship.getZ(), this.ship);
-
+        // add Ship to the Grid
+        this.grid.setObject(this.ship.getPosition(), this.ship);
 
         this.rocks = new Rocks(this.gridSize, this.grid);
 
@@ -26,47 +28,50 @@ export class Game {
     }
 
     #moveShipLaterally(dx, dy) {
-        const newX = this.ship.getX() + dx;
-        const newY = this.ship.getY() + dy;
-        const currentZ = this.ship.getZ();
+        const newX = this.ship.getPosition().x + dx;
+        const newY = this.ship.getPosition().y + dy;
 
         if (newX >= 0 && newX < this.gridSize && newY >= 0 && newY < this.gridSize) {
-            const neighboringObject = this.grid.getObject(newX, newY, currentZ);
+            const newPosition = new Position(newX, newY, this.ship.getPosition().z);
+            const neighboringObject = this.grid.getObject(newPosition);
 
             if (neighboringObject && neighboringObject instanceof Rock) {
                 // if space we want to move into is a Rock, apply drill damage
                 neighboringObject.applyDamage(this.ship.getDrillPower());
                 if (neighboringObject.getHitPoints() <= 0) {
                     // drill damage destroyed Rock; remove Rock
-                    this.grid.removeObject(newX, newY, currentZ);
+                    this.grid.removeObject(newPosition);
                     // move ship into newly empty space
-                    this.#updateShipPosition(newX, newY);
+                    this.#updateShipPosition(newPosition);
                 }
             }
             else {
                 // the grid cell space was already empty; ship can move freely
-                this.#updateShipPosition(newX, newY);
+                this.#updateShipPosition(newPosition);
             }
         }
     }
 
-    #updateShipPosition(newX, newY) {
-        this.grid.removeObject(this.ship.getX(), this.ship.getY(), this.ship.getZ());
-        this.ship.setX(newX);
-        this.ship.setY(newY);
-        this.grid.setObject(this.ship.getX(), this.ship.getY(), this.ship.getZ(), this.ship);
+    #updateShipPosition(newPosition) {
+        this.grid.removeObject(this.ship.getPosition());
+        this.ship.setPosition(newPosition);
+        this.grid.setObject(this.ship.getPosition(), this.ship);
     }
 
     #changeLevel(delta) {
-        const newZ = this.ship.getZ() + delta;
+        const newZ = this.ship.getPosition().z + delta;
         if (newZ > 0) return; // never rise above the surface
 
-        this.grid.removeObject(this.ship.getX(), this.ship.getY(), this.ship.getZ());
-        this.ship.setZ(newZ);
-        if (!this.grid.levelExists(this.ship.getZ())) {
-            this.rocks.generateRocks(this.ship.getZ());
+        // remove Ship from old location on Grid
+        this.grid.removeObject(this.ship.getPosition());
+        // set new Ship location internally
+        const newPosition = new Position(this.ship.getPosition().x, this.ship.getPosition().y, newZ);
+        this.ship.setPosition(newPosition);
+        if (!this.grid.levelExists(newZ)) {
+            this.rocks.generateRocks(newZ);
         }
-        this.grid.setObject(this.ship.getX(), this.ship.getY(), this.ship.getZ(), this.ship);
+        // add Ship to Grid in new position
+        this.grid.setObject(this.ship.getPosition(), this.ship);
     }
 
     #setupEventListeners() {
