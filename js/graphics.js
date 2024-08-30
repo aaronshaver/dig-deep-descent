@@ -18,15 +18,16 @@ export class Graphics {
     }
 
     drawGrid(grid, shipPosition) {
+        const gridSize = grid.getGridSize();
+        const cellSize = grid.getCellSize();
+        const gridGap = grid.getGridGap();
+
         // fill with base/default color
         this.ctx.fillStyle = '#333';
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
         // create grid lines
         this.ctx.fillStyle = '#222';
-        const gridSize = grid.getGridSize();
-        const cellSize = grid.getCellSize();
-        const gridGap = grid.getGridGap();
         for (let row = 0; row < gridSize; row++) {
             for (let col = 0; col < gridSize; col++) {
                 const x = col * (cellSize + gridGap);
@@ -52,11 +53,11 @@ export class Graphics {
         arrayOfArrays.forEach((row) => {
             row.forEach((object) => {
                 if (object) { // check if anything is there at all
-                    if (typeof object === 'Rock') {
+                    if (object instanceof Rock) {
                         this.#drawRock(cellSize, gridGap);
                     }
-                    else if (typeof object === Ship) {
-                        // #drawShip();
+                    else if (object instanceof Ship) {
+                        this.#drawShip(cellSize, gridGap, shipPosition);
                     }
                 }
             });
@@ -71,37 +72,66 @@ export class Graphics {
         const centerY = y + cellSize / 2;
         const radius = cellSize * 0.45;
 
-        ctx.fillStyle = '#6F4E37';
-        ctx.beginPath();
+        this.ctx.fillStyle = '#6F4E37';
+        this.ctx.beginPath();
         for (let i = 0; i < 6; i++) {
-        const angle = (Math.PI / 3) * i;
-        const pointX = centerX + radius * Math.cos(angle);
-        const pointY = centerY + radius * Math.sin(angle);
-        if (i === 0) {
-            ctx.moveTo(pointX, pointY);
-        } else {
-            ctx.lineTo(pointX, pointY);
+            const angle = (Math.PI / 3) * i;
+            const pointX = centerX + radius * Math.cos(angle);
+            const pointY = centerY + radius * Math.sin(angle);
+            if (i === 0) {
+                this.ctx.moveTo(pointX, pointY);
+            } else {
+                this.ctx.lineTo(pointX, pointY);
+            }
         }
-        }
-        ctx.closePath();
-        ctx.fill();
+        this.ctx.closePath();
+        this.ctx.fill();
+    }
+
+    #drawShip(cellSize, gridGap, shipPosition) {
+        const x = shipPosition.x * (cellSize + gridGap);
+        const y = shipPosition.y * (cellSize + gridGap);
+        const centerX = x + cellSize / 2;
+        const centerY = y + cellSize / 2;
+        const radius = cellSize / 2 - 2;
+
+        // Body
+        this.ctx.fillStyle = '#4477AA';
+        this.ctx.beginPath();
+        this.ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+        this.ctx.fill();
+
+        // Armor
+        this.ctx.fillStyle = '#66AAFF';
+        const armorWidth = cellSize - 10;
+        const armorThickness = 2;
+        this.ctx.fillRect(x + 5, y + 2, armorWidth, armorThickness);
+        this.ctx.fillRect(x + 5, y + cellSize - 4, armorWidth, armorThickness);
+        this.ctx.fillRect(x + 2, y + 5, armorThickness, armorWidth);
+        this.ctx.fillRect(x + cellSize - 4, y + 5, armorThickness, armorWidth);
+
+        // Drill
+        this.ctx.fillStyle = '#FFFFFF';
+        this.ctx.beginPath();
+        this.ctx.arc(centerX, centerY, 2, 0, Math.PI * 2);
+        this.ctx.fill();
     }
 
     // simulates darkness outside a radius
     #drawMask(shipPosition) {
         for (let y = 0; y < this.size; y++) {
-        for (let x = 0; x < this.size; x++) {
-            const distance = Math.sqrt(Math.pow(x - shipPosition.x, 2) + Math.pow(y - ship.Position.y, 2));
-            const opacity = this.#getOpacity(distance);
+            for (let x = 0; x < this.size; x++) {
+                const distance = Math.sqrt(Math.pow(x - shipPosition.x, 2) + Math.pow(y - shipPosition.y, 2));
+                const opacity = this.#getOpacity(distance);
 
-            if (opacity < 1) {
-            const drawX = x * (this.cellSize + this.gridGap);
-            const drawY = y * (this.cellSize + this.gridGap);
-            ctx.globalAlpha = 1 - opacity;
-            ctx.fillStyle = 'black';
-            ctx.fillRect(drawX, drawY, this.cellSize, this.cellSize);
+                if (opacity < 1) {
+                    const drawX = x * (this.cellSize + this.gridGap);
+                    const drawY = y * (this.cellSize + this.gridGap);
+                    this.ctx.globalAlpha = 1 - opacity;
+                    this.ctx.fillStyle = 'black';
+                    this.ctx.fillRect(drawX, drawY, this.cellSize, this.cellSize);
+                }
             }
-        }
         }
         this.ctx.globalAlpha = 1;
     }
