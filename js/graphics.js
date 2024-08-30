@@ -54,7 +54,7 @@ export class Graphics {
             row.forEach((object) => {
                 if (object) { // check if anything is there at all
                     if (object instanceof Rock) {
-                        this.#drawRock(cellSize, gridGap);
+                        this.#drawRock(cellSize, gridGap, object);
                     }
                     else if (object instanceof Ship) {
                         this.#drawShip(cellSize, gridGap, shipPosition);
@@ -65,9 +65,9 @@ export class Graphics {
 
     }
 
-    #drawRock(cellSize, gridGap) {
-        const x = this.x * (cellSize + gridGap);
-        const y = this.y * (cellSize + gridGap);
+    #drawRock(cellSize, gridGap, rock) {
+        const x = rock.x * (cellSize + gridGap);
+        const y = rock.y * (cellSize + gridGap);
         const centerX = x + cellSize / 2;
         const centerY = y + cellSize / 2;
         const radius = cellSize * 0.45;
@@ -86,6 +86,7 @@ export class Graphics {
         }
         this.ctx.closePath();
         this.ctx.fill();
+        console.log("we got here 2")
     }
 
     #drawShip(cellSize, gridGap, shipPosition) {
