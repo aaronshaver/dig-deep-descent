@@ -37,8 +37,7 @@ export class Graphics {
         }
 
         this.#drawAllObjectsAtCurrentZLevel(grid, shipPosition, cellSize, gridGap);
-
-        this.#drawMask(shipPosition);
+        this.#drawMask(grid, shipPosition, cellSize, gridGap);
 
         // green border to indicate ship is at the safe, surface-level of world
         if (shipPosition.z === 0) {
@@ -119,24 +118,26 @@ export class Graphics {
     }
 
     // simulates darkness outside a radius
-    #drawMask(shipPosition) {
-        for (let y = 0; y < this.size; y++) {
-            for (let x = 0; x < this.size; x++) {
+    #drawMask(grid, shipPosition, cellSize, gridGap) {
+        const gridSize = grid.getGridSize();
+        for (let y = 0; y < gridSize; y++) {
+            for (let x = 0; x < gridSize; x++) {
                 const distance = Math.sqrt(Math.pow(x - shipPosition.x, 2) + Math.pow(y - shipPosition.y, 2));
                 const opacity = this.#getOpacity(distance);
 
                 if (opacity < 1) {
-                    const drawX = x * (this.cellSize + this.gridGap);
-                    const drawY = y * (this.cellSize + this.gridGap);
+                    const drawX = x * (cellSize + gridGap);
+                    const drawY = y * (cellSize + gridGap);
                     this.ctx.globalAlpha = 1 - opacity;
                     this.ctx.fillStyle = 'black';
-                    this.ctx.fillRect(drawX, drawY, this.cellSize, this.cellSize);
+                    this.ctx.fillRect(drawX, drawY, cellSize, cellSize);
                 }
             }
         }
         this.ctx.globalAlpha = 1;
     }
 
+    // closer distance == brighter illumination / less masking
     #getOpacity(distance) {
         if (distance <= 2.5) return 1;
         if (distance <= 4.5) return 0.75;
