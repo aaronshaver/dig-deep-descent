@@ -4,8 +4,8 @@ export class Ship {
     #position;
     #drillPower;
 
-    constructor(x, y, z) {
-        this.#position = new Position(x, y, z);
+    constructor(position) {
+        this.#position = position;
         this.#drillPower = 100;
     }
 

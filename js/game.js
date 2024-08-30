@@ -6,22 +6,15 @@ import Position from './position.js';
 
 export class Game {
     constructor() {
-        this.graphics = new Graphics()
-
-        this.canvas = document.getElementById('gameCanvas');
-        this.ctx = this.canvas.getContext('2d');
-        this.gridSize = 27;
-        this.cellSize = 30;
-        this.gridGap = 1;
-        this.canvas.width = this.gridSize * (this.cellSize + this.gridGap) - this.gridGap;
-        this.canvas.height = this.canvas.width;
-
-        this.grid = new Grid(this.gridSize, this.cellSize, this.gridGap);
-        this.ship = new Ship(13, 13, 0);
+        this.grid = new Grid();
+        const gridSize = this.grid.getGridSize();
+        this.graphics = new Graphics(gridSize, this.grid.getCellSize(), this.grid.getGridGap())
+        this.ship = new Ship(this.grid.getInitialShipPosition());
         // add Ship to the Grid
         this.grid.setObject(this.ship.getPosition(), this.ship);
 
-        this.rocks = new Rocks(this.gridSize, this.grid);
+        this.rocks = new Rocks(gridSize);
+        this.rocks.generateRocks(0, this.grid);
 
         this.#setupEventListeners();
         this.#gameLoop();
@@ -31,7 +24,7 @@ export class Game {
         const newX = this.ship.getPosition().x + dx;
         const newY = this.ship.getPosition().y + dy;
 
-        if (newX >= 0 && newX < this.gridSize && newY >= 0 && newY < this.gridSize) {
+        if (newX >= 0 && newX < this.grid.getGridSize() && newY >= 0 && newY < this.grid.getGridSize()) {
             const newPosition = new Position(newX, newY, this.ship.getPosition().z);
             const neighboringObject = this.grid.getObject(newPosition);
 
@@ -58,7 +51,7 @@ export class Game {
         this.grid.setObject(this.ship.getPosition(), this.ship);
     }
 
-    #changeLevel(delta) {
+    #changeShipZLevel(delta) {
         const newZ = this.ship.getPosition().z + delta;
         if (newZ > 0) return; // never rise above the surface
 
@@ -94,18 +87,18 @@ export class Game {
                     this.#moveShipLaterally(1, 0);
                     break;
                 case 'c':
-                    this.#changeLevel(-1);
+                    this.#changeShipZLevel(-1);
                     break;
                 case ' ':
-                    this.#changeLevel(1);
+                    this.#changeShipZLevel(1);
                     break;
             }
         });
     }
 
     #gameLoop() {
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        this.grid.draw(this.ctx, this.canvas.width, this.canvas.height, this.ship);
+        this.graphics.clearPlayableArea();
+        this.graphics.drawGrid(this.grid, this.ship.getPosition());
         this.graphics.updateStats(this.ship);
         requestAnimationFrame(() => this.#gameLoop());
     }

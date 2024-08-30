@@ -6,6 +6,7 @@
 * Create battery and drill classes
     * get this "const battery = 1000;" out of game.js and into a getBattery()
 * add unit, integration tests
+* (after finished refactoring) ask Claude how well my code adheres to SOLID OO design principles
 * feature: introduce a slight delay on keypress so that you can't just zip through rocks or fly across the screen
 * feature: add first mineral, and be sure to replace rocks with minerals rather than placing them on empty ground
 * feature: mouseover objects == show short description
