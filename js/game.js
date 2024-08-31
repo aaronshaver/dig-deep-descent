@@ -8,12 +8,14 @@ export class Game {
     constructor() {
         this.grid = new Grid();
         const gridSize = this.grid.getGridSize();
+
         this.graphics = new Graphics(gridSize, this.grid.getCellSize(), this.grid.getGridGap())
+
         this.ship = new Ship(this.grid.getInitialShipPosition());
         // add Ship to the Grid
         this.grid.setObject(this.ship.getPosition(), this.ship);
 
-        this.rocks = new Rocks(gridSize);
+        this.rocks = new Rocks();
         this.rocks.generateRocks(0, this.grid);
 
         this.#setupEventListeners();
@@ -57,12 +59,15 @@ export class Game {
 
         // remove Ship from old location on Grid
         this.grid.removeObject(this.ship.getPosition());
+
+        // if it's a Z level we haven't seen before, generate Rocks for it
+        if (!this.grid.levelExists(newZ)) {
+            this.rocks.generateRocks(newZ, this.grid);
+        }
+
         // set new Ship location internally
         const newPosition = new Position(this.ship.getPosition().x, this.ship.getPosition().y, newZ);
         this.ship.setPosition(newPosition);
-        if (!this.grid.levelExists(newZ)) {
-            this.rocks.generateRocks(newZ);
-        }
         // add Ship to Grid in new position
         this.grid.setObject(this.ship.getPosition(), this.ship);
     }

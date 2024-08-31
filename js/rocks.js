@@ -19,22 +19,22 @@ export class Rock {
 }
 
 export class Rocks {
-  constructor(gridSize) {
-    this.gridSize = gridSize;
+  constructor() {
     this.perlin = new PerlinNoise();
   }
 
   generateRocks(z, grid) {
-    this.#generateRocksAtScale(z, 0.1, grid);
-    this.#generateRocksAtScale(z, 0.4, grid);
-    this.#generateRocksAtScale(z, 0.8, grid);
+    this.#generateRocksAtScale(z, grid, 0.1);
+    this.#generateRocksAtScale(z, grid, 0.4);
+    this.#generateRocksAtScale(z, grid, 0.8);
   }
 
-  #generateRocksAtScale(z, scale, grid) {
-    for (let y = 0; y < this.gridSize; y++) {
-      for (let x = 0; x < this.gridSize; x++) {
-        const position = new Position(x, y, z);
+  #generateRocksAtScale(z, grid, scale) {
+    const gridSize = grid.getGridSize();
+    for (let y = 0; y < gridSize; y++) {
+      for (let x = 0; x < gridSize; x++) {
         const noiseValue = this.perlin.getNoise(x * scale, y * scale, z * scale);
+        const position = new Position(x, y, z);
         if (noiseValue > 0.2 && !grid.getObject(position)) {
           const rock = new Rock(x, y, z);
           grid.setObject(position, rock);

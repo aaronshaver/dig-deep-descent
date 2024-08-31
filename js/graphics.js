@@ -22,11 +22,11 @@ export class Graphics {
         const cellSize = grid.getCellSize();
         const gridGap = grid.getGridGap();
 
-        // fill with base/default color
+        // Fill canvas with outline color, which will surround each cell with a slightly-lighter color
         this.ctx.fillStyle = '#333';
         this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
-        // create grid lines
+        // Draw grid cell backgrounds to set a main cell color, a slightly darker color than the outline
         this.ctx.fillStyle = '#222';
         for (let row = 0; row < gridSize; row++) {
             for (let col = 0; col < gridSize; col++) {
@@ -37,9 +37,10 @@ export class Graphics {
         }
 
         this.#drawAllObjectsAtCurrentZLevel(grid, shipPosition, cellSize, gridGap);
-        this.#drawMask(grid, shipPosition, cellSize, gridGap);
+        // Order matters; must be drawn after objects
+        this.#drawLightMask(grid, shipPosition, cellSize, gridGap);
 
-        // green border to indicate ship is at the safe, surface-level of world
+        // Draw special border to indicate ship is at the safe, surface-level
         if (shipPosition.z === 0) {
             this.ctx.strokeStyle = '#00ff00';
             this.ctx.lineWidth = 1;
@@ -85,7 +86,6 @@ export class Graphics {
         }
         this.ctx.closePath();
         this.ctx.fill();
-        console.log("we got here 2")
     }
 
     #drawShip(cellSize, gridGap, shipPosition) {
@@ -118,7 +118,7 @@ export class Graphics {
     }
 
     // simulates darkness outside a radius
-    #drawMask(grid, shipPosition, cellSize, gridGap) {
+    #drawLightMask(grid, shipPosition, cellSize, gridGap) {
         const gridSize = grid.getGridSize();
         for (let y = 0; y < gridSize; y++) {
             for (let x = 0; x < gridSize; x++) {
@@ -139,10 +139,11 @@ export class Graphics {
 
     // closer distance == brighter illumination / less masking
     #getOpacity(distance) {
-        if (distance <= 2.5) return 1;
-        if (distance <= 4.5) return 0.75;
-        if (distance <= 6.5) return 0.5;
-        if (distance <= 8.5) return 0.25;
+        if (distance <= 1.5) return 1;
+        if (distance <= 2.5) return 0.8;
+        if (distance <= 3.5) return 0.6;
+        if (distance <= 4.5) return 0.4;
+        if (distance <= 5.5) return 0.2;
         return 0;
     }
 
