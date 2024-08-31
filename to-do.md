@@ -4,8 +4,12 @@
 * Convert "const depth = Math.abs(this.ship.getZ()) * 10;" into a getDisplayDepth() function
 * Extract and hoist constants toward the tops of files, functions where it makes sense
     * i.e. where I could see myself adjusting those values
+
 * add unit, integration tests
+
 * (after finished refactoring) ask Claude how well my code adheres to SOLID OO design principles to see if there's anything more I can do to build a solid (NPI) foundation
+    * be sure to ask it for a plan first, not just a bunch of files right away
+
 * feature: introduce a slight delay on keypress so that you can't just zip through rocks or fly across the screen
 * feature: add first mineral, and be sure to replace rocks with minerals rather than placing them on empty ground
 * feature: mouseover objects == show short description
