@@ -1,4 +1,6 @@
 
+* notice how in #changeShipZLevel it's just repeating what's already in #updateShipPosition ?
+    * DRY that up so it just calls the function instead of duplicating it
 * Create battery and drill classes
     * get this "const battery = 1000;" out of game.js and into a getBattery()
 * Convert "const depth = Math.abs(this.ship.getZ()) * 10;" into a getDisplayDepth() function
