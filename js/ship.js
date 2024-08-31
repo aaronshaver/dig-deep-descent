@@ -1,5 +1,3 @@
-import Position from './position.js';
-
 export class Ship {
     #position;
     #drillPower;
