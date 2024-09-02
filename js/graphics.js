@@ -149,11 +149,11 @@ export class Graphics {
 
     updateStats(ship) {
         const depth = Math.abs(ship.getPosition().z) * 10;
-        this.depthStat.textContent = `Depth in meters: ${depth}`;
+        this.depthStat.textContent = `Depth: ${depth}`;
 
         const battery = 1000;
-        this.batteryStat.textContent = `Battery remaining: ${battery}`;
+        this.batteryStat.textContent = `Battery: ${battery}`;
 
-        this.drillPowerStat.textContent = `Drill power: ${ship.getDrillPower()}`;
+        this.drillPowerStat.textContent = `Drill: ${ship.getDrillPower()}`;
     }
 }
