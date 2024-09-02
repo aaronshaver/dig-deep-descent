@@ -53,7 +53,7 @@ export class Game {
     #changeShipZLevel(delta) {
         const newZ = this.ship.getPosition().z + delta;
         if (newZ > 0) return; // never rise above the surface
-        const newPosition = new Position(this.ship.getPosition().x, this.ship.getPosition().x, newZ);
+        const newPosition = new Position(this.ship.getPosition().x, this.ship.getPosition().y, newZ);
         this.#updateShipPosition(newPosition);
     }
 
