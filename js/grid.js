@@ -16,16 +16,19 @@ export class Grid {
     this.initLevel(0);
   }
 
+  // fill a z-level with initial nulls so that we can place objects at coordinates later
   initLevel(z) {
     if (!this.#grid.has(z)) {
       this.#grid.set(z, Array(this.#size).fill().map(() => Array(this.#size).fill(null)));
     }
   }
 
+  // returns a Set of which levels have had the initial creation of terrain
   getInitializedTerrainLevels() {
     return this.#initializedTerrainLevels;
   }
 
+  // marks a given z-level as having completed its initial terrain generation
   setInitializedTerrainLevel(z) {
     this.#initializedTerrainLevels.add(z);
   }
@@ -46,8 +49,10 @@ export class Grid {
     return this.#gridGap;
   }
 
-  getInitialShipPosition() {
-    return new Position(13, 13, 0);
+  // the position the Ship starts at at the beginning of the game
+  getCenteredInitialShipPosition() {
+    const center = Math.floor(this.getGridSize() / 2);
+    return new Position(center, center, 0);
   }
 
   getObject(position) {

@@ -1,7 +1,3 @@
-
-* Extract and hoist constants toward the tops of files, functions where it makes sense
-    * i.e. where I could see myself adjusting those values
-
 * add unit, integration tests
 
 * (after finished refactoring) ask work buddy Claude how well my code adheres to SOLID OO design principles to see if there's anything more I can do to build a solid (NPI) foundation

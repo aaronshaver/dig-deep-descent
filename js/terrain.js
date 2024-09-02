@@ -1,7 +1,7 @@
 import { PerlinNoise } from './perlin-noise.js';
 import Position from './position.js';
 
-export class Rock {
+export class BasicRock {
   constructor(x, y, z) {
     this.x = x;
     this.y = y;
@@ -18,26 +18,26 @@ export class Rock {
   }
 }
 
-export class Rocks {
+export class Terrain {
   constructor() {
     this.perlin = new PerlinNoise();
   }
 
-  generateTerrain(z, grid) {
-    this.#generateRocksAtScale(z, grid, 0.1);
-    this.#generateRocksAtScale(z, grid, 0.4);
-    this.#generateRocksAtScale(z, grid, 0.8);
+  generate(z, grid) {
+    this.#generateTerrainAtScale(z, grid, 0.1);
+    this.#generateTerrainAtScale(z, grid, 0.4);
+    this.#generateTerrainAtScale(z, grid, 0.8);
     grid.setInitializedTerrainLevel(z);
   }
 
-  #generateRocksAtScale(z, grid, scale) {
+  #generateTerrainAtScale(z, grid, scale) {
     const gridSize = grid.getGridSize();
     for (let y = 0; y < gridSize; y++) {
       for (let x = 0; x < gridSize; x++) {
         const noiseValue = this.perlin.getNoise(x * scale, y * scale, z * scale);
         const position = new Position(x, y, z);
         if (noiseValue > 0.2 && !grid.getObject(position)) {
-          const rock = new Rock(x, y, z);
+          const rock = new BasicRock(x, y, z);
           grid.setObject(position, rock);
         }
       }

@@ -1,10 +1,11 @@
-import { Rock } from './rocks.js';
+import { BasicRock as Rock } from './terrain.js';
 import { Ship } from './ship.js';
 
 export class Graphics {
-    constructor(gridSize, cellSize, gridGap) {
+    constructor(grid) {
+        const gridGap = grid.getGridGap();
         this.canvas = document.getElementById('gameCanvas');
-        this.canvas.width = gridSize * (cellSize + gridGap) - gridGap;
+        this.canvas.width = grid.getGridSize() * (grid.getCellSize() + gridGap) - gridGap;
         this.canvas.height = this.canvas.width;
         this.ctx = this.canvas.getContext('2d');
 
@@ -117,7 +118,7 @@ export class Graphics {
         this.ctx.fill();
     }
 
-    // simulates darkness outside a radius
+    // simulates decreasing visibilty as illumination dissipates at a distance
     #drawLightMask(grid, shipPosition, cellSize, gridGap) {
         const gridSize = grid.getGridSize();
         for (let y = 0; y < gridSize; y++) {
@@ -137,7 +138,7 @@ export class Graphics {
         this.ctx.globalAlpha = 1;
     }
 
-    // closer distance == brighter illumination / less masking
+    // closer distance == brighter illumination == less blocked from the mask
     #getOpacity(distance) {
         if (distance <= 1.5) return 1;
         if (distance <= 2.5) return 0.8;

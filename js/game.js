@@ -1,21 +1,19 @@
 import { Ship } from './ship.js';
 import { Grid } from './grid.js';
-import { Rocks, Rock } from './rocks.js';
+import { Terrain, BasicRock } from './terrain.js';
 import { Graphics } from './graphics.js';
 import Position from './position.js';
 
 export class Game {
     constructor() {
         this.grid = new Grid();
-        const gridSize = this.grid.getGridSize();
+        this.graphics = new Graphics(this.grid);
 
-        this.graphics = new Graphics(gridSize, this.grid.getCellSize(), this.grid.getGridGap())
-
-        this.ship = new Ship(this.grid.getInitialShipPosition());
+        this.ship = new Ship(this.grid.getCenteredInitialShipPosition());
         // add Ship to the Grid
         this.grid.setObject(this.ship.getPosition(), this.ship);
 
-        this.rocks = new Rocks();
+        this.terrain = new Terrain();
 
         this.#setupEventListeners();
         this.#gameLoop();
@@ -29,7 +27,7 @@ export class Game {
             const newPosition = new Position(newX, newY, this.ship.getPosition().z);
             const neighboringObject = this.grid.getObject(newPosition);
 
-            if (neighboringObject && neighboringObject instanceof Rock) {
+            if (neighboringObject && neighboringObject instanceof BasicRock) {
                 // if space we want to move into is a Rock, apply drill damage
                 neighboringObject.applyDamage(this.ship.getDrill().getPower());
                 if (neighboringObject.getHitPoints() <= 0) {
@@ -55,7 +53,6 @@ export class Game {
     #changeShipZLevel(delta) {
         const newZ = this.ship.getPosition().z + delta;
         if (newZ > 0) return; // never rise above the surface
-
         const newPosition = new Position(this.ship.getPosition().x, this.ship.getPosition().x, newZ);
         this.#updateShipPosition(newPosition);
     }
@@ -91,10 +88,11 @@ export class Game {
 
     #gameLoop() {
         this.graphics.clearPlayableArea();
-        this.graphics.drawGrid(this.grid, this.ship.getPosition());
+        const shipPosition = this.ship.getPosition();
+        this.graphics.drawGrid(this.grid, shipPosition);
         this.graphics.updateStats(this.ship);
-        if (!this.grid.getInitializedTerrainLevels().has(this.ship.getPosition().z)) {
-            this.rocks.generateTerrain(this.ship.getPosition().z, this.grid);
+        if (!this.grid.getInitializedTerrainLevels().has(shipPosition.z)) {
+            this.terrain.generate(shipPosition.z, this.grid);
         }
         requestAnimationFrame(() => this.#gameLoop());
     }
