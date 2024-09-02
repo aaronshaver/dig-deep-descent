@@ -23,10 +23,11 @@ export class Rocks {
     this.perlin = new PerlinNoise();
   }
 
-  generateRocks(z, grid) {
+  generateTerrain(z, grid) {
     this.#generateRocksAtScale(z, grid, 0.1);
     this.#generateRocksAtScale(z, grid, 0.4);
     this.#generateRocksAtScale(z, grid, 0.8);
+    grid.setInitializedTerrainLevel(z);
   }
 
   #generateRocksAtScale(z, grid, scale) {

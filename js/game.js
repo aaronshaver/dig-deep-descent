@@ -16,7 +16,6 @@ export class Game {
         this.grid.setObject(this.ship.getPosition(), this.ship);
 
         this.rocks = new Rocks();
-        this.rocks.generateRocks(0, this.grid);
 
         this.#setupEventListeners();
         this.#gameLoop();
@@ -57,19 +56,8 @@ export class Game {
         const newZ = this.ship.getPosition().z + delta;
         if (newZ > 0) return; // never rise above the surface
 
-        // remove Ship from old location on Grid
-        this.grid.removeObject(this.ship.getPosition());
-
-        // if it's a Z level we haven't seen before, generate Rocks for it
-        if (!this.grid.levelExists(newZ)) {
-            this.rocks.generateRocks(newZ, this.grid);
-        }
-
-        // set new Ship location internally
-        const newPosition = new Position(this.ship.getPosition().x, this.ship.getPosition().y, newZ);
-        this.ship.setPosition(newPosition);
-        // add Ship to Grid in new position
-        this.grid.setObject(this.ship.getPosition(), this.ship);
+        const newPosition = new Position(this.ship.getPosition().x, this.ship.getPosition().x, newZ);
+        this.#updateShipPosition(newPosition);
     }
 
     #setupEventListeners() {
@@ -105,6 +93,9 @@ export class Game {
         this.graphics.clearPlayableArea();
         this.graphics.drawGrid(this.grid, this.ship.getPosition());
         this.graphics.updateStats(this.ship);
+        if (!this.grid.getInitializedTerrainLevels().has(this.ship.getPosition().z)) {
+            this.rocks.generateTerrain(this.ship.getPosition().z, this.grid);
+        }
         requestAnimationFrame(() => this.#gameLoop());
     }
 }
