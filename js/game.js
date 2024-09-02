@@ -31,7 +31,7 @@ export class Game {
 
             if (neighboringObject && neighboringObject instanceof Rock) {
                 // if space we want to move into is a Rock, apply drill damage
-                neighboringObject.applyDamage(this.ship.getDrillPower());
+                neighboringObject.applyDamage(this.ship.getDrill().getPower());
                 if (neighboringObject.getHitPoints() <= 0) {
                     // drill damage destroyed Rock; remove Rock
                     this.grid.removeObject(newPosition);
