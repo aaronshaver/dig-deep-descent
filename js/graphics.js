@@ -1,4 +1,4 @@
-import { BasicRock as Rock } from './terrain.js';
+import { BasicRock } from './terrain.js';
 import { Ship } from './ship.js';
 
 export class Graphics {
@@ -54,7 +54,7 @@ export class Graphics {
         arrayOfArrays.forEach((row) => {
             row.forEach((object) => {
                 if (object) { // check if anything is there at all
-                    if (object instanceof Rock) {
+                    if (object instanceof BasicRock) {
                         this.#drawRock(cellSize, gridGap, object);
                     }
                     else if (object instanceof Ship) {
