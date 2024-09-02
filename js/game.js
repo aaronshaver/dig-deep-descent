@@ -28,12 +28,10 @@ export class Game {
             const neighboringObject = this.grid.getObject(newPosition);
 
             if (neighboringObject && neighboringObject instanceof BasicRock) {
-                // if space we want to move into is a Rock, apply drill damage
-                neighboringObject.applyDamage(this.ship.getDrill().getPower());
-                if (neighboringObject.getHitPoints() <= 0) {
-                    // drill damage destroyed Rock; remove Rock
+                const basicRock = neighboringObject;
+                basicRock.applyDamage(this.ship.getDrill().getPower());
+                if (basicRock.getHitPoints() <= 0) {
                     this.grid.removeObject(newPosition);
-                    // move ship into newly empty space
                     this.#updateShipPosition(newPosition);
                 }
             }
