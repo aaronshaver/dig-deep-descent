@@ -5,15 +5,14 @@ import { Graphics } from './graphics.js';
 import Position from './position.js';
 
 export class Game {
-    constructor() {
-        this.grid = new Grid();
-        this.graphics = new Graphics(this.grid);
+    constructor(grid, graphics, terrain) {
+        this.grid = grid;
+        this.graphics = graphics;
+        this.terrain = terrain;
 
         this.ship = new Ship(this.grid.getCenteredInitialShipPosition());
         // add Ship to the Grid
         this.grid.setObject(this.ship.getPosition(), this.ship);
-
-        this.terrain = new Terrain();
 
         this.#setupEventListeners();
         this.#gameLoop();
@@ -97,5 +96,8 @@ export class Game {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    new Game();
+    const grid = new Grid();
+    const graphics = new Graphics(grid);
+    const terrain = new Terrain();
+    new Game(grid, graphics, terrain);
 });
