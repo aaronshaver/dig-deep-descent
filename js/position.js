@@ -3,11 +3,13 @@ class Position {
     #y;
     #z;
 
-    constructor(x = 0, y = 0, z = 0) {
-        this.#x = x;
-        this.#y = y;
-        this.#z = z;
-    }
+    constructor(x, y, z) {
+        Object.defineProperties(this, {
+          x: { value: x, writable: false },
+          y: { value: y, writable: false },
+          z: { value: z, writable: false }
+        });
+      }
 
     get x() { return this.#x; }
     set x(value) { this.#x = value; }

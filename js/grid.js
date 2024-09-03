@@ -61,6 +61,9 @@ export class Grid {
   }
 
   setObject(position, object) {
+    if (!position || !object) {
+      throw new Error('Invalid position or object');
+    }
     this.initLevel(position.z);
     this.#grid.get(position.z)[position.y][position.x] = object;
   }
