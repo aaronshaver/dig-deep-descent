@@ -1,4 +1,4 @@
-* add unit, integration tests
+* continuing increasing test coverage
 
 * feature: introduce a slight delay on keypress so that you can't just zip through rocks or fly across the screen
 * feature: for drawRock can we use a random 0-5 to skip one of the points to get randomized rocks for less uniform/more natural rocks?
