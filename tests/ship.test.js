@@ -18,4 +18,11 @@ describe('Ship', () => {
     const ship = new Ship(new Position(0, 0, 0));
     expect(ship.getDrill().getPower()).toBe(100);
   });
+
+  test('should be able to set a new position', () => {
+    const ship = new Ship(new Position(0, 0, 0));
+    const newPosition = new Position(1, 1, 1);
+    ship.setPosition(newPosition);
+    expect(ship.getPosition()).toBe(newPosition);
+  });
 });
