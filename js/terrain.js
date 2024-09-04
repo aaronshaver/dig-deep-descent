@@ -24,14 +24,17 @@ export class Terrain {
   }
 
   generate(z, grid) {
-    this.#generateTerrainAtScale(z, grid, 0.1);
-    this.#generateTerrainAtScale(z, grid, 0.4);
-    this.#generateTerrainAtScale(z, grid, 0.8);
+    let rocks = [];
+    rocks = rocks.concat(this.#generateTerrainAtScale(z, grid, 0.1));
+    rocks = rocks.concat(this.#generateTerrainAtScale(z, grid, 0.4));
+    rocks = rocks.concat(this.#generateTerrainAtScale(z, grid, 0.8));
     grid.setInitializedTerrainLevel(z);
+    return rocks;
   }
 
   #generateTerrainAtScale(z, grid, scale) {
     const gridSize = grid.getGridSize();
+    const rocks = [];
     for (let y = 0; y < gridSize; y++) {
       for (let x = 0; x < gridSize; x++) {
         const noiseValue = this.perlin.getNoise(x * scale, y * scale, z * scale);
@@ -39,8 +42,10 @@ export class Terrain {
         if (noiseValue > 0.2 && !grid.getObject(position)) {
           const rock = new BasicRock(x, y, z);
           grid.setObject(position, rock);
+          rocks.push(rock);
         }
       }
     }
+    return rocks;
   }
 }
