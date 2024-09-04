@@ -149,8 +149,8 @@ export class Graphics {
     }
 
     updateStats(ship) {
-        this.depthStat.textContent = `Depth: ${ship.getPosition().z}`;
-        this.batteryStat.textContent = `Battery: ${ship.getBattery().getLevel()}`;
-        this.drillPowerStat.textContent = `Drill: ${ship.getDrill().getPower()}`;
+        this.depthStat.textContent = ship.getPosition().z;
+        this.batteryStat.textContent = ship.getBattery().getLevel();
+        this.drillPowerStat.textContent = ship.getDrill().getPower();
     }
 }
