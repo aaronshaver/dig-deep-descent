@@ -5,4 +5,5 @@ module.exports = {
   },
   moduleFileExtensions: ['js'],
   testMatch: ['**/tests/**/*.test.js'],
+  coveragePathIgnorePatterns: ['<rootDir>/js/perlin-noise.js'],
 };
