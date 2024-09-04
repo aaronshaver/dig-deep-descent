@@ -11,3 +11,4 @@
 * feature: new class: VerticalHole and graphics to indicate it
 * feature: be sure to have some one-time-use items in addition to permanent upgrades to make it feel like an expedition/stocking up
 * feature: add PayPal donation links at bottom of left and right columns
+* feature: gems get bigger diameter as the colors get more valuable to give a sense of reward
