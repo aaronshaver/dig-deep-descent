@@ -1,5 +1,6 @@
 * continuing increasing test coverage
 
+* feature: Battery events enum for battery draining activities
 * feature: introduce a slight delay on keypress so that you can't just zip through rocks or fly across the screen
 * feature: for drawRock can we use a random 0-5 to skip one of the points to get randomized rocks for less uniform/more natural rocks?
 * feature: add first mineral, and be sure to replace rocks with minerals rather than placing them on empty ground

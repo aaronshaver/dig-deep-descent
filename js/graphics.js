@@ -38,7 +38,8 @@ export class Graphics {
         }
 
         this.#drawAllObjectsAtCurrentZLevel(grid, shipPosition, cellSize, gridGap);
-        // Order matters; must be drawn after objects
+
+        // Order matters; mask must be drawn after objects to properly cover them
         this.#drawLightMask(grid, shipPosition, cellSize, gridGap);
 
         // Draw special border to indicate ship is at the safe, surface-level
@@ -67,8 +68,8 @@ export class Graphics {
     }
 
     #drawRock(cellSize, gridGap, rock) {
-        const x = rock.x * (cellSize + gridGap);
-        const y = rock.y * (cellSize + gridGap);
+        const x = rock.getPosition().x * (cellSize + gridGap);
+        const y = rock.getPosition().y * (cellSize + gridGap);
         const centerX = x + cellSize / 2;
         const centerY = y + cellSize / 2;
         const radius = cellSize * 0.45;

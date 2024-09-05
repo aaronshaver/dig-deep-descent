@@ -1,16 +1,17 @@
 import { BasicRock, Terrain } from '../js/terrain.js';
 import { PerlinNoise } from '../js/perlin-noise.js';
 import { Grid } from '../js/grid.js';
+import Position from '../js/position.js';
 
 jest.mock('../js/perlin-noise.js');
 jest.mock('../js/grid.js');
 
 describe('BasicRock', () => {
   test('constructor initializes properties correctly', () => {
-    const rock = new BasicRock(1, 2, 3);
-    expect(rock.x).toBe(1);
-    expect(rock.y).toBe(2);
-    expect(rock.z).toBe(3);
+    const rock = new BasicRock(new Position(1, 2, 3));
+    expect(rock.getPosition().x).toBe(1);
+    expect(rock.getPosition().y).toBe(2);
+    expect(rock.getPosition().z).toBe(3);
     expect(rock.hitPoints).toBe(800);
   });
 

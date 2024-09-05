@@ -2,11 +2,15 @@ import { PerlinNoise } from './perlin-noise.js';
 import Position from './position.js';
 
 export class BasicRock {
-  constructor(x, y, z) {
-    this.x = x;
-    this.y = y;
-    this.z = z;
+  #position;
+
+  constructor(position) {
+    this.#position = position;
     this.hitPoints = 800;
+  }
+
+  getPosition() {
+    return this.#position;
   }
 
   applyDamage(damage) {
@@ -40,7 +44,7 @@ export class Terrain {
         const noiseValue = this.perlin.getNoise(x * scale, y * scale, z * scale);
         const position = new Position(x, y, z);
         if (noiseValue > 0.2 && !grid.getObject(position)) {
-          const rock = new BasicRock(x, y, z);
+          const rock = new BasicRock(position);
           grid.setObject(position, rock);
           rocks.push(rock);
         }
