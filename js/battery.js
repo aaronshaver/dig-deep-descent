@@ -7,7 +7,7 @@ export const BatteryEvents = {
 const BATTERY_DRAIN = {
     [BatteryEvents.LATERAL_MOVE]: 5,
     [BatteryEvents.Z_MOVE]: 100,
-    [BatteryEvents.DIG_BASIC_ROCK]: 5,
+    [BatteryEvents.DIG_BASIC_ROCK]: 10,
 };
 
 export class Battery {

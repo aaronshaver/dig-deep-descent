@@ -24,7 +24,6 @@ export class Game {
         const newY = this.ship.getPosition().y + dy;
 
         if (newX >= 0 && newX < this.grid.getGridSize() && newY >= 0 && newY < this.grid.getGridSize()) {
-            this.ship.getBattery().reduceBattery(BatteryEvents.LATERAL_MOVE);
             const newPosition = new Position(newX, newY, this.ship.getPosition().z);
             const neighboringObject = this.grid.getObject(newPosition);
 
@@ -34,11 +33,13 @@ export class Game {
                 basicRock.applyDamage(this.ship.getDrill().getPower());
                 if (basicRock.getHitPoints() <= 0) {
                     this.grid.removeObject(newPosition);
+                    this.ship.getBattery().reduceBattery(BatteryEvents.LATERAL_MOVE);
                     this.#updateShipPosition(newPosition);
                 }
             }
             else {
                 // the grid cell space was already empty; ship can move freely
+                this.ship.getBattery().reduceBattery(BatteryEvents.LATERAL_MOVE);
                 this.#updateShipPosition(newPosition);
             }
         }
