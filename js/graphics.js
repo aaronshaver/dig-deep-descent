@@ -44,7 +44,7 @@ export class Graphics {
 
         // Draw special border to indicate ship is at the safe, surface-level
         if (shipPosition.z === 0) {
-            this.ctx.strokeStyle = '#00ff00';
+            this.ctx.strokeStyle = '#0000ff';
             this.ctx.lineWidth = 1;
             this.ctx.strokeRect(0, 0, this.canvas.width, this.canvas.height);
         }
