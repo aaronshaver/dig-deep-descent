@@ -139,7 +139,7 @@ export class Graphics {
         this.ctx.globalAlpha = 1;
     }
 
-    // closer distance == brighter illumination == less blocked from the mask
+    // closer distance == brighter illumination == more shows through mask
     #getOpacity(distance) {
         if (distance <= 1.5) return 1;
         if (distance <= 2.5) return 0.8;
@@ -150,8 +150,15 @@ export class Graphics {
     }
 
     updateStats(ship) {
-        this.depthStat.textContent = ship.getPosition().z;
+        this.depthStat.textContent = ship.getPosition().z * 10; // digging down is meant to be expensive
         this.batteryStat.textContent = ship.getBattery().getLevel();
         this.drillPowerStat.textContent = ship.getDrill().getPower();
+    }
+
+    displayGameOver(reason) {
+        const gameOverScreen = document.getElementById('gameOverScreen');
+        const gameOverReason = document.getElementById('gameOverReason');
+        gameOverReason.textContent = reason;
+        gameOverScreen.classList.remove('hidden');
     }
 }

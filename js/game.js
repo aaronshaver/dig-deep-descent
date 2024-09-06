@@ -6,10 +6,13 @@ import Position from './position.js';
 import { BatteryEvents } from '../js/battery.js';
 
 export class Game {
+    #gameOverReason;
+
     constructor(grid, graphics, terrain) {
         this.grid = grid;
         this.graphics = graphics;
         this.terrain = terrain;
+        this.#gameOverReason = null;
 
         this.ship = new Ship(this.grid.getCenteredInitialShipPosition());
         // add Ship to the Grid
@@ -89,6 +92,15 @@ export class Game {
     }
 
     #gameLoop() {
+        if (this.ship.getBattery().getLevel() < 0) {
+            this.#gameOverReason = "Your console goes dark. The clean air filter whirs to a stop. It's now quiet in your ship. You realize the worst has happened as the ship runs out of power completely. The ship grows dark and cold as you hope an OBTL ship passes by soon, before you freeze or starve to death...";
+        }
+
+        if (this.#gameOverReason) {
+            this.graphics.displayGameOver(this.#gameOverReason);
+            return;
+        }
+
         this.graphics.clearPlayableArea();
         const shipPosition = this.ship.getPosition();
         this.graphics.drawGrid(this.grid, shipPosition);
@@ -96,7 +108,10 @@ export class Game {
         if (!this.grid.getInitializedTerrainLevels().has(shipPosition.z)) {
             this.terrain.generate(shipPosition.z, this.grid);
         }
-        requestAnimationFrame(() => this.#gameLoop());
+
+        if (!this.#gameOverReason) {
+            requestAnimationFrame(() => this.#gameLoop());
+        }
     }
 }
 
