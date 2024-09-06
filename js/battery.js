@@ -26,5 +26,6 @@ export class Battery {
             throw new Error(`Unknown battery event`);
         }
         this.#level -= BATTERY_DRAIN[event];
+        if (this.#level < 0) this.#level = 0; // don't show nonsensical negative battery numbers
     }
 }

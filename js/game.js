@@ -19,7 +19,8 @@ export class Game {
         this.grid.setObject(this.ship.getPosition(), this.ship);
 
         this.#setupEventListeners();
-        this.#gameLoop();
+        this.#updateGameState();
+        this.#updateGameState(); // WHY DOES THIS WORK?
     }
 
     #moveShipLaterally(dx, dy) {
@@ -39,13 +40,16 @@ export class Game {
                     this.ship.getBattery().reduceBattery(BatteryEvents.LATERAL_MOVE);
                     this.#updateShipPosition(newPosition);
                 }
+                return true;
             }
             else {
                 // the grid cell space was already empty; ship can move freely
                 this.ship.getBattery().reduceBattery(BatteryEvents.LATERAL_MOVE);
                 this.#updateShipPosition(newPosition);
+                return true;
             }
         }
+        return false;
     }
 
     #updateShipPosition(newPosition) {
@@ -56,46 +60,52 @@ export class Game {
 
     #changeShipZLevel(delta) {
         const newZ = this.ship.getPosition().z + delta;
-        if (newZ > 0) return; // never rise above the surface
+        if (newZ > 0) return false; // never rise above the surface
         this.ship.getBattery().reduceBattery(BatteryEvents.Z_MOVE);
         const newPosition = new Position(this.ship.getPosition().x, this.ship.getPosition().y, newZ);
         this.#updateShipPosition(newPosition);
+        return true;
     }
-
     #setupEventListeners() {
         document.addEventListener('keydown', (e) => {
-            switch(e.key) {
+            if (this.#gameOverReason) return;
+            let moved = false;
+            switch (e.key) {
                 case 'ArrowUp':
                 case 'w':
-                    this.#moveShipLaterally(0, -1);
+                    moved = this.#moveShipLaterally(0, -1);
                     break;
                 case 'ArrowDown':
                 case 's':
-                    this.#moveShipLaterally(0, 1);
+                    moved = this.#moveShipLaterally(0, 1);
                     break;
                 case 'ArrowLeft':
                 case 'a':
-                    this.#moveShipLaterally(-1, 0);
+                    moved = this.#moveShipLaterally(-1, 0);
                     break;
                 case 'ArrowRight':
                 case 'd':
-                    this.#moveShipLaterally(1, 0);
+                    moved = this.#moveShipLaterally(1, 0);
                     break;
                 case 'c':
-                    this.#changeShipZLevel(-1);
+                    moved = this.#changeShipZLevel(-1);
                     break;
                 case ' ':
-                    this.#changeShipZLevel(1);
+                    moved = this.#changeShipZLevel(1);
                     break;
+            }
+            if (moved) {
+                this.#updateGameState();
             }
         });
     }
 
-    #gameLoop() {
-        if (this.ship.getBattery().getLevel() < 0) {
+    #updateGameState() {
+        this.graphics.updateStats(this.ship); // order matters so that battery stats make sense during Game Over
+
+        if (this.ship.getBattery().getLevel() <= 0) {
             this.#gameOverReason = "Your console goes dark. The clean air filter whirs to a stop. It's now quiet in your ship. You realize the worst has happened as the ship runs out of power completely. The ship grows dark and cold as you hope an OBTL ship passes by soon, before you freeze or starve to death...";
         }
-
         if (this.#gameOverReason) {
             this.graphics.displayGameOver(this.#gameOverReason);
             return;
@@ -104,13 +114,8 @@ export class Game {
         this.graphics.clearPlayableArea();
         const shipPosition = this.ship.getPosition();
         this.graphics.drawGrid(this.grid, shipPosition);
-        this.graphics.updateStats(this.ship);
         if (!this.grid.getInitializedTerrainLevels().has(shipPosition.z)) {
             this.terrain.generate(shipPosition.z, this.grid);
-        }
-
-        if (!this.#gameOverReason) {
-            requestAnimationFrame(() => this.#gameLoop());
         }
     }
 }
