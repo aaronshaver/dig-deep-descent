@@ -3,6 +3,7 @@ import { Grid } from './grid.js';
 import { Terrain, BasicRock } from './terrain.js';
 import { Graphics } from './graphics.js';
 import Position from './position.js';
+import { BatteryEvents } from '../js/battery.js';
 
 export class Game {
     constructor(grid, graphics, terrain) {
@@ -23,11 +24,13 @@ export class Game {
         const newY = this.ship.getPosition().y + dy;
 
         if (newX >= 0 && newX < this.grid.getGridSize() && newY >= 0 && newY < this.grid.getGridSize()) {
+            this.ship.getBattery().reduceBattery(BatteryEvents.LATERAL_MOVE);
             const newPosition = new Position(newX, newY, this.ship.getPosition().z);
             const neighboringObject = this.grid.getObject(newPosition);
 
             if (neighboringObject && neighboringObject instanceof BasicRock) {
                 const basicRock = neighboringObject;
+                this.ship.getBattery().reduceBattery(BatteryEvents.DIG_BASIC_ROCK);
                 basicRock.applyDamage(this.ship.getDrill().getPower());
                 if (basicRock.getHitPoints() <= 0) {
                     this.grid.removeObject(newPosition);
@@ -50,6 +53,7 @@ export class Game {
     #changeShipZLevel(delta) {
         const newZ = this.ship.getPosition().z + delta;
         if (newZ > 0) return; // never rise above the surface
+        this.ship.getBattery().reduceBattery(BatteryEvents.Z_MOVE);
         const newPosition = new Position(this.ship.getPosition().x, this.ship.getPosition().y, newZ);
         this.#updateShipPosition(newPosition);
     }

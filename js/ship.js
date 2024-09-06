@@ -1,3 +1,5 @@
+import { Battery } from "./battery.js";
+
 export class Ship {
     #position;
     #battery;
@@ -23,18 +25,6 @@ export class Ship {
 
     setPosition(position) {
         this.#position = position;
-    }
-}
-
-class Battery {
-    #level;
-
-    constructor() {
-        this.#level = 1000;
-    }
-
-    getLevel() {
-        return this.#level;
     }
 }
 

@@ -3,7 +3,6 @@ import Position from '../js/position.js';
 
 describe('Ship', () => {
   test('should be created with the given position', () => {
-    console.log(process.version);
     const position = new Position(1, 2, 3);
     const ship = new Ship(position);
     expect(ship.getPosition()).toBe(position);
