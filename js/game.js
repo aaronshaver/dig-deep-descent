@@ -3,7 +3,8 @@ import { Grid } from './grid.js';
 import { Terrain, BasicRock } from './terrain.js';
 import { Graphics } from './graphics.js';
 import Position from './position.js';
-import { BatteryEvents } from '../js/battery.js';
+import { BatteryEvents } from './battery.js';
+import { DrillDirections } from './drill.js'
 
 export class Game {
     #gameOverReason;
@@ -25,6 +26,14 @@ export class Game {
     #moveShipLaterally(dx, dy) {
         const newX = this.ship.getPosition().x + dx;
         const newY = this.ship.getPosition().y + dy;
+        if (dy === 0) {
+            const direction = dx > 0 ? DrillDirections.RIGHT : DrillDirections.LEFT;
+            this.ship.getDrill().setDirection(direction);
+        }
+        else {
+            const direction = dy > 0 ? DrillDirections.DOWN : DrillDirections.UP;
+            this.ship.getDrill().setDirection(direction);
+        }
 
         if (newX >= 0 && newX < this.grid.getGridSize() && newY >= 0 && newY < this.grid.getGridSize()) {
             const newPosition = new Position(newX, newY, this.ship.getPosition().z);
@@ -61,6 +70,7 @@ export class Game {
         const newZ = this.ship.getPosition().z + delta;
         if (newZ > 0) return false; // never rise above the surface
         this.ship.getBattery().reduceBattery(BatteryEvents.Z_MOVE);
+        this.ship.getDrill().setDirection(DrillDirections.CENTER);
         const newPosition = new Position(this.ship.getPosition().x, this.ship.getPosition().y, newZ);
         this.#updateShipPosition(newPosition);
         return true;
@@ -115,7 +125,7 @@ export class Game {
         if (!this.grid.getInitializedTerrainLevels().has(shipPosition.z)) {
             this.terrain.generate(shipPosition.z, this.grid);
         }
-        this.graphics.drawGrid(this.grid, shipPosition); // order matters; must be after terrain generation
+        this.graphics.drawGrid(this.grid, this.ship); // order matters; must be after terrain generation
     }
 }
 

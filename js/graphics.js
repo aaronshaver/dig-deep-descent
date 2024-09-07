@@ -1,5 +1,6 @@
 import { BasicRock } from './terrain.js';
 import { Ship } from './ship.js';
+import { DrillDirections } from './drill.js';
 
 export class Graphics {
     constructor(grid) {
@@ -18,7 +19,7 @@ export class Graphics {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     }
 
-    drawGrid(grid, shipPosition) {
+    drawGrid(grid, ship) {
         const gridSize = grid.getGridSize();
         const cellSize = grid.getCellSize();
         const gridGap = grid.getGridGap();
@@ -37,21 +38,21 @@ export class Graphics {
             }
         }
 
-        this.#drawAllObjectsAtCurrentZLevel(grid, shipPosition, cellSize, gridGap);
+        this.#drawAllObjectsAtCurrentZLevel(grid, ship, cellSize, gridGap);
 
         // Order matters; mask must be drawn after objects to properly cover them
-        this.#drawLightMask(grid, shipPosition, cellSize, gridGap);
+        this.#drawLightMask(grid, ship.getPosition(), cellSize, gridGap);
 
         // Draw special border to indicate ship is at the safe, surface-level
-        if (shipPosition.z === 0) {
+        if (ship.getPosition().z === 0) {
             this.ctx.strokeStyle = '#0000ff';
             this.ctx.lineWidth = 1;
             this.ctx.strokeRect(0, 0, this.canvas.width, this.canvas.height);
         }
     }
 
-    #drawAllObjectsAtCurrentZLevel(grid, shipPosition, cellSize, gridGap) {
-        const arrayOfArrays = grid.getGridAtZLevel(shipPosition.z);
+    #drawAllObjectsAtCurrentZLevel(grid, ship, cellSize, gridGap) {
+        const arrayOfArrays = grid.getGridAtZLevel(ship.getPosition().z);
         arrayOfArrays.forEach((row) => {
             row.forEach((object) => {
                 if (object) { // check if anything is there at all
@@ -59,7 +60,7 @@ export class Graphics {
                         this.#drawRock(cellSize, gridGap, object);
                     }
                     else if (object instanceof Ship) {
-                        this.#drawShip(cellSize, gridGap, shipPosition);
+                        this.#drawShip(cellSize, gridGap, ship);
                     }
                 }
             });
@@ -90,9 +91,9 @@ export class Graphics {
         this.ctx.fill();
     }
 
-    #drawShip(cellSize, gridGap, shipPosition) {
-        const x = shipPosition.x * (cellSize + gridGap);
-        const y = shipPosition.y * (cellSize + gridGap);
+    #drawShip(cellSize, gridGap, ship) {
+        const x = ship.getPosition().x * (cellSize + gridGap);
+        const y = ship.getPosition().y * (cellSize + gridGap);
         const centerX = x + cellSize / 2;
         const centerY = y + cellSize / 2;
         const radius = cellSize / 2 - 3;
@@ -114,8 +115,23 @@ export class Graphics {
 
         // Drill
         this.ctx.fillStyle = '#FFFFFF';
+        let xOffset = 0;
+        let yOffset = 0;
+        const drillDirection = ship.getDrill().getDirection();
+        if (drillDirection === DrillDirections.LEFT) {
+            xOffset = -5;
+        }
+        else if (drillDirection === DrillDirections.RIGHT) {
+            xOffset = 5;
+        }
+        else if (drillDirection === DrillDirections.UP) {
+            yOffset = -5;
+        }
+        else if (drillDirection === DrillDirections.DOWN) {
+            yOffset = 5;
+        }
         this.ctx.beginPath();
-        this.ctx.arc(centerX, centerY, 2, 0, Math.PI * 2);
+        this.ctx.arc(centerX + xOffset, centerY + yOffset, 2, 0, Math.PI * 2);
         this.ctx.fill();
     }
 

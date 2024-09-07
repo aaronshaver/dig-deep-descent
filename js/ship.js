@@ -1,4 +1,5 @@
 import { Battery } from "./battery.js";
+import { Drill } from "./drill.js";
 
 export class Ship {
     #position;
@@ -25,17 +26,5 @@ export class Ship {
 
     setPosition(position) {
         this.#position = position;
-    }
-}
-
-class Drill {
-    #power;
-
-    constructor() {
-        this.#power = 100;
-    }
-
-    getPower() {
-        return this.#power;
     }
 }

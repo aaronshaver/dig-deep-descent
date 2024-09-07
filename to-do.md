@@ -1,6 +1,7 @@
 ## near-term
 
 * continuing increasing test coverage
+* fix the inconsistency with the "moved" var also referring to successful rock drilling (but no movement)
 
 * feature: upgrade Depth -> Position with x, y, z (will need to calibrate around mid-points)
 * feature: for drawRock can we use a random 0-5 to skip one of the points to get randomized rocks for less uniform/more natural rocks?
