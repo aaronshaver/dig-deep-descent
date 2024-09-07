@@ -8,7 +8,7 @@ export class Grid {
   #initializedTerrainLevels;
 
   constructor() {
-    this.#size = 27;
+    this.#size = 25;
     this.#cellSize = 30;
     this.#gridGap = 1;
     this.#grid = new Map();
