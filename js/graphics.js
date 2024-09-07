@@ -95,10 +95,10 @@ export class Graphics {
         const y = shipPosition.y * (cellSize + gridGap);
         const centerX = x + cellSize / 2;
         const centerY = y + cellSize / 2;
-        const radius = cellSize / 2 - 2;
+        const radius = cellSize / 2 - 3;
 
         // Body
-        this.ctx.fillStyle = '#4477AA';
+        this.ctx.fillStyle = '#355e86';
         this.ctx.beginPath();
         this.ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
         this.ctx.fill();
