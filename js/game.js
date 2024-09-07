@@ -20,7 +20,6 @@ export class Game {
 
         this.#setupEventListeners();
         this.#updateGameState();
-        this.#updateGameState(); // WHY DOES THIS WORK?
     }
 
     #moveShipLaterally(dx, dy) {
@@ -113,10 +112,10 @@ export class Game {
 
         this.graphics.clearPlayableArea();
         const shipPosition = this.ship.getPosition();
-        this.graphics.drawGrid(this.grid, shipPosition);
         if (!this.grid.getInitializedTerrainLevels().has(shipPosition.z)) {
             this.terrain.generate(shipPosition.z, this.grid);
         }
+        this.graphics.drawGrid(this.grid, shipPosition); // order matters; must be after terrain generation
     }
 }
 
