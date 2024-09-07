@@ -33,7 +33,7 @@ export class Game {
             if (neighboringObject && neighboringObject instanceof BasicRock) {
                 const basicRock = neighboringObject;
                 this.ship.getBattery().reduceBattery(BatteryEvents.DIG_BASIC_ROCK);
-                basicRock.applyDamage(this.ship.getDrill().getPower());
+                basicRock.setHitPoints(basicRock.getHitPoints() - this.ship.getDrill().getPower());
                 if (basicRock.getHitPoints() <= 0) {
                     this.grid.removeObject(newPosition);
                     this.ship.getBattery().reduceBattery(BatteryEvents.LATERAL_MOVE);

@@ -3,22 +3,23 @@ import Position from './position.js';
 
 export class BasicRock {
   #position;
+  #hitPoints;
 
   constructor(position) {
     this.#position = position;
-    this.hitPoints = 800;
+    this.#hitPoints = 800;
   }
 
   getPosition() {
     return this.#position;
   }
 
-  applyDamage(damage) {
-    this.hitPoints -= damage;
+  setHitPoints(newValue) {
+    this.#hitPoints = newValue;
   }
 
   getHitPoints() {
-    return this.hitPoints;
+    return this.#hitPoints;
   }
 }
 

@@ -12,12 +12,12 @@ describe('BasicRock', () => {
     expect(rock.getPosition().x).toBe(1);
     expect(rock.getPosition().y).toBe(2);
     expect(rock.getPosition().z).toBe(3);
-    expect(rock.hitPoints).toBe(800);
+    expect(rock.getHitPoints()).toBe(800);
   });
 
   test('applyDamage reduces hitPoints', () => {
     const rock = new BasicRock(0, 0, 0);
-    rock.applyDamage(100);
+    rock.setHitPoints(rock.getHitPoints() - 100);
     expect(rock.getHitPoints()).toBe(700);
   });
 
