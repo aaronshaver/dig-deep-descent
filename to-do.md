@@ -1,11 +1,8 @@
 ## near-term
 
 * continuing increasing test coverage
-* fix the inconsistency with the "moved" var also referring to successful rock drilling (but no movement)
-* tweak: shrink armor to width of 1 and extend to full width
 
 * feature: upgrade Depth -> Position with x, y, z (will need to calibrate around mid-points)
-* feature: for drawRock can we use a random 0-5 to skip one of the points to get randomized rocks for less uniform/more natural rocks?
 * feature: random light brown triangles animate while digging
 * feature: correlate the # of triangles with the points of drill power to show increasing strength visually; i.e. 400 drill power should add more triangles than 100 power
 * feature: introduce a slight delay on keypress so that you can't just zip through rocks or fly across the screen

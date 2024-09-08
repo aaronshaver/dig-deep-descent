@@ -4,10 +4,12 @@ import Position from './position.js';
 export class BasicRock {
   #position;
   #hitPoints;
+  #randomFlatSide;
 
   constructor(position) {
     this.#position = position;
     this.#hitPoints = 800;
+    this.#randomFlatSide = Math.floor(Math.random() * 6);
   }
 
   getPosition() {
@@ -20,6 +22,10 @@ export class BasicRock {
 
   getHitPoints() {
     return this.#hitPoints;
+  }
+
+  getFlatSide() {
+    return this.#randomFlatSide;
   }
 }
 

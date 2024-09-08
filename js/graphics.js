@@ -73,20 +73,32 @@ export class Graphics {
         const y = rock.getPosition().y * (cellSize + gridGap);
         const centerX = x + cellSize / 2;
         const centerY = y + cellSize / 2;
-        const radius = cellSize * 0.45;
+        const radius = cellSize * 0.49;
+        const flatSide = rock.getFlatSide();
 
         this.ctx.fillStyle = '#6F4E37';
         this.ctx.beginPath();
+
         for (let i = 0; i < 6; i++) {
             const angle = (Math.PI / 3) * i;
-            const pointX = centerX + radius * Math.cos(angle);
-            const pointY = centerY + radius * Math.sin(angle);
-            if (i === 0) {
-                this.ctx.moveTo(pointX, pointY);
-            } else {
-                this.ctx.lineTo(pointX, pointY);
+            const nextAngle = (Math.PI / 3) * ((i + 1) % 6);
+
+            if (i === flatSide) {
+                // Draw a straight line between the two adjacent corners
+                const x1 = centerX + radius * Math.cos(angle);
+                const y1 = centerY + radius * Math.sin(angle);
+                const x2 = centerX + radius * Math.cos(nextAngle);
+                const y2 = centerY + radius * Math.sin(nextAngle);
+                this.ctx.lineTo(x1, y1);
+                this.ctx.lineTo(x2, y2);
+            } else if (i !== (flatSide + 5) % 6) {
+                // Draw normal side for non-flat sides
+                const x = centerX + radius * Math.cos(angle);
+                const y = centerY + radius * Math.sin(angle);
+                this.ctx.lineTo(x, y);
             }
         }
+
         this.ctx.closePath();
         this.ctx.fill();
     }
@@ -96,22 +108,27 @@ export class Graphics {
         const y = ship.getPosition().y * (cellSize + gridGap);
         const centerX = x + cellSize / 2;
         const centerY = y + cellSize / 2;
-        const radius = cellSize / 2 - 3;
 
         // Body
         this.ctx.fillStyle = '#355e86';
         this.ctx.beginPath();
+        let radius = cellSize / 2 - 1;
+        this.ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+        this.ctx.fill();
+        this.ctx.fillStyle = '#244d75';
+        this.ctx.beginPath();
+        radius = cellSize / 4;
         this.ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
         this.ctx.fill();
 
         // Armor
         this.ctx.fillStyle = '#66AAFF';
-        const armorWidth = cellSize - 10;
-        const armorThickness = 2;
-        this.ctx.fillRect(x + 5, y + 2, armorWidth, armorThickness);
-        this.ctx.fillRect(x + 5, y + cellSize - 4, armorWidth, armorThickness);
-        this.ctx.fillRect(x + 2, y + 5, armorThickness, armorWidth);
-        this.ctx.fillRect(x + cellSize - 4, y + 5, armorThickness, armorWidth);
+        const armorWidth = cellSize;
+        const armorThickness = 1;
+        this.ctx.fillRect(x, y, armorWidth, armorThickness);
+        this.ctx.fillRect(x, y + (cellSize - 1), armorWidth, armorThickness);
+        this.ctx.fillRect(x, y, armorThickness, armorWidth);
+        this.ctx.fillRect(x + (cellSize - 1), y, armorThickness, armorWidth);
 
         // Drill
         this.ctx.fillStyle = '#FFFFFF';

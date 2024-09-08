@@ -15,6 +15,13 @@ describe('BasicRock', () => {
     expect(rock.getHitPoints()).toBe(800);
   });
 
+  test('has a random flat side property within a range', () => {
+    const rock = new BasicRock(new Position(1, 2, 3));
+    expect(rock.getFlatSide()).toBeDefined;
+    expect(rock.getFlatSide()).toBeGreaterThanOrEqual(0);
+    expect(rock.getFlatSide()).toBeLessThanOrEqual(5);
+  });
+
   test('applyDamage reduces hitPoints', () => {
     const rock = new BasicRock(0, 0, 0);
     rock.setHitPoints(rock.getHitPoints() - 100);
