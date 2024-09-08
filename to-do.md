@@ -13,8 +13,7 @@
 ## medium -term
 
 * feature: white drill dot fades from white to black as correlated with percentage of battery
-* feature: show “Please play on a desktop or laptop browser” if mobile is detected
-    * make sure mobile detection doesn’t filter out iPad because could technically be played with tablet plus keyboard
+* feature: show “Please play on a desktop or laptop; mobile is not currently supported” if mobile is detected
 * feature: visual indicator of drill at work... maybe a ring, maybe a different color dot
 * feature: mouseover objects == show short description + stats like hit points of rocks
 * feature: gems get bigger diameter as the colors get more valuable to give a sense of reward
