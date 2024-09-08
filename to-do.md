@@ -2,6 +2,7 @@
 
 * continuing increasing test coverage
 * fix the inconsistency with the "moved" var also referring to successful rock drilling (but no movement)
+* tweak: shrink armor to width of 1 and extend to full width
 
 * feature: upgrade Depth -> Position with x, y, z (will need to calibrate around mid-points)
 * feature: for drawRock can we use a random 0-5 to skip one of the points to get randomized rocks for less uniform/more natural rocks?
@@ -14,7 +15,9 @@
 
 ## medium -term
 
+* feature: white drill dot fades from white to black as correlated with percentage of battery
 * feature: show “Please play on a desktop or laptop browser” if mobile is detected
+    * make sure mobile detection doesn’t filter out iPad because could technically be played with tablet plus keyboard
 * feature: visual indicator of drill at work... maybe a ring, maybe a different color dot
 * feature: mouseover objects == show short description + stats like hit points of rocks
 * feature: gems get bigger diameter as the colors get more valuable to give a sense of reward

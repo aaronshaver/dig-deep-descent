@@ -78,32 +78,32 @@ export class Game {
     #setupEventListeners() {
         document.addEventListener('keydown', (e) => {
             if (this.#gameOverReason) return;
-            let moved = false;
+            let changed = false;
             switch (e.key) {
                 case 'ArrowUp':
                 case 'w':
-                    moved = this.#moveShipLaterally(0, -1);
+                    changed = this.#moveShipLaterally(0, -1);
                     break;
                 case 'ArrowDown':
                 case 's':
-                    moved = this.#moveShipLaterally(0, 1);
+                    changed = this.#moveShipLaterally(0, 1);
                     break;
                 case 'ArrowLeft':
                 case 'a':
-                    moved = this.#moveShipLaterally(-1, 0);
+                    changed = this.#moveShipLaterally(-1, 0);
                     break;
                 case 'ArrowRight':
                 case 'd':
-                    moved = this.#moveShipLaterally(1, 0);
+                    changed = this.#moveShipLaterally(1, 0);
                     break;
                 case 'c':
-                    moved = this.#changeShipZLevel(-1);
+                    changed = this.#changeShipZLevel(-1);
                     break;
                 case ' ':
-                    moved = this.#changeShipZLevel(1);
+                    changed = this.#changeShipZLevel(1);
                     break;
             }
-            if (moved) {
+            if (changed) {
                 this.#updateGameState();
             }
         });
@@ -113,7 +113,7 @@ export class Game {
         this.graphics.updateStats(this.ship); // order matters so that battery stats make sense during Game Over
 
         if (this.ship.getBattery().getLevel() <= 0) {
-            this.#gameOverReason = "Your console goes dark. The clean air filter whirs to a stop. It's now quiet in your ship. You realize the worst has happened as the ship runs out of power completely. The ship grows dark and cold as you hope an OBTL ship passes by soon, before you freeze or starve to death...";
+            this.#gameOverReason = "Your console goes dark. The clean air filter whirs to a stop. It's now quiet in your ship. You realize the worst has happened as the ship runs out of power completely. The ship grows dark and cold as you hope another mining ship passes near you soon, before you freeze or starve to death...";
         }
         if (this.#gameOverReason) {
             this.graphics.displayGameOver(this.#gameOverReason);
