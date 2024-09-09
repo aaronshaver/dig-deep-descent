@@ -4,6 +4,7 @@
 
 ## near-term
 
+* add a recommended background music link: https://www.youtube.com/watch?v=EtADp4pZU2s
 * feature: upgrade Depth -> Position with x, y, z (will need to calibrate around mid-points)
 * feature: introduce a slight delay on keypress so that you can't just zip through rocks or fly across the screen
 * feature: visual effects pipeline, and start using it for random light brown triangles while digging
