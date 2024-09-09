@@ -39,7 +39,7 @@ export class Terrain {
     rocks = rocks.concat(this.#generateTerrainAtScale(z, grid, 0.1));
     rocks = rocks.concat(this.#generateTerrainAtScale(z, grid, 0.4));
     rocks = rocks.concat(this.#generateTerrainAtScale(z, grid, 0.8));
-    grid.setInitializedTerrainLevel(z);
+    grid.setTerrainAsGeneratedForLevel(z);
     return rocks;
   }
 

@@ -122,7 +122,7 @@ export class Game {
 
         this.graphics.clearPlayableArea();
         const shipPosition = this.ship.getPosition();
-        if (!this.grid.getInitializedTerrainLevels().has(shipPosition.z)) {
+        if (!this.grid.getLevelsWithGeneratedTerrain().has(shipPosition.z)) {
             this.terrain.generate(shipPosition.z, this.grid);
         }
         this.graphics.drawGrid(this.grid, this.ship); // order matters; must be after terrain generation

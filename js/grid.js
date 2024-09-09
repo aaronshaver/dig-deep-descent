@@ -13,23 +13,23 @@ export class Grid {
     this.#gridGap = 1;
     this.#grid = new Map();
     this.#initializedTerrainLevels = new Set([]);
-    this.initLevel(0);
+    this.createEmptyLevel(0);
   }
 
   // fill a z-level with initial nulls so that we can place objects at coordinates later
-  initLevel(z) {
+  createEmptyLevel(z) {
     if (!this.#grid.has(z)) {
       this.#grid.set(z, Array(this.#size).fill().map(() => Array(this.#size).fill(null)));
     }
   }
 
   // returns a Set of which levels have had the initial creation of terrain
-  getInitializedTerrainLevels() {
+  getLevelsWithGeneratedTerrain() {
     return this.#initializedTerrainLevels;
   }
 
   // marks a given z-level as having completed its initial terrain generation
-  setInitializedTerrainLevel(z) {
+  setTerrainAsGeneratedForLevel(z) {
     this.#initializedTerrainLevels.add(z);
   }
 
@@ -56,7 +56,7 @@ export class Grid {
   }
 
   getObject(position) {
-    this.initLevel(position.z);
+    this.createEmptyLevel(position.z);
     return this.#grid.get(position.z)[position.y][position.x];
   }
 
@@ -64,7 +64,7 @@ export class Grid {
     if (!position || !object) {
       throw new Error('Invalid position or object');
     }
-    this.initLevel(position.z);
+    this.createEmptyLevel(position.z);
     this.#grid.get(position.z)[position.y][position.x] = object;
   }
 
