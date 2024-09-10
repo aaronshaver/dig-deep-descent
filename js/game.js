@@ -20,7 +20,7 @@ export class Game {
         this.grid.setObject(this.ship.getPosition(), this.ship);
 
         this.#setupEventListeners();
-        this.#updateGameState();
+        this.updateGameState();
     }
 
     #moveShipLaterally(dx, dy) {
@@ -75,41 +75,41 @@ export class Game {
         this.#updateShipPosition(newPosition);
         return true;
     }
+
     #setupEventListeners() {
         document.addEventListener('keydown', (e) => {
             if (this.#gameOverReason) return;
-            let changed = false;
-            switch (e.key) {
-                case 'ArrowUp':
-                case 'w':
-                    changed = this.#moveShipLaterally(0, -1);
-                    break;
-                case 'ArrowDown':
-                case 's':
-                    changed = this.#moveShipLaterally(0, 1);
-                    break;
-                case 'ArrowLeft':
-                case 'a':
-                    changed = this.#moveShipLaterally(-1, 0);
-                    break;
-                case 'ArrowRight':
-                case 'd':
-                    changed = this.#moveShipLaterally(1, 0);
-                    break;
-                case 'c':
-                    changed = this.#changeShipZLevel(-1);
-                    break;
-                case ' ':
-                    changed = this.#changeShipZLevel(1);
-                    break;
-            }
+            const changed = this.handleKeyPress(e.key);
             if (changed) {
-                this.#updateGameState();
+                this.updateGameState();
             }
         });
     }
 
-    #updateGameState() {
+    handleKeyPress(key) {
+        switch (key) {
+            case 'ArrowUp':
+            case 'w':
+                return this.#moveShipLaterally(0, -1);
+            case 'ArrowDown':
+            case 's':
+                return this.#moveShipLaterally(0, 1);
+            case 'ArrowLeft':
+            case 'a':
+                return this.#moveShipLaterally(-1, 0);
+            case 'ArrowRight':
+            case 'd':
+                return this.#moveShipLaterally(1, 0);
+            case 'c':
+                return this.#changeShipZLevel(-1);
+            case ' ':
+                return this.#changeShipZLevel(1);
+            default:
+                return false;
+        }
+    }
+
+    updateGameState() {
         this.graphics.updateStats(this.ship); // order matters so that battery stats make sense during Game Over
 
         if (this.ship.getBattery().getLevel() <= 0) {
