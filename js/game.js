@@ -19,7 +19,6 @@ export class Game {
         // add Ship to the Grid
         this.grid.setObject(this.ship.getPosition(), this.ship);
 
-        this.#setupEventListeners();
         this.updateGameState();
     }
 
@@ -76,8 +75,8 @@ export class Game {
         return true;
     }
 
-    #setupEventListeners() {
-        document.addEventListener('keydown', (e) => {
+    setupEventListeners(element) {
+        element.addEventListener('keydown', (e) => {
             if (this.#gameOverReason) return;
             const changed = this.handleKeyPress(e.key);
             if (changed) {
@@ -128,10 +127,3 @@ export class Game {
         this.graphics.drawGrid(this.grid, this.ship); // order matters; must be after terrain generation
     }
 }
-
-document.addEventListener('DOMContentLoaded', () => {
-    const grid = new Grid();
-    const graphics = new Graphics(grid);
-    const terrain = new Terrain();
-    new Game(grid, graphics, terrain);
-});

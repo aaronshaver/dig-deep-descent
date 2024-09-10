@@ -8,6 +8,7 @@ module.exports = {
   collectCoverageFrom: [
     'js/**/*.js',
     '!js/perlin-noise.js',
-    '!js/graphics.js'
+    '!js/graphics.js',
+    '!js/main.js'
   ],
 };
