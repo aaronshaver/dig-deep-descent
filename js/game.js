@@ -73,8 +73,8 @@ export class Game {
         return true;
     }
 
-    setupEventListeners(element) {
-        element.addEventListener('keydown', (e) => {
+    setupEventListeners(dom) {
+        dom.addEventListener('keydown', (e) => {
             if (this.#gameOverReason) return;
             const changed = this.handleKeyPress(e.key);
             if (changed) {

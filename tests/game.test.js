@@ -3,7 +3,6 @@ import { Grid } from '../js/grid.js';
 import { Graphics } from '../js/graphics.js';
 import { Terrain } from '../js/terrain.js';
 import { Ship } from '../js/ship.js';
-import { BasicRock } from '../js/terrain.js';
 import Position from '../js/position.js';
 
 jest.mock('../js/graphics.js');
