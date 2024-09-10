@@ -23,7 +23,7 @@ describe('Game', () => {
     // Set up Grid mock
     Grid.mockImplementation(() => ({
       getLevelsWithGeneratedTerrain: jest.fn().mockReturnValue(new Set()),
-      getCenteredInitialShipPosition: jest.fn().mockReturnValue(new Position(6, 6, 0)),
+      getCenteredInitialShipPosition: jest.fn().mockReturnValue(new Position(5, 5, 0)),
       setObject: jest.fn(),
       getGridSize: jest.fn().mockReturnValue(11),
       getObject: jest.fn(),
@@ -57,14 +57,28 @@ describe('Game', () => {
     expect(grid.setObject).toHaveBeenCalledWith(expect.any(Position), game.ship);
   });
 
-  test('handleKeyPress responds to different keys correctly', () => {
+  test('handleKeyPress happy path cases where movement occurs', () => {
     expect(game.handleKeyPress('ArrowUp')).toBe(true);
     expect(game.handleKeyPress('ArrowDown')).toBe(true);
     expect(game.handleKeyPress('ArrowLeft')).toBe(true);
     expect(game.handleKeyPress('ArrowRight')).toBe(true);
+    expect(game.handleKeyPress('w')).toBe(true);
+    expect(game.handleKeyPress('a')).toBe(true);
+    expect(game.handleKeyPress('s')).toBe(true);
+    expect(game.handleKeyPress('d')).toBe(true);
     expect(game.handleKeyPress('c')).toBe(true);
     expect(game.handleKeyPress(' ')).toBe(true);
-    expect(game.handleKeyPress('x')).toBe(false);
+    expect(game.handleKeyPress('*')).toBe(false); // unsupported key
+  });
+
+  test('handleKeyPress sad path case where movement does not occur', () => {
+    // on an 11x11 grid, if at the center (x==5 and y==5), after 5 up movements, cannot go further up
+    game.handleKeyPress('w');
+    game.handleKeyPress('w');
+    game.handleKeyPress('w');
+    game.handleKeyPress('w');
+    game.handleKeyPress('w');
+    expect(game.handleKeyPress('w')).toBe(false);
   });
 
   test('updateGameState handles low battery condition', () => {

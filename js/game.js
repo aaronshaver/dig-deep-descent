@@ -1,7 +1,5 @@
 import { Ship } from './ship.js';
-import { Grid } from './grid.js';
-import { Terrain, BasicRock } from './terrain.js';
-import { Graphics } from './graphics.js';
+import { BasicRock } from './terrain.js';
 import Position from './position.js';
 import { BatteryEvents } from './battery.js';
 import { DrillDirections } from './drill.js'
