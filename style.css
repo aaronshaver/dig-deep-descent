@@ -7,6 +7,14 @@ body, html {
     color: #ddd;
 }
 
+a:link {
+    color: #0096FF;
+}
+
+a:visited {
+    color: #7393B3;
+}
+
 .column {
     padding: 20px;
     box-sizing: border-box;

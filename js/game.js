@@ -23,28 +23,15 @@ export class Game {
     #moveShipLaterally(dx, dy) {
         const newX = this.ship.getPosition().x + dx;
         const newY = this.ship.getPosition().y + dy;
-        if (dy === 0) {
-            const direction = dx > 0 ? DrillDirections.RIGHT : DrillDirections.LEFT;
-            this.ship.getDrill().setDirection(direction);
-        }
-        else {
-            const direction = dy > 0 ? DrillDirections.DOWN : DrillDirections.UP;
-            this.ship.getDrill().setDirection(direction);
-        }
+
+        this.ship.getDrill().setDirection(this.#calculateNewDrillDirection(dy, dx));
 
         if (newX >= 0 && newX < this.grid.getGridSize() && newY >= 0 && newY < this.grid.getGridSize()) {
             const newPosition = new Position(newX, newY, this.ship.getPosition().z);
             const neighboringObject = this.grid.getObject(newPosition);
 
             if (neighboringObject && neighboringObject instanceof BasicRock) {
-                const basicRock = neighboringObject;
-                this.ship.getBattery().reduceBattery(BatteryEvents.DIG_BASIC_ROCK);
-                basicRock.setHitPoints(basicRock.getHitPoints() - this.ship.getDrill().getPower());
-                if (basicRock.getHitPoints() <= 0) {
-                    this.grid.removeObject(newPosition);
-                    this.ship.getBattery().reduceBattery(BatteryEvents.LATERAL_MOVE);
-                    this.#updateShipPosition(newPosition);
-                }
+                this.#handleBasicRockCollision(neighboringObject, newPosition);
                 return true;
             }
             else {
@@ -55,6 +42,27 @@ export class Game {
             }
         }
         return false;
+    }
+
+    #handleBasicRockCollision(rock, position) {
+        this.ship.getBattery().reduceBattery(BatteryEvents.DIG_BASIC_ROCK);
+        rock.setHitPoints(rock.getHitPoints() - this.ship.getDrill().getStrength());
+        if (rock.getHitPoints() <= 0) {
+            this.grid.removeObject(position);
+            this.ship.getBattery().reduceBattery(BatteryEvents.LATERAL_MOVE);
+            this.#updateShipPosition(position);
+        }
+    }
+
+    #calculateNewDrillDirection(dy, dx) {
+        let direction;
+        if (dy === 0) {
+            direction = dx > 0 ? DrillDirections.RIGHT : DrillDirections.LEFT;
+        }
+        else {
+            direction = dy > 0 ? DrillDirections.DOWN : DrillDirections.UP;
+        }
+        return direction;
     }
 
     #updateShipPosition(newPosition) {

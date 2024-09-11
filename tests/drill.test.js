@@ -1,4 +1,6 @@
 import { Drill, DrillDirections } from '../js/drill.js';
+import { Ship } from '../js/ship.js';
+import Position from '../js/position.js';
 
 describe('Drill', () => {
     test('starts with center direction', () => {
@@ -23,4 +25,10 @@ describe('Drill', () => {
         expect(drill.getDirection()).toBeDefined();
         expect(drill.getDirection()).toBe(DrillDirections.DOWN);
     });
+
+    test('should have initial drill power/strength of 100', () => {
+        const ship = new Ship(new Position(0, 0, 0));
+        expect(ship.getDrill().getStrength()).toBe(100);
+    });
+
 });

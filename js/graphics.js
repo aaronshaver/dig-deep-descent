@@ -185,7 +185,7 @@ export class Graphics {
     updateStats(ship) {
         this.depthStat.textContent = ship.getPosition().z * 10; // digging down is meant to be expensive
         this.batteryStat.textContent = ship.getBattery().getLevel();
-        this.drillPowerStat.textContent = ship.getDrill().getPower();
+        this.drillPowerStat.textContent = ship.getDrill().getStrength();
     }
 
     displayGameOver(reason) {

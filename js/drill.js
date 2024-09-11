@@ -7,16 +7,16 @@ export const DrillDirections = {
 };
 
 export class Drill {
-    #power;
-    #direction;
+    #strength; // how much damage the drill can do against drill-able objects
+    #direction; // which cardinal direction the drill faces (or centered)
 
     constructor() {
-        this.#power = 100;
+        this.#strength = 100;
         this.#direction = DrillDirections.CENTER;
     }
 
-    getPower() {
-        return this.#power;
+    getStrength() {
+        return this.#strength;
     }
 
     getDirection() {

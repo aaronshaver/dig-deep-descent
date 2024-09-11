@@ -1,7 +1,7 @@
 
 # 0.1
 
-* finish back-filling test coverage
+* finish back-filling test coverage for game.js (at about 80% coverage now)
 
 # 0.2 - mineral system
 
