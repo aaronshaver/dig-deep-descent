@@ -1,4 +1,4 @@
-import { BasicRock, Terrain } from '../js/terrain.js';
+import { Rock, LightRock, Terrain } from '../js/terrain.js';
 import { PerlinNoise } from '../js/perlin-noise.js';
 import { Grid } from '../js/grid.js';
 import Position from '../js/position.js';
@@ -6,31 +6,47 @@ import Position from '../js/position.js';
 jest.mock('../js/perlin-noise.js');
 jest.mock('../js/grid.js');
 
-describe('BasicRock', () => {
+describe('Rock', () => {
   test('constructor initializes properties correctly', () => {
-    const rock = new BasicRock(new Position(1, 2, 3));
+    const rock = new Rock(new Position(1, 2, 3), 999, 0.44);
     expect(rock.getPosition().x).toBe(1);
     expect(rock.getPosition().y).toBe(2);
     expect(rock.getPosition().z).toBe(3);
-    expect(rock.getHitPoints()).toBe(800);
+    expect(rock.getHitPoints()).toBe(999);
+    expect(rock.getRadius()).toBe(0.44);
   });
 
   test('has a random flat side property within a range', () => {
-    const rock = new BasicRock(new Position(1, 2, 3));
+    const rock = new Rock(new Position(1, 2, 3), 333, 0.33);
     expect(rock.getFlatSide()).toBeDefined;
     expect(rock.getFlatSide()).toBeGreaterThanOrEqual(0);
     expect(rock.getFlatSide()).toBeLessThanOrEqual(5);
   });
 
   test('applyDamage reduces hitPoints', () => {
-    const rock = new BasicRock(0, 0, 0);
+    const rock = new Rock(new Position(1, 2, 3), 600, 0.33);
     rock.setHitPoints(rock.getHitPoints() - 100);
-    expect(rock.getHitPoints()).toBe(700);
+    expect(rock.getHitPoints()).toBe(500);
   });
 
-  test('getHitPoints returns correct value for BasicRock', () => {
-    const rock = new BasicRock(0, 0, 0);
-    expect(rock.getHitPoints()).toBe(800);
+  test('constructor throws error if no hitPoints passed in', () => {
+    expect(() => {
+      new Rock(new Position(1, 2, 3), null, 0.44);
+    }).toThrow('No hitPoints param passed in to Rock constructor');
+  });
+
+  test('constructor throws error if no radius passed in', () => {
+    expect(() => {
+      new Rock(new Position(1, 2, 3), 100);
+    }).toThrow('No radius param passed in to Rock constructor');
+  });
+});
+
+describe('LightRock', () => {
+  test('constructor initializes properties correctly', () => {
+    const lightRock = new LightRock(new Position(1, 2, 3));
+    expect(lightRock.getHitPoints()).toBe(800);
+    expect(lightRock.getRadius()).toBe(0.41);
   });
 });
 
@@ -46,14 +62,14 @@ describe('Terrain', () => {
     mockGrid.getGridSize.mockReturnValue(5);
   });
 
-  test('generate returns an array of BasicRock objects', () => {
+  test('generate returns an array of Rock objects', () => {
     const mockPerlin = {
       getNoise: jest.fn().mockReturnValue(0.3)
     };
     terrain.perlin = mockPerlin;
 
     const rocks = terrain.generate(0, mockGrid);
-    expect(rocks.every(rock => rock instanceof BasicRock)).toBe(true);
+    expect(rocks.every(rock => rock instanceof Rock)).toBe(true);
   });
 
   test('increasing scale parameters result in fewer rocks', () => {

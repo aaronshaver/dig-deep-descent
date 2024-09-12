@@ -1,4 +1,4 @@
-import { BasicRock } from './terrain.js';
+import { Rock } from './terrain.js';
 import { Ship } from './ship.js';
 import { DrillDirections } from './drill.js';
 
@@ -56,7 +56,7 @@ export class Graphics {
         arrayOfArrays.forEach((row) => {
             row.forEach((object) => {
                 if (object) { // check if anything is there at all
-                    if (object instanceof BasicRock) {
+                    if (object instanceof Rock) {
                         this.#drawRock(cellSize, gridGap, object);
                     }
                     else if (object instanceof Ship) {
@@ -73,7 +73,7 @@ export class Graphics {
         const y = rock.getPosition().y * (cellSize + gridGap);
         const centerX = x + cellSize / 2;
         const centerY = y + cellSize / 2;
-        const radius = cellSize * 0.49;
+        const radius = cellSize * rock.getRadius();
         const flatSide = rock.getFlatSide();
 
         this.ctx.fillStyle = '#6F4E37';

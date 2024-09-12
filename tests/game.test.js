@@ -3,7 +3,7 @@ import { Grid } from '../js/grid.js';
 import { Graphics } from '../js/graphics.js';
 import { Terrain } from '../js/terrain.js';
 import { Ship } from '../js/ship.js';
-import { BasicRock } from '../js/terrain.js';
+import { Rock } from '../js/terrain.js';
 import Position from '../js/position.js';
 import { BatteryEvents } from '../js/battery.js';
 
@@ -81,9 +81,9 @@ describe('Game', () => {
     }));
   });
 
-  test('attempts to move ship into cell with BasicRock', () => {
+  test('attempts to move ship into cell with Rock', () => {
     const rockPosition = new Position(6, 5, 0);
-    const mockRock = new BasicRock(rockPosition);
+    const mockRock = new Rock(rockPosition);
     mockRock.getHitPoints = jest.fn().mockReturnValue(100);
     mockGrid.getObject.mockReturnValue(mockRock);
 
@@ -91,9 +91,9 @@ describe('Game', () => {
     expect(mockShip.setPosition).not.toHaveBeenCalled();
   });
 
-  test('destroys BasicRock and moves into its cell', () => {
+  test('destroys Rock and moves into its cell', () => {
     const rockPosition = new Position(6, 5, 0);
-    const mockRock = new BasicRock(rockPosition);
+    const mockRock = new Rock(rockPosition);
     mockRock.getHitPoints = jest.fn().mockReturnValue(0);
     mockGrid.getObject.mockReturnValue(mockRock);
 
@@ -108,9 +108,9 @@ describe('Game', () => {
     expect(mockShip.getBattery().reduceBattery).toHaveBeenCalledWith(BatteryEvents.LATERAL_MOVE);
   });
 
-  test('drains battery correctly when destroying BasicRock', () => {
+  test('drains battery correctly when destroying Rock', () => {
     const rockPosition = new Position(6, 5, 0);
-    const mockRock = new BasicRock(rockPosition);
+    const mockRock = new Rock(rockPosition);
     mockRock.getHitPoints = jest.fn().mockReturnValue(0);
     mockGrid.getObject.mockReturnValue(mockRock);
 

@@ -1,5 +1,5 @@
 import { Ship } from './ship.js';
-import { BasicRock } from './terrain.js';
+import { Rock } from './terrain.js';
 import Position from './position.js';
 import { BatteryEvents } from './battery.js';
 import { DrillDirections } from './drill.js'
@@ -30,8 +30,8 @@ export class Game {
             const newPosition = new Position(newX, newY, this.ship.getPosition().z);
             const neighboringObject = this.grid.getObject(newPosition);
 
-            if (neighboringObject && neighboringObject instanceof BasicRock) {
-                this.#handleBasicRockCollision(neighboringObject, newPosition);
+            if (neighboringObject && neighboringObject instanceof Rock) {
+                this.#handleRockCollision(neighboringObject, newPosition);
                 return true;
             }
             else {
@@ -44,7 +44,7 @@ export class Game {
         return false;
     }
 
-    #handleBasicRockCollision(rock, position) {
+    #handleRockCollision(rock, position) {
         this.ship.getBattery().reduceBattery(BatteryEvents.DIG_BASIC_ROCK);
         rock.setHitPoints(rock.getHitPoints() - this.ship.getDrill().getStrength());
         if (rock.getHitPoints() <= 0) {
