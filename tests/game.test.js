@@ -160,31 +160,15 @@ describe('Game', () => {
     expect(mockTerrain.generate).toHaveBeenCalled();
   });
 
-  test('setupEventListeners attaches event listener to provided element', () => {
-    const mockElement = { addEventListener: jest.fn() };
-    game.setupEventListeners(mockElement);
-    expect(mockElement.addEventListener).toHaveBeenCalledWith('keydown', expect.any(Function));
-  });
+  test('updateGameState does not regenerate terrain for already generated levels', () => {
+    const mockShipPosition = new Position(5, 5, 0);
+    mockShip.getPosition.mockReturnValue(mockShipPosition);
+    const mockSet = new Set([0]);
+    mockGrid.getLevelsWithGeneratedTerrain.mockReturnValue(mockSet);
+    mockTerrain.generate.mockClear(); // reset call count
 
-  test('setupEventListeners correctly handles keydown events', () => {
-    const mockElement = { addEventListener: jest.fn() };
-    game.setupEventListeners(mockElement);
+    game.updateGameState();
 
-    // Verify that the event listener was added
-    expect(mockElement.addEventListener).toHaveBeenCalledWith('keydown', expect.any(Function));
-
-    // Get the event handler function
-    const eventHandler = mockElement.addEventListener.mock.calls[0][1];
-
-    // Create a mock event
-    const mockEvent = { key: 'ArrowRight' };
-
-    // Call the event handler
-    eventHandler(mockEvent);
-
-    // Verify that the game state was updated
-    expect(mockGraphics.updateStats).toHaveBeenCalled();
-    expect(mockGraphics.clearPlayableArea).toHaveBeenCalled();
-    expect(mockGraphics.drawGrid).toHaveBeenCalled();
+    expect(mockTerrain.generate).not.toHaveBeenCalled();
   });
 });

@@ -1,8 +1,4 @@
 
-# 0.1
-
-* finish back-filling test coverage for game.js (at about 80% coverage now)
-
 # 0.2 - mineral system
 
 * gem and rock rarity system for "fading" rock and gem types in and out depending on level

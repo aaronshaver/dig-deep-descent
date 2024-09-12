@@ -5,13 +5,13 @@ import { BatteryEvents } from './battery.js';
 import { DrillDirections } from './drill.js'
 
 export class Game {
-    #gameOverReason;
+    gameOverReason;
 
     constructor(grid, graphics, terrain) {
         this.grid = grid;
         this.graphics = graphics;
         this.terrain = terrain;
-        this.#gameOverReason = null;
+        this.gameOverReason = null;
 
         this.ship = new Ship(this.grid.getCenteredInitialShipPosition());
         // add Ship to the Grid
@@ -81,16 +81,6 @@ export class Game {
         return true;
     }
 
-    setupEventListeners(dom) {
-        dom.addEventListener('keydown', (e) => {
-            if (this.#gameOverReason) return;
-            const changed = this.handleKeyPress(e.key);
-            if (changed) {
-                this.updateGameState();
-            }
-        });
-    }
-
     handleKeyPress(key) {
         switch (key) {
             case 'ArrowUp':
@@ -118,10 +108,10 @@ export class Game {
         this.graphics.updateStats(this.ship); // order matters so that battery stats make sense during Game Over
 
         if (this.ship.getBattery().getLevel() <= 0) {
-            this.#gameOverReason = "Your console goes dark. The clean air filter whirs to a stop. It's now quiet in your ship. You realize the worst has happened as the ship runs out of power completely. The ship grows dark and cold as you hope another mining ship passes near you soon, before you freeze or starve to death...";
+            this.gameOverReason = "Your console goes dark. The clean air filter whirs to a stop. It's now quiet in your ship. You realize the worst has happened as the ship runs out of power completely. The ship grows dark and cold as you hope another mining ship passes near you soon, before you freeze or starve to death...";
         }
-        if (this.#gameOverReason) {
-            this.graphics.displayGameOver(this.#gameOverReason);
+        if (this.gameOverReason) {
+            this.graphics.displayGameOver(this.gameOverReason);
             return;
         }
 
