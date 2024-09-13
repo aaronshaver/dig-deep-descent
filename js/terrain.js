@@ -64,8 +64,10 @@ export class Terrain {
   generate(z, grid) {
     let rocks = [];
     rocks = rocks.concat(this.#generateTerrainAtScale(z, grid, 0.1));
-    rocks = rocks.concat(this.#generateTerrainAtScale(z, grid, 0.4));
-    rocks = rocks.concat(this.#generateTerrainAtScale(z, grid, 0.8));
+    rocks = rocks.concat(this.#generateTerrainAtScale(z, grid, 0.3));
+    rocks = rocks.concat(this.#generateTerrainAtScale(z, grid, 0.5));
+    rocks = rocks.concat(this.#generateTerrainAtScale(z, grid, 0.7));
+    rocks = rocks.concat(this.#generateTerrainAtScale(z, grid, 0.9));
     grid.setTerrainAsGeneratedForLevel(z);
     return rocks;
   }
