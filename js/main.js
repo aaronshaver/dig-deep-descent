@@ -1,14 +1,14 @@
 import { Game } from './game.js';
 import { Grid } from './grid.js';
 import { Graphics } from './graphics.js';
-import { Terrain } from './terrain.js';
+import { TerrainGenerator } from './terrain-generation.js';
 
 // we separate out DOM stuff because otherwise Jest tests get mad because of conflicting implementation DOM vs test DOM
 document.addEventListener('DOMContentLoaded', () => {
     const grid = new Grid();
     const graphics = new Graphics(grid);
-    const terrain = new Terrain();
-    const game = new Game(grid, graphics, terrain);
+    const terrainGenerator = new TerrainGenerator();
+    const game = new Game(grid, graphics, terrainGenerator);
 
     document.addEventListener('keydown', (e) => {
         if (game.gameOverReason) return;

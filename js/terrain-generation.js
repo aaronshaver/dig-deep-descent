@@ -1,80 +1,5 @@
-class SolidObject {
-    #position;
-    #hitPoints;
-    #radius;
-
-    constructor(position, hitPoints, radius) {
-        this.#position = position;
-        this.#hitPoints = hitPoints;
-        this.#radius = radius;
-    }
-
-    getPosition() {
-        return this.#position;
-    }
-
-    setHitPoints(value) {
-        this.#hitPoints = value;
-    }
-
-    getHitPoints() {
-        return this.#hitPoints;
-    }
-
-    getRadius() {
-        return this.#radius;
-    }
-}
-
-class Rock extends SolidObject {
-    #randomFlatSide;
-
-    constructor(position, hitPoints, radius) {
-        super(position, hitPoints, radius);
-        this.#randomFlatSide = Math.floor(Math.random() * 6);
-    }
-
-    getFlatSide() {
-        return this.#randomFlatSide;
-    }
-}
-
-class Mineral extends SolidObject {
-    #sellValue;
-
-    constructor(position, hitPoints, radius, sellValue) {
-        super(position, hitPoints, radius);
-        this.#sellValue = sellValue;
-    }
-
-    getSellValue() {
-        return this.#sellValue;
-    }
-}
-
-class CompositeObject {
-    #rock;
-    #mineral;
-    #isScanned;
-
-    constructor(rock, mineral = null) {
-        this.#rock = rock;
-        this.#mineral = mineral;
-        this.#isScanned = true;  // Set to true for now
-    }
-
-    getRock() {
-        return this.#rock;
-    }
-
-    getMineral() {
-        return this.#mineral;
-    }
-
-    isScanned() {
-        return this.#isScanned;
-    }
-}
+import { Rock, Mineral } from './solid-objects.js';
+import Position from './position.js';
 
 class ZLevelDistribution {
     #distributions;
@@ -140,6 +65,8 @@ class TerrainGenerator {
     #zLevelDistribution;
 
     constructor(perlin, zLevelDistribution) {
+        if (!perlin) throw new Error("No perlin param passed in to TerrainGenerator constructor");
+        if (!zLevelDistribution) throw new Error("No zLevelDistribution param passed in to TerrainGenerator constructor");
         this.#perlin = perlin;
         this.#zLevelDistribution = zLevelDistribution;
     }
@@ -191,3 +118,5 @@ class TerrainGenerator {
         }
     }
 }
+
+export { ZLevelDistribution, TerrainGenerator };

@@ -1,5 +1,5 @@
 import { Ship } from './ship.js';
-import { Rock } from './terrain.js';
+import { CompositeObject } from './solid-objects.js';
 import Position from './position.js';
 import { BatteryEvents } from './battery.js';
 import { DrillDirections } from './drill.js'
@@ -7,10 +7,10 @@ import { DrillDirections } from './drill.js'
 export class Game {
     gameOverReason;
 
-    constructor(grid, graphics, terrain) {
+    constructor(grid, graphics, terrainGenerator) {
         this.grid = grid;
         this.graphics = graphics;
-        this.terrain = terrain;
+        this.terrainGenerator = terrainGenerator;
         this.gameOverReason = null;
 
         this.ship = new Ship(this.grid.getCenteredInitialShipPosition());
@@ -30,8 +30,8 @@ export class Game {
             const newPosition = new Position(newX, newY, this.ship.getPosition().z);
             const neighboringObject = this.grid.getObject(newPosition);
 
-            if (neighboringObject && neighboringObject instanceof Rock) {
-                this.#handleRockCollision(neighboringObject, newPosition);
+            if (neighboringObject && neighboringObject instanceof CompositeObject) {
+                this.#handleCollision(neighboringObject, newPosition);
                 return true;
             }
             else {
@@ -44,7 +44,7 @@ export class Game {
         return false;
     }
 
-    #handleRockCollision(rock, position) {
+    #handleCollision(rock, position) {
         this.ship.getBattery().reduceBattery(BatteryEvents.DIG_ROCK);
         rock.setHitPoints(rock.getHitPoints() - this.ship.getDrill().getStrength());
         if (rock.getHitPoints() <= 0) {
@@ -118,7 +118,7 @@ export class Game {
         this.graphics.clearPlayableArea();
         const shipPosition = this.ship.getPosition();
         if (!this.grid.getLevelsWithGeneratedTerrain().has(shipPosition.z)) {
-            this.terrain.generate(shipPosition.z, this.grid);
+            this.terrainGenerator.generate(shipPosition.z, this.grid);
         }
         this.graphics.drawGrid(this.grid, this.ship); // order matters; must be after terrain generation
     }
