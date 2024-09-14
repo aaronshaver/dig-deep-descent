@@ -1,10 +1,6 @@
 
 # 0.2 - mineral system
 
-* gem and rock rarity system for "fading" rock and gem types in and out depending on level
-    * maybe min percent, increment, decrement, max percent values?
-* gems should have a radius attribute
-* feature: add first mineral, and be sure to replace rocks with minerals rather than placing them on empty ground
 * feature: minerals are hidden until scanner reveals them
 * bump the version number in index.html
 

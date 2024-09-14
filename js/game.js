@@ -46,8 +46,9 @@ export class Game {
 
     #handleCollision(object, position) {
         this.ship.getBattery().reduceBattery(BatteryEvents.DIG_ROCK);
-        object.setHitPoints(object.getHitPoints() - this.ship.getDrill().getStrength());
-        if (object.getHitPoints() <= 0) {
+        const rock = object.getRock();
+        rock.setHitPoints(rock.getHitPoints() - this.ship.getDrill().getStrength());
+        if (rock.getHitPoints() <= 0) {
             this.grid.removeObject(position);
             this.ship.getBattery().reduceBattery(BatteryEvents.LATERAL_MOVE);
             this.#updateShipPosition(position);
