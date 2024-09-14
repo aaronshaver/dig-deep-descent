@@ -77,7 +77,7 @@ export class Graphics {
         const rock = compositeObject.getRock();
         const rockRadius = cellSize * rock.getRadius();
         const rockFlatSide = rock.getFlatSide();
-        this.#drawRock(centerX, centerY, rockRadius, rockFlatSide);
+        this.#drawRock(rock.getName(), centerX, centerY, rockRadius, rockFlatSide);
 
         const mineral = compositeObject.getMineral();
         if (mineral) {
@@ -121,8 +121,15 @@ export class Graphics {
         this.ctx.fill();
     }
 
-    #drawRock(centerX, centerY, rockRadius, rockFlatSide) {
-        this.ctx.fillStyle = '#6F4E37';
+    #drawRock(name, centerX, centerY, rockRadius, rockFlatSide) {
+        // calculate color
+        const rockColors = new Map([
+            ["LightRock", ['#6F4E37']],
+            ["MediumRock", ['#CCCCCC']],
+        ]);
+        let rockColor;
+        [rockColor] = rockColors.get(name);
+        this.ctx.fillStyle = rockColor;
         this.ctx.beginPath();
 
         for (let i = 0; i < 6; i++) {
