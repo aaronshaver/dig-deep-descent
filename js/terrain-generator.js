@@ -8,7 +8,7 @@ class ZLevelDistribution {
         this.#distributions = {
             0: {LightRock: 0.95, RedMineral: 0.05},
             10: {LightRock: 0.90, MediumRock: 0.05, RedMineral: 0.05},
-            20: {LightRock: 0.80, MediumRock: 0.15, RedMineral: 0.03, GreenMineral: 0.02},
+            20: {LightRock: 0.80, MediumRock: 0.15, RedMineral: 0.03, BlueMineral: 0.02},
         };
     }
 
@@ -70,8 +70,8 @@ class TerrainGenerator {
     #zLevelDistribution;
 
     constructor(perlin, zLevelDistribution) {
-        if (!perlin) throw new Error("No perlin param passed in to TerrainGenerator constructor");
-        if (!zLevelDistribution) throw new Error("No zLevelDistribution param passed in to TerrainGenerator constructor");
+        if (!perlin) throw new Error("No perlin passed in to TerrainGenerator constructor");
+        if (!zLevelDistribution) throw new Error("No zLevelDistribution passed in to TerrainGenerator constructor");
         this.#perlin = perlin;
         this.#zLevelDistribution = zLevelDistribution;
     }
@@ -127,9 +127,9 @@ class TerrainGenerator {
     createRock(rockType, position) {
         switch (rockType) {
             case 'LightRock':
-                return new Rock(position, 800, 0.41);
+                return new Rock("LightRock", position, 800, 0.41);
             case 'MediumRock':
-                return new Rock(position, 1600, 0.43);
+                return new Rock("MediumRock", position, 1600, 0.43);
             default:
                 throw new Error(`Unknown rock type: ${rockType}`);
         }
@@ -138,13 +138,22 @@ class TerrainGenerator {
     createMineral(mineralType, position) {
         switch (mineralType) {
             case 'RedMineral':
-                return new Mineral(position, 400, 0.3, 100);
-            case 'GreenMineral':
-                return new Mineral(position, 600, 0.35, 200);
+                return new Mineral("RedMineral", position, 400, 0.100, 100);
+            case 'BlueMineral':
+                return new Mineral("BlueMineral", position, 600, 0.144, 200);
             default:
                 throw new Error(`Unknown mineral type: ${mineralType}`);
         }
     }
+    // future mineral radiuses
+    // 0.189
+    // 0.233
+    // 0.278
+    // 0.322
+    // 0.367
+    // 0.411
+    // 0.456
+    // 0.500
 }
 
 export { ZLevelDistribution, TerrainGenerator };

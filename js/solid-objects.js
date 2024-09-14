@@ -4,9 +4,9 @@ class SolidObject {
     #radius;
 
     constructor(position, hitPoints, radius) {
-        if (!position) throw new Error("No position param passed in to SolidObject constructor");
-        if (!hitPoints) throw new Error("No hitPoints param passed in to SolidObject constructor");
-        if (!radius) throw new Error("No radius param passed in to SolidObject constructor");
+        if (!position) throw new Error("No position passed in to SolidObject constructor");
+        if (!hitPoints) throw new Error("No hitPoints passed in to SolidObject constructor");
+        if (!radius) throw new Error("No radius passed in to SolidObject constructor");
         this.#position = position;
         this.#hitPoints = hitPoints;
         this.#radius = radius;
@@ -30,14 +30,21 @@ class SolidObject {
 }
 
 class Rock extends SolidObject {
+    #name;
     #randomFlatSide;
 
-    constructor(position, hitPoints, radius) {
-        if (!position) throw new Error("No position param passed in to Rock constructor");
-        if (!hitPoints) throw new Error("No hitPoints param passed in to Rock constructor");
-        if (!radius) throw new Error("No radius param passed in to Rock constructor");
+    constructor(name, position, hitPoints, radius) {
+        if (!name) throw new Error("No name passed in to Rock constructor");
+        if (!position) throw new Error("No position passed in to Rock constructor");
+        if (!hitPoints) throw new Error("No hitPoints passed in to Rock constructor");
+        if (!radius) throw new Error("No radius passed in to Rock constructor");
         super(position, hitPoints, radius);
+        this.#name = name;
         this.#randomFlatSide = Math.floor(Math.random() * 6);
+    }
+
+    getName() {
+        return this.#name;
     }
 
     getFlatSide() {
@@ -46,15 +53,22 @@ class Rock extends SolidObject {
 }
 
 class Mineral extends SolidObject {
+    #name;
     #sellValue;
 
-    constructor(position, hitPoints, radius, sellValue) {
-        if (!position) throw new Error("No position param passed in to Mineral constructor");
-        if (!hitPoints) throw new Error("No hitPoints param passed in to Mineral constructor");
-        if (!radius) throw new Error("No radius param passed in to Mineral constructor");
-        if (!sellValue) throw new Error("No sellValue param passed in to Mineral constructor");
+    constructor(name, position, hitPoints, radius, sellValue) {
+        if (!name) throw new Error("No name passed in to Mineral constructor");
+        if (!position) throw new Error("No position passed in to Mineral constructor");
+        if (!hitPoints) throw new Error("No hitPoints passed in to Mineral constructor");
+        if (!radius) throw new Error("No radius passed in to Mineral constructor");
+        if (!sellValue) throw new Error("No sellValue passed in to Mineral constructor");
         super(position, hitPoints, radius);
+        this.#name = name;
         this.#sellValue = sellValue;
+    }
+
+    getName() {
+        return this.#name;
     }
 
     getSellValue() {
@@ -68,7 +82,7 @@ class CompositeObject {
     #isScanned;
 
     constructor(rock, mineral = null) {
-        if (!rock) throw new Error("No rock param passed in to CompositeObject constructor");
+        if (!rock) throw new Error("No rock passed in to CompositeObject constructor");
         this.#rock = rock;
         this.#mineral = mineral;
         this.#isScanned = true; // hard-coded to true until we're ready to implement Scanner upgrade

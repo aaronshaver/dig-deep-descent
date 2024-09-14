@@ -33,19 +33,19 @@ describe('Rock', () => {
   test('constructor throws error if no hitPoints passed in', () => {
     expect(() => {
       new Rock(new Position(1, 2, 3), null, 0.44, 0.99);
-    }).toThrow('No hitPoints param passed in to Rock constructor');
+    }).toThrow('No hitPoints passed in to Rock constructor');
   });
 
   test('constructor throws error if no radius passed in', () => {
     expect(() => {
       new Rock(new Position(1, 2, 3), 100, null, 0.99);
-    }).toThrow('No radius param passed in to Rock constructor');
+    }).toThrow('No radius passed in to Rock constructor');
   });
 
   test('constructor throws error if no currentRarity passed in', () => {
     expect(() => {
       new Rock(new Position(1, 2, 3), 100, 0.44, null);
-    }).toThrow('No currentRarity param passed in to Rock constructor');
+    }).toThrow('No currentRarity passed in to Rock constructor');
   });
 });
 

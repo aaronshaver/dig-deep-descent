@@ -82,13 +82,20 @@ export class Graphics {
         const mineral = compositeObject.getMineral();
         if (mineral) {
             const mineralRadius = cellSize * mineral.getRadius();
-            this.#drawMineral(centerX, centerY, mineralRadius);
+            this.#drawMineral(mineral.getName(), centerX, centerY, mineralRadius);
         }
     }
 
-    #drawMineral(centerX, centerY, mineralRadius) {
-        const outerColor = '#8B0000';
-        const innerColor = '#FF0000';
+    #drawMineral(name, centerX, centerY, mineralRadius) {
+        // calculate color
+        const mineralColors = new Map([
+            ["RedMineral", ['#8B0000', '#FF0000']],
+            ["BlueMineral", ['#00008B', '#0000FF']],
+        ]);
+        let outerColor;
+        let innerColor;
+        [outerColor, innerColor] = mineralColors.get(name);
+
         const innerRadius = mineralRadius * 0.7;
 
         this.ctx.beginPath();
