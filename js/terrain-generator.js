@@ -26,13 +26,15 @@ class ZLevelDistribution {
         const lowerDist = this.#distributions[lowerLevel];
         const upperDist = this.#distributions[upperLevel];
     
-        // Only interpolate for types present in both levels
-        const commonTypes = Object.keys(lowerDist).filter(key => key in upperDist);
+        // Combine all object types from both levels
+        const allTypes = new Set([...Object.keys(lowerDist), ...Object.keys(upperDist)]);
         
-        const interpolatedDist = commonTypes.reduce((acc, key) => {
-            acc[key] = lowerDist[key] + factor * (upperDist[key] - lowerDist[key]);
-            return acc;
-        }, {});
+        const interpolatedDist = {};
+        for (const type of allTypes) {
+            const lowerProb = lowerDist[type] || 0;
+            const upperProb = upperDist[type] || 0;
+            interpolatedDist[type] = lowerProb + factor * (upperProb - lowerProb);
+        }
     
         // Normalize probabilities
         const total = Object.values(interpolatedDist).reduce((sum, prob) => sum + prob, 0);
@@ -42,7 +44,7 @@ class ZLevelDistribution {
     
         return interpolatedDist;
     }
-
+    
     selectObjectType(zLevel) {
         const probabilities = this.getObjectProbabilities(zLevel);
         const rand = Math.random();
