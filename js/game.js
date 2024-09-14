@@ -45,7 +45,7 @@ export class Game {
     }
 
     #handleRockCollision(rock, position) {
-        this.ship.getBattery().reduceBattery(BatteryEvents.DIG_BASIC_ROCK);
+        this.ship.getBattery().reduceBattery(BatteryEvents.DIG_ROCK);
         rock.setHitPoints(rock.getHitPoints() - this.ship.getDrill().getStrength());
         if (rock.getHitPoints() <= 0) {
             this.grid.removeObject(position);

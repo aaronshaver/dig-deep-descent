@@ -115,7 +115,7 @@ describe('Game', () => {
     mockGrid.getObject.mockReturnValue(mockRock);
 
     game.handleKeyPress('ArrowRight');
-    expect(mockShip.getBattery().reduceBattery).toHaveBeenCalledWith(BatteryEvents.DIG_BASIC_ROCK);
+    expect(mockShip.getBattery().reduceBattery).toHaveBeenCalledWith(BatteryEvents.DIG_ROCK);
     expect(mockShip.getBattery().reduceBattery).toHaveBeenCalledWith(BatteryEvents.LATERAL_MOVE);
   });
 

@@ -1,13 +1,13 @@
 export const BatteryEvents = {
     LATERAL_MOVE: 'LATERAL_MOVE',
     Z_MOVE: 'Z_MOVE',
-    DIG_BASIC_ROCK: 'DIG_BASIC_ROCK',
+    DIG_ROCK: 'DIG_ROCK',
 };
 
 const BATTERY_DRAIN = {
     [BatteryEvents.LATERAL_MOVE]: 5,
     [BatteryEvents.Z_MOVE]: 100,
-    [BatteryEvents.DIG_BASIC_ROCK]: 10,
+    [BatteryEvents.DIG_ROCK]: 10,
 };
 
 export class Battery {

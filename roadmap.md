@@ -47,6 +47,8 @@
 
 # 0.8 - quality of life
 
+* upgrade: compressed energy for quick boost of increased drill power
+* upgrade: battery auto-recharger
 * feature: easy way to do a win condition: the last upgrade on the list is an extremely expensive Buy Space Yacht type upgrade
 * feature: local storage of game data + New Game button which resets everything
 * feature: mouseover objects == show short description + stats like hit points of rocks

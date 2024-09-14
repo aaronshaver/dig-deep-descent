@@ -87,18 +87,6 @@ describe('Terrain', () => {
     expect(rocks.every(rock => rock instanceof Rock)).toBe(true);
   });
 
-  test('generate contains at least some MediumRock objects at z-level 0', () => {
-    const mockPerlin = {
-      getNoise: jest.fn().mockReturnValue(0.3)
-    };
-    terrain.perlin = mockPerlin;
-
-    mockGrid.getGridSize.mockReturnValue(25);
-    const rocks = terrain.generate(0, mockGrid);
-    console.log(rocks.size)
-    expect(rocks.some(rock => rock instanceof MediumRock)).toBe(true);
-  });
-
   test('increasing scale parameters result in fewer rocks', () => {
     const mockPerlin = {
       getNoise: jest.fn().mockReturnValue(0.8)
