@@ -10,7 +10,7 @@ export class Game {
     constructor(grid, graphics, terrainGenerator) {
         this.grid = grid;
         this.graphics = graphics;
-        this.terrainGenerator = terrainGenerator;
+        this.terrain = terrainGenerator;
         this.gameOverReason = null;
 
         this.ship = new Ship(this.grid.getCenteredInitialShipPosition());
@@ -44,10 +44,10 @@ export class Game {
         return false;
     }
 
-    #handleCollision(rock, position) {
+    #handleCollision(object, position) {
         this.ship.getBattery().reduceBattery(BatteryEvents.DIG_ROCK);
-        rock.setHitPoints(rock.getHitPoints() - this.ship.getDrill().getStrength());
-        if (rock.getHitPoints() <= 0) {
+        object.setHitPoints(object.getHitPoints() - this.ship.getDrill().getStrength());
+        if (object.getHitPoints() <= 0) {
             this.grid.removeObject(position);
             this.ship.getBattery().reduceBattery(BatteryEvents.LATERAL_MOVE);
             this.#updateShipPosition(position);
@@ -118,7 +118,7 @@ export class Game {
         this.graphics.clearPlayableArea();
         const shipPosition = this.ship.getPosition();
         if (!this.grid.getLevelsWithGeneratedTerrain().has(shipPosition.z)) {
-            this.terrainGenerator.generate(shipPosition.z, this.grid);
+            this.terrain.generate(shipPosition.z, this.grid);
         }
         this.graphics.drawGrid(this.grid, this.ship); // order matters; must be after terrain generation
     }

@@ -56,8 +56,8 @@ export class Graphics {
         arrayOfArrays.forEach((row) => {
             row.forEach((object) => {
                 if (object) { // check if anything is there at all
-                    if (object instanceof Rock) {
-                        this.#drawRock(cellSize, gridGap, object);
+                    if (object instanceof CompositeObject) {
+                        this.#drawCompositeObject(cellSize, gridGap, object);
                     }
                     else if (object instanceof Ship) {
                         this.#drawShip(cellSize, gridGap, ship);
@@ -68,14 +68,53 @@ export class Graphics {
 
     }
 
-    #drawRock(cellSize, gridGap, rock) {
-        const x = rock.getPosition().x * (cellSize + gridGap);
-        const y = rock.getPosition().y * (cellSize + gridGap);
+    #drawCompositeObject(cellSize, gridGap, compositeObject) {
+        const x = compositeObject.getRock().getPosition().x * (cellSize + gridGap);
+        const y = compositeObject.getRock().getPosition().y * (cellSize + gridGap);
         const centerX = x + cellSize / 2;
         const centerY = y + cellSize / 2;
-        const radius = cellSize * rock.getRadius();
-        const flatSide = rock.getFlatSide();
 
+        const rock = compositeObject.getRock();
+        const rockRadius = cellSize * rock.getRadius();
+        const rockFlatSide = rock.getFlatSide();
+        this.#drawRock(centerX, centerY, rockRadius, rockFlatSide);
+
+        const mineral = compositeObject.getMineral();
+        if (mineral) {
+            const mineralRadius = cellSize * mineral.getRadius();
+            this.#drawMineral(centerX, centerY, mineralRadius);
+        }
+    }
+
+    #drawMineral(centerX, centerY, mineralRadius) {
+        const outerColor = '#8B0000';
+        const innerColor = '#FF0000';
+        const innerRadius = mineralRadius * 0.7;
+
+        this.ctx.beginPath();
+        for (let i = 0; i < 8; i++) {
+            const angle = (Math.PI / 4) * i;
+            const x = centerX + mineralRadius * Math.cos(angle);
+            const y = centerY + mineralRadius * Math.sin(angle);
+            this.ctx.lineTo(x, y);
+        }
+        this.ctx.closePath();
+        this.ctx.fillStyle = outerColor;
+        this.ctx.fill();
+
+        this.ctx.beginPath();
+        for (let i = 0; i < 8; i++) {
+            const angle = (Math.PI / 4) * i;
+            const x = centerX + innerRadius * Math.cos(angle);
+            const y = centerY + innerRadius * Math.sin(angle);
+            this.ctx.lineTo(x, y);
+        }
+        this.ctx.closePath();
+        this.ctx.fillStyle = innerColor;
+        this.ctx.fill();
+    }
+
+    #drawRock(centerX, centerY, rockRadius, rockFlatSide) {
         this.ctx.fillStyle = '#6F4E37';
         this.ctx.beginPath();
 
@@ -83,22 +122,21 @@ export class Graphics {
             const angle = (Math.PI / 3) * i;
             const nextAngle = (Math.PI / 3) * ((i + 1) % 6);
 
-            if (i === flatSide) {
+            if (i === rockFlatSide) {
                 // Draw a straight line between the two adjacent corners
-                const x1 = centerX + radius * Math.cos(angle);
-                const y1 = centerY + radius * Math.sin(angle);
-                const x2 = centerX + radius * Math.cos(nextAngle);
-                const y2 = centerY + radius * Math.sin(nextAngle);
+                const x1 = centerX + rockRadius * Math.cos(angle);
+                const y1 = centerY + rockRadius * Math.sin(angle);
+                const x2 = centerX + rockRadius * Math.cos(nextAngle);
+                const y2 = centerY + rockRadius * Math.sin(nextAngle);
                 this.ctx.lineTo(x1, y1);
                 this.ctx.lineTo(x2, y2);
-            } else if (i !== (flatSide + 5) % 6) {
+            } else if (i !== (rockFlatSide + 5) % 6) {
                 // Draw normal side for non-flat sides
-                const x = centerX + radius * Math.cos(angle);
-                const y = centerY + radius * Math.sin(angle);
+                const x = centerX + rockRadius * Math.cos(angle);
+                const y = centerY + rockRadius * Math.sin(angle);
                 this.ctx.lineTo(x, y);
             }
         }
-
         this.ctx.closePath();
         this.ctx.fill();
     }

@@ -1,4 +1,4 @@
-import { Rock, Mineral } from './solid-objects.js';
+import { Rock, Mineral, CompositeObject } from './solid-objects.js';
 import Position from './position.js';
 
 class ZLevelDistribution {
@@ -9,32 +9,23 @@ class ZLevelDistribution {
             0: {LightRock: 0.95, RedMineral: 0.05},
             10: {LightRock: 0.90, MediumRock: 0.05, RedMineral: 0.05},
             20: {LightRock: 0.80, MediumRock: 0.15, RedMineral: 0.03, GreenMineral: 0.02},
-            // ... more levels ...
         };
     }
 
     getObjectProbabilities(zLevel) {
-        // Get all defined z-levels and sort them
-        const levels = Object.keys(this.#distributions).map(Number).sort((a, b) => a - b);
-
-        // Find the nearest defined levels below and above the current zLevel
+        zLevel = Math.abs(zLevel); // keeps us from having to constantly deal with negative numbers throughout
+        const levels = Object.keys(this.#distributions).map(Number).sort((a, b) => b - a);
         const lowerLevel = levels.filter(level => level <= zLevel).pop();
         const upperLevel = levels.filter(level => level > zLevel).shift();
 
-        // If zLevel matches a defined level, return that level's distribution
         if (lowerLevel === upperLevel) {
             return this.#distributions[lowerLevel];
         }
 
-        // Calculate how far between lowerLevel and upperLevel our zLevel is
-        // This will be used to interpolate probabilities
         const factor = (zLevel - lowerLevel) / (upperLevel - lowerLevel);
-
         const lowerDist = this.#distributions[lowerLevel];
         const upperDist = this.#distributions[upperLevel];
 
-        // Interpolate probabilities for each object type
-        // If an object doesn't exist in one level, treat its probability as 0
         return Object.keys({...lowerDist, ...upperDist}).reduce((acc, key) => {
             acc[key] = (lowerDist[key] || 0) + factor * ((upperDist[key] || 0) - (lowerDist[key] || 0));
             return acc;
@@ -46,8 +37,6 @@ class ZLevelDistribution {
         const rand = Math.random();
         let cumulative = 0;
 
-        // Iterate through object types, adding up probabilities
-        // When the cumulative probability exceeds our random number, select that object type
         for (const [objType, prob] of Object.entries(probabilities)) {
             cumulative += prob;
             if (rand < cumulative) {
@@ -55,8 +44,24 @@ class ZLevelDistribution {
             }
         }
 
-        // Fallback to last type (this should rarely happen due to floating point precision)
         return Object.keys(probabilities).pop();
+    }
+
+    getDominantRockType(zLevel) {
+        const probabilities = this.getObjectProbabilities(zLevel);
+        const rockTypes = Object.keys(probabilities).filter(type => type.includes('Rock'));
+        const rockProbabilities = rockTypes.reduce((acc, type) => {
+            acc[type] = probabilities[type];
+            return acc;
+        }, {});
+
+        const totalRockProbability = Object.values(rockProbabilities).reduce((sum, prob) => sum + prob, 0);
+        const normalizedRockProbabilities = Object.entries(rockProbabilities).reduce((acc, [type, prob]) => {
+            acc[type] = prob / totalRockProbability;
+            return acc;
+        }, {});
+
+        return Object.entries(normalizedRockProbabilities).reduce((a, b) => a[1] > b[1] ? a : b)[0];
     }
 }
 
@@ -72,19 +77,20 @@ class TerrainGenerator {
     }
 
     generate(z, grid) {
-        const solidObjects = [];
-        solidObjects.push(...this.generateTerrainAtScale(z, grid, 0.1));
-        solidObjects.push(...this.generateTerrainAtScale(z, grid, 0.3));
-        solidObjects.push(...this.generateTerrainAtScale(z, grid, 0.5));
-        solidObjects.push(...this.generateTerrainAtScale(z, grid, 0.7));
-        solidObjects.push(...this.generateTerrainAtScale(z, grid, 0.9));
+        const compositeObjects = [];
+        compositeObjects.push(...this.generateTerrainAtScale(z, grid, 0.1));
+        compositeObjects.push(...this.generateTerrainAtScale(z, grid, 0.3));
+        compositeObjects.push(...this.generateTerrainAtScale(z, grid, 0.5));
+        compositeObjects.push(...this.generateTerrainAtScale(z, grid, 0.7));
+        compositeObjects.push(...this.generateTerrainAtScale(z, grid, 0.9));
         grid.setTerrainAsGeneratedForLevel(z);
-        return solidObjects;
+
+        return compositeObjects;
     }
 
     generateTerrainAtScale(z, grid, scale) {
         const gridSize = grid.getGridSize();
-        const solidObjects = [];
+        const compositeObjects = [];
         for (let y = 0; y < gridSize; y++) {
             for (let x = 0; x < gridSize; x++) {
                 const noiseValue = this.#perlin.getNoise(x * scale, y * scale, z * scale);
@@ -92,29 +98,51 @@ class TerrainGenerator {
                     const position = new Position(x, y, z);
                     if (!grid.getObject(position)) {
                         const objectType = this.#zLevelDistribution.selectObjectType(z);
-                        const solidObject = this.createSolidObject(objectType, position);
-                        grid.setObject(position, solidObject);
-                        solidObjects.push(solidObject);
+                        const compositeObject = this.createCompositeObject(objectType, position, z);
+                        grid.setObject(position, compositeObject);
+                        compositeObjects.push(compositeObject);
                     }
                 }
             }
         }
-        return solidObjects;
+        return compositeObjects;
     }
 
-    createSolidObject(objectType, position) {
-        switch (objectType) {
+    createCompositeObject(objectType, position, zLevel) {
+        let rock, mineral;
+
+        if (objectType.includes('Rock')) {
+            rock = this.createRock(objectType, position);
+        } else if (objectType.includes('Mineral')) {
+            const dominantRockType = this.#zLevelDistribution.getDominantRockType(zLevel);
+            rock = this.createRock(dominantRockType, position);
+            mineral = this.createMineral(objectType, position);
+        } else {
+            throw new Error(`Unknown object type: ${objectType}`);
+        }
+
+        return new CompositeObject(rock, mineral);
+    }
+
+    createRock(rockType, position) {
+        switch (rockType) {
             case 'LightRock':
                 return new Rock(position, 800, 0.41);
             case 'MediumRock':
                 return new Rock(position, 1600, 0.43);
+            default:
+                throw new Error(`Unknown rock type: ${rockType}`);
+        }
+    }
+
+    createMineral(mineralType, position) {
+        switch (mineralType) {
             case 'RedMineral':
                 return new Mineral(position, 400, 0.3, 100);
             case 'GreenMineral':
                 return new Mineral(position, 600, 0.35, 200);
-            // Add more cases as needed
             default:
-                throw new Error(`Unknown object type: ${objectType}`);
+                throw new Error(`Unknown mineral type: ${mineralType}`);
         }
     }
 }
