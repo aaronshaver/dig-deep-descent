@@ -13,23 +13,34 @@ class ZLevelDistribution {
     }
 
     getObjectProbabilities(zLevel) {
-        zLevel = Math.abs(zLevel); // keeps us from having to constantly deal with negative numbers throughout
-        const levels = Object.keys(this.#distributions).map(Number).sort((a, b) => b - a);
+        zLevel = Math.abs(zLevel);
+        const levels = Object.keys(this.#distributions).map(Number).sort((a, b) => a - b);
         const lowerLevel = levels.filter(level => level <= zLevel).pop();
         const upperLevel = levels.filter(level => level > zLevel).shift();
-
+    
         if (lowerLevel === upperLevel) {
             return this.#distributions[lowerLevel];
         }
-
+    
         const factor = (zLevel - lowerLevel) / (upperLevel - lowerLevel);
         const lowerDist = this.#distributions[lowerLevel];
         const upperDist = this.#distributions[upperLevel];
-
-        return Object.keys({...lowerDist, ...upperDist}).reduce((acc, key) => {
-            acc[key] = (lowerDist[key] || 0) + factor * ((upperDist[key] || 0) - (lowerDist[key] || 0));
+    
+        // Only interpolate for types present in both levels
+        const commonTypes = Object.keys(lowerDist).filter(key => key in upperDist);
+        
+        const interpolatedDist = commonTypes.reduce((acc, key) => {
+            acc[key] = lowerDist[key] + factor * (upperDist[key] - lowerDist[key]);
             return acc;
         }, {});
+    
+        // Normalize probabilities
+        const total = Object.values(interpolatedDist).reduce((sum, prob) => sum + prob, 0);
+        Object.keys(interpolatedDist).forEach(key => {
+            interpolatedDist[key] /= total;
+        });
+    
+        return interpolatedDist;
     }
 
     selectObjectType(zLevel) {
