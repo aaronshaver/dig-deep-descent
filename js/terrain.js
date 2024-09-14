@@ -72,11 +72,6 @@ export class Terrain {
     return rocks;
   }
 
-  #willObjectExist(rarity) {
-    const randomFloat = Math.random();
-    return randomFloat < rarity;
-  }
-
   #generateTerrainAtScale(z, grid, scale) {
     const gridSize = grid.getGridSize();
     const rocks = [];
@@ -85,12 +80,6 @@ export class Terrain {
         const noiseValue = this.perlin.getNoise(x * scale, y * scale, z * scale);
         const position = new Position(x, y, z);
         if (noiseValue > 0.2 && !grid.getObject(position)) {
-          // const possibleObjects = [];
-          // possibleObjects.push(new LightRock(position));
-          // possibleObjects.push(new MediumRock(position));
-          // TODO: while loop until successful generation of an object
-          // TODO: within larger loop, loop through each object, looking for success
-          // break out once successful
           const lightRock = new LightRock(position);
           grid.setObject(position, lightRock);
           rocks.push(lightRock);

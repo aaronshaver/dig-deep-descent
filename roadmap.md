@@ -47,6 +47,7 @@
 
 # 0.8 - quality of life
 
+* feature: easy way to do a win condition: the last upgrade on the list is an extremely expensive Buy Space Yacht type upgrade
 * feature: local storage of game data + New Game button which resets everything
 * feature: mouseover objects == show short description + stats like hit points of rocks
 * feature: a graphical bar along the side to visually indicate depth
