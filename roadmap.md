@@ -1,6 +1,7 @@
 
 # 0.2 - mineral system
 
+* testing: be sure to do a none matcher for rock/mineral rarity unit tests
 * feature: minerals are hidden until scanner reveals them
 * bump the version number in index.html
 
@@ -20,7 +21,7 @@
 * feature: suffix battery level with (warning) and (DANGER) for low battery levels
 * feature: visual effects pipeline
     * start using it for random triangles while digging
-    * rock fragment triangles should be two steps lighter using a TDD function that takes color
+    * have a system for the chips of rocks that come off when digging where it detects if the base color is more toward FFF or 000 and adds or subtracts accordingly
 * feature: new class: VerticalHole with darker color center, light outline on each affected level (two) to indicate it
 * bump the version number in index.html
 

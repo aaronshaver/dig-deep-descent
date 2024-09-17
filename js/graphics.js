@@ -89,8 +89,13 @@ export class Graphics {
     #drawMineral(name, centerX, centerY, mineralRadius) {
         // calculate color
         const mineralColors = new Map([
-            ["RedMineral", ['#8B0000', '#FF0000']],
-            ["BlueMineral", ['#00008B', '#0000FF']],
+            ["Red Mineral", ['#8B0000', '#FF0000']],
+            ["Blue Mineral", ['#00008B', '#0000FF']],
+            ["Orange Mineral", ['#FFAC1C', '#FFAC1C']],
+            ["White Mineral", ['#FFF', '#FFF']],
+            ["Green Mineral", ['#0F0', '#0F0']],
+            ["Purple Mineral", ['#663399', '#663399']],
+            ["Yellow Mineral", ['#FFFF00', '#FFFF00']],
         ]);
         let outerColor;
         let innerColor;
@@ -124,8 +129,11 @@ export class Graphics {
     #drawRock(name, centerX, centerY, rockRadius, rockFlatSide) {
         // calculate color
         const rockColors = new Map([
-            ["LightRock", ['#6F4E37']],
-            ["MediumRock", ['#CCCCCC']],
+            ["Loose Rock", ['#C4A484']],
+            ["Normal Rock", ['#B87333']],
+            ["Dense Rock", ['#5C4033']],
+            ["Very Dense Rock", ['#696969']],
+            ["Extremely Dense Rock", ['#2F4F4F']],
         ]);
         let rockColor;
         [rockColor] = rockColors.get(name);
@@ -226,6 +234,7 @@ export class Graphics {
 
     // closer distance == brighter illumination == more shows through mask
     #getOpacity(distance) {
+        return 1;
         if (distance <= 1.5) return 1;
         if (distance <= 2.5) return 0.8;
         if (distance <= 3.5) return 0.6;
