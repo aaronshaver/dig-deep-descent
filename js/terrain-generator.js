@@ -150,15 +150,15 @@ class TerrainGenerator {
     createRock(rockType, position) {
         switch (rockType) {
             case 'LooseRock':
-                return new Rock("Loose Rock", position, 400, 0.41);
+                return new Rock("Loose Rock", position, 400, 0.38);
             case 'NormalRock':
-                return new Rock("Normal Rock", position, 800, 0.43);
+                return new Rock("Normal Rock", position, 800, 0.41);
             case 'DenseRock':
-                return new Rock("Dense Rock", position, 1600, 0.45);
+                return new Rock("Dense Rock", position, 1600, 0.44);
             case 'VeryDenseRock':
                 return new Rock("Very Dense Rock", position, 3200, 0.47);
             case 'ExtremelyDenseRock':
-                return new Rock("Extremely Dense Rock", position, 6400, 0.49);
+                return new Rock("Extremely Dense Rock", position, 6400, 0.50);
             default:
                 throw new Error(`Unknown rock type: ${rockType}`);
         }
@@ -167,19 +167,19 @@ class TerrainGenerator {
     createMineral(mineralType, position) {
         switch (mineralType) {
             case 'RedMineral':
-                return new Mineral("Red Mineral", position, 200, 0.100, 100);
+                return new Mineral("Red Mineral", position, 200, 0.15, 100);
             case 'BlueMineral':
-                return new Mineral("Blue Mineral", position, 300, 0.144, 200);
+                return new Mineral("Blue Mineral", position, 300, 0.20, 200);
             case 'OrangeMineral':
-                return new Mineral("Orange Mineral", position, 400, 0.189, 400);
+                return new Mineral("Orange Mineral", position, 400, 0.25, 400);
             case 'WhiteMineral':
-                return new Mineral("White Mineral", position, 500, 0.233, 800);
+                return new Mineral("White Mineral", position, 500, 0.30, 800);
             case 'GreenMineral':
-                return new Mineral("Green Mineral", position, 600, 0.278, 1600);
+                return new Mineral("Green Mineral", position, 600, 0.35, 1600);
             case 'PurpleMineral':
-                return new Mineral("Purple Mineral", position, 700, 0.322, 3200);
+                return new Mineral("Purple Mineral", position, 700, 0.40, 3200);
             case 'YellowMineral':
-                return new Mineral("Yellow Mineral", position, 800, 0.367, 6400);
+                return new Mineral("Yellow Mineral", position, 800, 0.45, 6400);
             default:
                 throw new Error(`Unknown mineral type: ${mineralType}`);
         }
