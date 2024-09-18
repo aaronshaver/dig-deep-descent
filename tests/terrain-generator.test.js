@@ -103,4 +103,27 @@ describe('Terrain', () => {
     expect(rocks.length).toBe(0);
     expect(mockGrid.setObject).not.toHaveBeenCalled();
   });
+
+  test('objects on z-level 0 are only those in 0 z-level distribution row (no interpolation with later rows)', () => {
+    const mockPerlin = {
+      getNoise: jest.fn().mockReturnValue(0.8)
+    };
+    terrainGenerator.perlin = mockPerlin;
+    mockGrid.getGridSize.mockReturnValue(25);
+
+    const objects = terrainGenerator.generate(0, mockGrid);
+
+    expect(objects.length).toBeGreaterThan(0);
+    for (let object of objects) {
+      let name;
+      if (object.getRock()) {
+        name = object.getRock().getName();
+      }
+      else {
+        name = object.getMineral().getName();
+      }
+      console.log(name);
+      expect(["Loose Rock", "Red Mineral"].includes(name)).toBe(true);
+    }
+  });
 });
