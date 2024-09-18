@@ -1,22 +1,22 @@
 import { Game } from '../js/game.js';
 import { Grid } from '../js/grid.js';
 import { Graphics } from '../js/graphics.js';
-import { Terrain } from '../js/terrain.js';
 import { Ship } from '../js/ship.js';
-import { Rock } from '../js/terrain.js';
+import { Rock, Mineral, CompositeObject } from '../js/solid-objects.js';
+import { TerrainGenerator } from '../js/terrain-generator.js';
 import Position from '../js/position.js';
 import { BatteryEvents } from '../js/battery.js';
 
 jest.mock('../js/graphics.js');
 jest.mock('../js/grid.js');
-jest.mock('../js/terrain.js');
+jest.mock('../js/terrain-generator.js');
 jest.mock('../js/ship.js');
 
 describe('Game', () => {
   let game;
   let mockGrid;
   let mockGraphics;
-  let mockTerrain;
+  let mockTerrainGenerator;
   let mockShip;
 
   beforeEach(() => {
@@ -40,10 +40,10 @@ describe('Game', () => {
     };
     Graphics.mockImplementation(() => mockGraphics);
 
-    mockTerrain = {
+    mockTerrainGenerator = {
       generate: jest.fn(),
     };
-    Terrain.mockImplementation(() => mockTerrain);
+    TerrainGenerator.mockImplementation(() => mockTerrainGenerator);
 
     mockShip = {
       getPosition: jest.fn().mockReturnValue(new Position(5, 5, 0)),
@@ -59,13 +59,13 @@ describe('Game', () => {
     };
     Ship.mockImplementation(() => mockShip);
 
-    game = new Game(mockGrid, mockGraphics, mockTerrain);
+    game = new Game(mockGrid, mockGraphics, mockTerrainGenerator);
   });
 
   test('initializes game with correct initial state', () => {
     expect(game.grid).toBe(mockGrid);
     expect(game.graphics).toBe(mockGraphics);
-    expect(game.terrain).toBe(mockTerrain);
+    expect(game.terrainGenerator).toBe(mockTerrainGenerator);
     expect(game.ship).toBeDefined();
     expect(mockGrid.setObject).toHaveBeenCalledWith(expect.any(Position), game.ship);
   });
@@ -81,11 +81,11 @@ describe('Game', () => {
     }));
   });
 
-  test('attempts to move ship into cell with Rock', () => {
+  test('does not move Ship when Ship attempts to move into cell with non-destroyed Rock', () => {
     const rockPosition = new Position(6, 5, 0);
-    const mockRock = new Rock(rockPosition);
+    const mockRock = new Rock("test rock name", rockPosition, 10, 0.44);
     mockRock.getHitPoints = jest.fn().mockReturnValue(100);
-    mockGrid.getObject.mockReturnValue(mockRock);
+    mockGrid.getObject.mockReturnValue(new CompositeObject(mockRock));
 
     game.handleKeyPress('ArrowRight');
     expect(mockShip.setPosition).not.toHaveBeenCalled();
@@ -93,7 +93,7 @@ describe('Game', () => {
 
   test('destroys Rock and moves into its cell', () => {
     const rockPosition = new Position(6, 5, 0);
-    const mockRock = new Rock(rockPosition);
+    const mockRock = new Rock("test rock name", rockPosition, 1000, 0.44);
     mockRock.getHitPoints = jest.fn().mockReturnValue(0);
     mockGrid.getObject.mockReturnValue(mockRock);
 
@@ -102,17 +102,17 @@ describe('Game', () => {
     expect(mockGrid.removeObject).toHaveBeenCalledWith(rockPosition);
   });
 
-  test('drains battery correctly during lateral movement', () => {
+  test('calls correct battery reduction operation moving into empty grid space', () => {
     mockGrid.getObject.mockReturnValue(null);
     game.handleKeyPress('ArrowRight');
     expect(mockShip.getBattery().reduceBattery).toHaveBeenCalledWith(BatteryEvents.LATERAL_MOVE);
   });
 
-  test('drains battery correctly when destroying Rock', () => {
+  test('calls correct battery reduction operation when destroying Rock', () => {
     const rockPosition = new Position(6, 5, 0);
-    const mockRock = new Rock(rockPosition);
+    const mockRock = new Rock("test rock name", rockPosition, 50, 0.45);
     mockRock.getHitPoints = jest.fn().mockReturnValue(0);
-    mockGrid.getObject.mockReturnValue(mockRock);
+    mockGrid.getObject.mockReturnValue(new CompositeObject(mockRock));
 
     game.handleKeyPress('ArrowRight');
     expect(mockShip.getBattery().reduceBattery).toHaveBeenCalledWith(BatteryEvents.DIG_ROCK);
@@ -157,7 +157,7 @@ describe('Game', () => {
   test('updateGameState generates new terrain when needed', () => {
     mockGrid.getLevelsWithGeneratedTerrain.mockReturnValue(new Set());
     game.updateGameState();
-    expect(mockTerrain.generate).toHaveBeenCalled();
+    expect(mockTerrainGenerator.generate).toHaveBeenCalled();
   });
 
   test('updateGameState does not regenerate terrain for already generated levels', () => {
@@ -165,10 +165,10 @@ describe('Game', () => {
     mockShip.getPosition.mockReturnValue(mockShipPosition);
     const mockSet = new Set([0]);
     mockGrid.getLevelsWithGeneratedTerrain.mockReturnValue(mockSet);
-    mockTerrain.generate.mockClear(); // reset call count
+    mockTerrainGenerator.generate.mockClear(); // reset call count
 
     game.updateGameState();
 
-    expect(mockTerrain.generate).not.toHaveBeenCalled();
+    expect(mockTerrainGenerator.generate).not.toHaveBeenCalled();
   });
 });

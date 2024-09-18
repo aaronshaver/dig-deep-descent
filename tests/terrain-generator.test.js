@@ -1,20 +1,20 @@
-import { Rock, LightRock, MediumRock, Terrain } from '../js/terrain.js';
+import { Rock, CompositeObject } from '../js/solid-objects.js';
 import { PerlinNoise } from '../js/perlin-noise.js';
 import { Grid } from '../js/grid.js';
 import Position from '../js/position.js';
+import { TerrainGenerator, ZLevelDistribution } from '../js/terrain-generator.js';
 
 jest.mock('../js/perlin-noise.js');
 jest.mock('../js/grid.js');
 
 describe('Rock', () => {
   test('constructor initializes properties correctly', () => {
-    const rock = new Rock(new Position(1, 2, 3), 999, 0.44, 0.50);
+    const rock = new Rock("test rock name", new Position(1, 2, 3), 999, 0.44);
     expect(rock.getPosition().x).toBe(1);
     expect(rock.getPosition().y).toBe(2);
     expect(rock.getPosition().z).toBe(3);
     expect(rock.getHitPoints()).toBe(999);
     expect(rock.getRadius()).toBe(0.44);
-    expect(rock.getCurrentRarity()).toBe(0.50);
   });
 
   test('has a random flat side property within a range', () => {
@@ -25,54 +25,32 @@ describe('Rock', () => {
   });
 
   test('applyDamage reduces hitPoints', () => {
-    const rock = new Rock(new Position(1, 2, 3), 600, 0.33, 0.50);
+    const rock = new Rock("test rock name", new Position(1, 2, 3), 600, 0.33);
     rock.setHitPoints(rock.getHitPoints() - 100);
     expect(rock.getHitPoints()).toBe(500);
   });
 
   test('constructor throws error if no hitPoints passed in', () => {
     expect(() => {
-      new Rock(new Position(1, 2, 3), null, 0.44, 0.99);
+      new Rock("test rock name", new Position(1, 2, 3), null, 0.44);
     }).toThrow('No hitPoints passed in to Rock constructor');
   });
 
   test('constructor throws error if no radius passed in', () => {
     expect(() => {
-      new Rock(new Position(1, 2, 3), 100, null, 0.99);
+      new Rock("test rock name", new Position(1, 2, 3), 100, null);
     }).toThrow('No radius passed in to Rock constructor');
-  });
-
-  test('constructor throws error if no currentRarity passed in', () => {
-    expect(() => {
-      new Rock(new Position(1, 2, 3), 100, 0.44, null);
-    }).toThrow('No currentRarity passed in to Rock constructor');
-  });
-});
-
-describe('LightRock', () => {
-  test('constructor initializes properties correctly', () => {
-    const lightRock = new LightRock(new Position(1, 2, 3));
-    expect(lightRock.getHitPoints()).toBe(800);
-    expect(lightRock.getRadius()).toBe(0.41);
-  });
-});
-
-describe('MediumRock', () => {
-  test('constructor initializes properties correctly', () => {
-    const lightRock = new MediumRock(new Position(1, 2, 3));
-    expect(lightRock.getHitPoints()).toBe(1600);
-    expect(lightRock.getRadius()).toBe(0.43);
   });
 });
 
 describe('Terrain', () => {
-  let terrain;
+  let terrainGenerator;
   let mockGrid;
 
   beforeEach(() => {
     PerlinNoise.mockClear();
     Grid.mockClear();
-    terrain = new Terrain();
+    terrainGenerator = new TerrainGenerator(new PerlinNoise(), new ZLevelDistribution());
     mockGrid = new Grid();
     mockGrid.getGridSize.mockReturnValue(5);
   });
@@ -81,35 +59,35 @@ describe('Terrain', () => {
     const mockPerlin = {
       getNoise: jest.fn().mockReturnValue(0.3)
     };
-    terrain.perlin = mockPerlin;
+    terrainGenerator.perlin = mockPerlin;
 
-    const rocks = terrain.generate(0, mockGrid);
-    expect(rocks.every(rock => rock instanceof Rock)).toBe(true);
+    const objects = terrainGenerator.generate(0, mockGrid);
+    expect(objects.every(object => object instanceof CompositeObject)).toBe(true);
   });
 
   test('increasing scale parameters result in fewer rocks', () => {
     const mockPerlin = {
       getNoise: jest.fn().mockReturnValue(0.8)
     };
-    terrain.perlin = mockPerlin;
-    const rocksLowScale = terrain.generate(0, mockGrid);
+    terrainGenerator.perlin = mockPerlin;
+    const rocksLowScale = terrainGenerator.generate(0, mockGrid);
 
     mockPerlin.getNoise.mockReturnValue(0.1);
-    const rocksHighScale = terrain.generate(0, mockGrid);
+    const rocksHighScale = terrainGenerator.generate(0, mockGrid);
 
     expect(rocksHighScale.length).toBeLessThan(rocksLowScale.length);
   });
 
-  test('rocks are created when noise value is above the threshold', () => {
+  test('objects are created when noise value is above the threshold', () => {
     const mockPerlin = {
       getNoise: jest.fn().mockReturnValue(0.8)
     };
-    terrain.perlin = mockPerlin;
+    terrainGenerator.perlin = mockPerlin;
     mockGrid.getGridSize.mockReturnValue(2);
 
-    const rocks = terrain.generate(0, mockGrid);
+    const objects = terrainGenerator.generate(0, mockGrid);
 
-    expect(rocks.length).toBeGreaterThan(0);
+    expect(objects.length).toBeGreaterThan(0);
     expect(mockGrid.setObject).toHaveBeenCalled();
   });
 
@@ -119,8 +97,8 @@ describe('Terrain', () => {
     const mockPerlin = {
       getNoise: jest.fn().mockReturnValue(0.1)
     };
-    terrain.perlin = mockPerlin;
-    const rocks = terrain.generate(0, mockGrid);
+    terrainGenerator.perlin = mockPerlin;
+    const rocks = terrainGenerator.generate(0, mockGrid);
 
     expect(rocks.length).toBe(0);
     expect(mockGrid.setObject).not.toHaveBeenCalled();

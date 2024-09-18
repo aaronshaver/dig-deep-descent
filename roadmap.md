@@ -3,6 +3,8 @@
 
 * testing: be sure to do a none matcher for rock/mineral rarity unit tests
 * feature: minerals are hidden until scanner reveals them
+* tweak: reduce light even further: 1.5 -> 0.5 and so on
+* tweak: have a 0.01 chance for "faded out"/phased out minerals just so it looks a bit more natural
 * bump the version number in index.html
 
 # 0.3 - sell minerals and buy upgrades
@@ -11,11 +13,7 @@
 * feature: able to buy a single upgrade at the surface and use it
 * bump the version number in index.html
 
-# 0.4 - add hazards
-
-* feature: at least one hazard
-
-# 0.5 - visual effects + other minor features
+# 0.4 - visual effects + other minor features
 
 * feature: introduce a slight delay on keypress so that you can't just zip through rocks or fly across the screen
 * feature: suffix battery level with (warning) and (DANGER) for low battery levels
@@ -24,6 +22,11 @@
     * have a system for the chips of rocks that come off when digging where it detects if the base color is more toward FFF or 000 and adds or subtracts accordingly
 * feature: new class: VerticalHole with darker color center, light outline on each affected level (two) to indicate it
 * bump the version number in index.html
+
+# 0.5 - add hazards
+
+* feature: at least one hazard
+
 
 # 0.6 - small visual improvements
 

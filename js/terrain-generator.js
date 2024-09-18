@@ -89,13 +89,13 @@ class ZLevelDistribution {
 }
 
 class TerrainGenerator {
-    #perlin;
+    perlin;
     #zLevelDistribution;
 
     constructor(perlin, zLevelDistribution) {
         if (!perlin) throw new Error("No perlin passed in to TerrainGenerator constructor");
         if (!zLevelDistribution) throw new Error("No zLevelDistribution passed in to TerrainGenerator constructor");
-        this.#perlin = perlin;
+        this.perlin = perlin;
         this.#zLevelDistribution = zLevelDistribution;
     }
 
@@ -116,7 +116,7 @@ class TerrainGenerator {
         const compositeObjects = [];
         for (let y = 0; y < gridSize; y++) {
             for (let x = 0; x < gridSize; x++) {
-                const noiseValue = this.#perlin.getNoise(x * scale, y * scale, z * scale);
+                const noiseValue = this.perlin.getNoise(x * scale, y * scale, z * scale);
                 if (noiseValue > 0.2) {
                     const position = new Position(x, y, z);
                     if (!grid.getObject(position)) {

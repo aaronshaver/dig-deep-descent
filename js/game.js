@@ -10,7 +10,7 @@ export class Game {
     constructor(grid, graphics, terrainGenerator) {
         this.grid = grid;
         this.graphics = graphics;
-        this.terrain = terrainGenerator;
+        this.terrainGenerator = terrainGenerator;
         this.gameOverReason = null;
 
         this.ship = new Ship(this.grid.getCenteredInitialShipPosition());
@@ -119,7 +119,7 @@ export class Game {
         this.graphics.clearPlayableArea();
         const shipPosition = this.ship.getPosition();
         if (!this.grid.getLevelsWithGeneratedTerrain().has(shipPosition.z)) {
-            this.terrain.generate(shipPosition.z, this.grid);
+            this.terrainGenerator.generate(shipPosition.z, this.grid);
         }
         this.graphics.drawGrid(this.grid, this.ship); // order matters; must be after terrain generation
     }
