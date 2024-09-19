@@ -1,7 +1,8 @@
 import { CompositeObject } from '../js/solid-objects.js';
 import { PerlinNoise } from '../js/perlin-noise.js';
 import { Grid } from '../js/grid.js';
-import { TerrainGenerator, ZLevelDistribution } from '../js/terrain-generator.js';
+import { TerrainGenerator } from '../js/terrain-generator.js';
+import { ZLevelDistribution } from '../js/z-level-distribution.js';
 
 jest.mock('../js/perlin-noise.js');
 jest.mock('../js/grid.js');
@@ -87,23 +88,5 @@ describe('Terrain', () => {
       }
       expect(["Loose Rock", "Red Mineral"].includes(name)).toBe(true);
     }
-  });
-});
-
-describe('ZLevelDistribution', () => {
-  let zLevelDistribution;
-
-  beforeEach(() => {
-    zLevelDistribution = new ZLevelDistribution();
-  });
-
-  test('all distribution probabilities sum to 1', () => {
-    const distributions = zLevelDistribution.getDistributions();
-
-    Object.entries(distributions).forEach(([zLevel, distribution]) => {
-      console.log(zLevel)
-      const sum = Object.values(distribution).reduce((acc, prob) => acc + prob, 0);
-      expect(sum).toBeCloseTo(1, 5); // Using toBeCloseTo to account for potential floating-point imprecision
-    });
   });
 });
