@@ -1,5 +1,5 @@
 
-# 0.2 - mineral system
+# 0.2 - terrain generation system and scanning
 
 * feature: minerals hidden by default + implement scanner to reveal (doesn't need visual effects yet)
 * tweak: have a 0.01 chance for "faded out"/phased out minerals just so it looks a bit more natural
