@@ -234,11 +234,11 @@ export class Graphics {
 
     // closer distance == brighter illumination == more shows through mask
     #getOpacity(distance) {
-        if (distance <= 1.5) return 1;
-        if (distance <= 2.5) return 0.8;
-        if (distance <= 3.5) return 0.6;
-        if (distance <= 4.5) return 0.4;
-        if (distance <= 5.5) return 0.2;
+        if (distance <= 0.5) return 1;
+        if (distance <= 1.5) return 0.8;
+        if (distance <= 2.5) return 0.6;
+        if (distance <= 3.5) return 0.4;
+        if (distance <= 4.5) return 0.2;
         return 0;
     }
 

@@ -1,8 +1,7 @@
 
 # 0.2 - mineral system
 
-* feature: minerals are hidden until scanner reveals them
-* tweak: reduce light even further: 1.5 -> 0.5 and so on
+* feature: minerals hidden by default + implement scanner to reveal (doesn't need visual effects yet)
 * tweak: have a 0.01 chance for "faded out"/phased out minerals just so it looks a bit more natural
 * bump the version number in index.html
 
