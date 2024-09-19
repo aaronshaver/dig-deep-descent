@@ -167,19 +167,19 @@ class TerrainGenerator {
     createMineral(mineralType, position) {
         switch (mineralType) {
             case 'RedMineral':
-                return new Mineral("Red Mineral", position, 200, 0.15, 100);
+                return new Mineral("Red Mineral", position, 0.15, 100);
             case 'WhiteMineral':
-                return new Mineral("White Mineral", position, 300, 0.20, 200);
+                return new Mineral("White Mineral", position, 0.20, 200);
             case 'OrangeMineral':
-                return new Mineral("Orange Mineral", position, 400, 0.25, 400);
+                return new Mineral("Orange Mineral", position, 0.25, 400);
             case 'PurpleMineral':
-                return new Mineral("Purple Mineral", position, 500, 0.30, 800);
+                return new Mineral("Purple Mineral", position, 0.30, 800);
             case 'YellowMineral':
-                return new Mineral("Yellow Mineral", position, 600, 0.35, 1600);
+                return new Mineral("Yellow Mineral", position, 0.35, 1600);
             case 'BlueMineral':
-                return new Mineral("Blue Mineral", position, 700, 0.40, 3200);
+                return new Mineral("Blue Mineral", position, 0.40, 3200);
             case 'GreenMineral':
-                return new Mineral("Green Mineral", position, 800, 0.45, 6400);
+                return new Mineral("Green Mineral", position, 0.45, 6400);
             default:
                 throw new Error(`Unknown mineral type: ${mineralType}`);
         }

@@ -1,4 +1,4 @@
-import { Rock, Mineral, CompositeObject } from './solid-objects.js';
+import { CompositeObject } from './solid-objects.js';
 import { Ship } from './ship.js';
 import { DrillDirections } from './drill.js';
 
