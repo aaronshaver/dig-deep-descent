@@ -7,18 +7,19 @@ class ZLevelDistribution {
     constructor() {
         this.#distributions = {
             0: {LooseRock: 0.95, RedMineral: 0.05},
-            10: {LooseRock: 0.475, NormalRock: 0.475, RedMineral: 0.025, BlueMineral: 0.025},
-            20: {NormalRock: 0.95, BlueMineral: 0.05},
-            30: {NormalRock: 0.45, DenseRock: 0.45, BlueMineral: 0.025, OrangeMineral: 0.025},
+            10: {LooseRock: 0.475, NormalRock: 0.475, RedMineral: 0.025, WhiteMineral: 0.025},
+            20: {NormalRock: 0.95, WhiteMineral: 0.05},
+            30: {NormalRock: 0.45, DenseRock: 0.45, WhiteMineral: 0.025, OrangeMineral: 0.025},
             40: {DenseRock: 0.95, OrangeMineral: 0.05},
-            50: {DenseRock: 0.45, VeryDenseRock: 0.45, OrangeMineral: 0.025, WhiteMineral: 0.025},
-            60: {VeryDenseRock: 0.95, WhiteMineral: 0.05},
-            70: {VeryDenseRock: 0.45, ExtremelyDenseRock: 0.45, WhiteMineral: 0.025, GreenMineral: 0.025},
-            80: {ExtremelyDenseRock: 0.95, GreenMineral: 0.05},
-            90: {ExtremelyDenseRock: 0.95, GreenMineral: 0.025, PurpleMineral: 0.025},
-            100: {ExtremelyDenseRock: 0.95, PurpleMineral: 0.05},
-            110: {ExtremelyDenseRock: 0.95, PurpleMineral: 0.025, YellowMineral: 0.025},
-            10000: {ExtremelyDenseRock: 0.95, PurpleMineral: 0.025, YellowMineral: 0.025},
+            50: {DenseRock: 0.45, VeryDenseRock: 0.45, OrangeMineral: 0.025, PurpleMineral: 0.025},
+            60: {VeryDenseRock: 0.95, PurpleMineral: 0.05},
+            70: {VeryDenseRock: 0.45, ExtremelyDenseRock: 0.45, PurpleMineral: 0.025, YellowMineral: 0.025},
+            80: {ExtremelyDenseRock: 0.95, YellowMineral: 0.05},
+            90: {ExtremelyDenseRock: 0.95, YellowMineral: 0.025, BlueMineral: 0.025},
+            100: {ExtremelyDenseRock: 0.95, BlueMineral: 0.05},
+            110: {ExtremelyDenseRock: 0.95, BlueMineral: 0.025, GreenMineral: 0.025},
+            120: {ExtremelyDenseRock: 0.95, GreenMineral: 0.05},
+            9999: {ExtremelyDenseRock: 0.95, GreenMineral: 0.05},
         };
     }
 
@@ -27,10 +28,6 @@ class ZLevelDistribution {
         const levels = Object.keys(this.#distributions).map(Number).sort((a, b) => a - b);
         const lowerLevel = levels.filter(level => level <= zLevel).pop();
         const upperLevel = levels.filter(level => level > zLevel).shift();
-
-        if (lowerLevel === upperLevel) {
-            return this.#distributions[lowerLevel];
-        }
 
         const factor = (zLevel - lowerLevel) / (upperLevel - lowerLevel);
         const lowerDist = this.#distributions[lowerLevel];
@@ -66,7 +63,6 @@ class ZLevelDistribution {
                 return objType;
             }
         }
-
         return Object.keys(probabilities).pop();
     }
 
