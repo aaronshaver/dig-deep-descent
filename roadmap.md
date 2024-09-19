@@ -1,7 +1,6 @@
 
 # 0.2 - mineral system
 
-* testing: be sure to do a none matcher for rock/mineral rarity unit tests
 * feature: minerals are hidden until scanner reveals them
 * tweak: reduce light even further: 1.5 -> 0.5 and so on
 * tweak: have a 0.01 chance for "faded out"/phased out minerals just so it looks a bit more natural

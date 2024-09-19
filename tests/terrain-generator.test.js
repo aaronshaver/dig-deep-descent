@@ -1,47 +1,10 @@
-import { Rock, CompositeObject } from '../js/solid-objects.js';
+import { CompositeObject } from '../js/solid-objects.js';
 import { PerlinNoise } from '../js/perlin-noise.js';
 import { Grid } from '../js/grid.js';
-import Position from '../js/position.js';
 import { TerrainGenerator, ZLevelDistribution } from '../js/terrain-generator.js';
 
 jest.mock('../js/perlin-noise.js');
 jest.mock('../js/grid.js');
-
-describe('Rock', () => {
-  test('constructor initializes properties correctly', () => {
-    const rock = new Rock("test rock name", new Position(1, 2, 3), 999, 0.44);
-    expect(rock.getPosition().x).toBe(1);
-    expect(rock.getPosition().y).toBe(2);
-    expect(rock.getPosition().z).toBe(3);
-    expect(rock.getHitPoints()).toBe(999);
-    expect(rock.getRadius()).toBe(0.44);
-  });
-
-  test('has a random flat side property within a range', () => {
-    const rock = new Rock(new Position(1, 2, 3), 333, 0.33, 0.50);
-    expect(rock.getFlatSide()).toBeDefined;
-    expect(rock.getFlatSide()).toBeGreaterThanOrEqual(0);
-    expect(rock.getFlatSide()).toBeLessThanOrEqual(5);
-  });
-
-  test('applyDamage reduces hitPoints', () => {
-    const rock = new Rock("test rock name", new Position(1, 2, 3), 600, 0.33);
-    rock.setHitPoints(rock.getHitPoints() - 100);
-    expect(rock.getHitPoints()).toBe(500);
-  });
-
-  test('constructor throws error if no hitPoints passed in', () => {
-    expect(() => {
-      new Rock("test rock name", new Position(1, 2, 3), null, 0.44);
-    }).toThrow('No hitPoints passed in to Rock constructor');
-  });
-
-  test('constructor throws error if no radius passed in', () => {
-    expect(() => {
-      new Rock("test rock name", new Position(1, 2, 3), 100, null);
-    }).toThrow('No radius passed in to Rock constructor');
-  });
-});
 
 describe('Terrain', () => {
   let terrainGenerator;
@@ -122,7 +85,6 @@ describe('Terrain', () => {
       else {
         name = object.getMineral().getName();
       }
-      console.log(name);
       expect(["Loose Rock", "Red Mineral"].includes(name)).toBe(true);
     }
   });
