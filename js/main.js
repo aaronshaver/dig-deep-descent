@@ -1,8 +1,9 @@
 import { Game } from './game.js';
 import { Grid } from './grid.js';
 import { Graphics } from './graphics.js';
-import { TerrainGenerator, ZLevelDistribution } from './terrain-generator.js';
+import { TerrainGenerator } from './terrain-generator.js';
 import { PerlinNoise } from './perlin-noise.js';
+import { ZLevelDistribution } from '../js/z-level-distribution.js';
 
 // we separate out DOM stuff because otherwise Jest tests get mad because of conflicting implementation DOM vs test DOM
 document.addEventListener('DOMContentLoaded', () => {
