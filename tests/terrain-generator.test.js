@@ -3,11 +3,12 @@ import { PerlinNoise } from '../js/perlin-noise.js';
 import { Grid } from '../js/grid.js';
 import { TerrainGenerator } from '../js/terrain-generator.js';
 import { ZLevelDistribution } from '../js/z-level-distribution.js';
+import Position from '../js/position.js';
 
 jest.mock('../js/perlin-noise.js');
 jest.mock('../js/grid.js');
 
-describe('Terrain', () => {
+describe('TerrainGenerator', () => {
   let terrainGenerator;
   let mockGrid;
 
@@ -88,5 +89,11 @@ describe('Terrain', () => {
       }
       expect(["Loose Rock", "Red Mineral"].includes(name)).toBe(true);
     }
+  });
+
+  test('createCompositeObject throws error for unknown type', () => {
+    expect(() => {
+      terrainGenerator.createCompositeObject('DoesNotExist', new Position(1, 2, 3), 0);
+    }).toThrow('Unknown object type: DoesNotExist');
   });
 });
