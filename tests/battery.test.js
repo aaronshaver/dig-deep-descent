@@ -1,4 +1,4 @@
-import { Battery, BatteryEvents } from '../js/battery.js';
+import { Battery, BatteryEvents } from '../js/ship-systems/battery.js';
 
 describe('Battery', () => {
     test('battery drains when event reduceBattery is called with an event', () => {

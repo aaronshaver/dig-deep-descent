@@ -1,6 +1,6 @@
 import { CompositeObject } from './solid-objects.js';
 import { Ship } from './ship.js';
-import { DrillDirections } from './drill.js';
+import { DrillDirections } from './ship-systems/drill.js';
 
 export class Graphics {
     constructor(grid) {

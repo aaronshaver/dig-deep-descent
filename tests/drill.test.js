@@ -1,4 +1,4 @@
-import { Drill, DrillDirections } from '../js/drill.js';
+import { Drill, DrillDirections } from '../js/ship-systems/drill.js';
 import { Ship } from '../js/ship.js';
 import Position from '../js/position.js';
 

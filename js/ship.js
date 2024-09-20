@@ -1,5 +1,5 @@
-import { Battery } from "./battery.js";
-import { Drill } from "./drill.js";
+import { Battery } from "./ship-systems/battery.js";
+import { Drill } from "./ship-systems/drill.js";
 
 export class Ship {
     #position;

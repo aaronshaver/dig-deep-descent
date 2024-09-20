@@ -3,7 +3,6 @@
 
 * feature: minerals hidden by default + implement scanner to reveal (doesn't need visual effects yet)
 * tweak: (have a TDD func): scale z-level digging by say 50+(abs(z-level) * 10)
-* tweak: have a 0.01 chance for "faded out"/phased out minerals just so it looks a bit more natural
 * bump the version number in index.html
 
 # 0.3 - sell minerals and buy upgrades

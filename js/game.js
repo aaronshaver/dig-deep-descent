@@ -1,8 +1,8 @@
 import { Ship } from './ship.js';
 import { CompositeObject } from './solid-objects.js';
 import Position from './position.js';
-import { BatteryEvents } from './battery.js';
-import { DrillDirections } from './drill.js'
+import { BatteryEvents } from './ship-systems/battery.js';
+import { DrillDirections } from './ship-systems/drill.js'
 
 export class Game {
     gameOverReason;

@@ -2,10 +2,10 @@ import { Game } from '../js/game.js';
 import { Grid } from '../js/grid.js';
 import { Graphics } from '../js/graphics.js';
 import { Ship } from '../js/ship.js';
-import { Rock, Mineral, CompositeObject } from '../js/solid-objects.js';
+import { Rock, CompositeObject } from '../js/solid-objects.js';
 import { TerrainGenerator } from '../js/terrain-generator.js';
 import Position from '../js/position.js';
-import { BatteryEvents } from '../js/battery.js';
+import { BatteryEvents } from '../js/ship-systems/battery.js';
 
 jest.mock('../js/graphics.js');
 jest.mock('../js/grid.js');
