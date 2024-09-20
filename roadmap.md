@@ -9,6 +9,7 @@
 
 * feature: able to sell minerals
 * feature: able to buy a single upgrade at the surface and use it
+* feature: tips screen overlay/popup when game load with reminders like "battery can only be recharged at the surface"
 * bump the version number in index.html
 
 # 0.4 - visual effects + other minor features
