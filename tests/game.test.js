@@ -56,6 +56,9 @@ describe('Game', () => {
         setDirection: jest.fn(),
         getStrength: jest.fn().mockReturnValue(100),
       }),
+      getScanner: jest.fn().mockReturnValue({
+        getRange: jest.fn().mockReturnValue(2),
+      }),
     };
     Ship.mockImplementation(() => mockShip);
 
@@ -125,7 +128,7 @@ describe('Game', () => {
     expect(mockGraphics.displayGameOver).toHaveBeenCalled();
   });
 
-  test('handleKeyPress happy path cases where movement occurs', () => {
+  test('handleKeyPress happy path cases where change (e.g. movement) occurs', () => {
     mockGrid.getObject.mockReturnValue(null);
     expect(game.handleKeyPress('ArrowUp')).toBe(true);
     expect(game.handleKeyPress('ArrowDown')).toBe(true);
@@ -136,6 +139,7 @@ describe('Game', () => {
     expect(game.handleKeyPress('s')).toBe(true);
     expect(game.handleKeyPress('d')).toBe(true);
     expect(game.handleKeyPress('c')).toBe(true);
+    expect(game.handleKeyPress('q')).toBe(true);
 
     // Mock the ship's initial position to be below the surface
     mockShip.getPosition.mockReturnValue(new Position(5, 5, -1));

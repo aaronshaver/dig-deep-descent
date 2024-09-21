@@ -95,7 +95,7 @@ describe('CompositeObject', () => {
     const mineral = new Mineral("test mineral name", new Position(1, 2, 3), 0.44, 100);
     const compositeObject = new CompositeObject(rock, mineral);
     expect(compositeObject.getMineral().getName()).toBe("test mineral name");
-    expect(compositeObject.isScanned()).toBe(true); // will change to false once Scanner is implemented
+    expect(compositeObject.isScanned()).toBe(false);
   });
 
   test('getMineral returns a mineral', () => {

@@ -1,7 +1,7 @@
 
 # 0.2 - terrain generation system and scanning
 
-* feature: minerals hidden by default + implement scanner to reveal (doesn't need visual effects yet)
+* after Scanner (minus visual effects) is done: get suite back up to 100% coverage
 * tweak: (have a TDD func): scale z-level digging by say 50+(abs(z-level) * 10)
 * bump the version number in index.html
 

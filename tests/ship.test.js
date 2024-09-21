@@ -19,4 +19,9 @@ describe('Ship', () => {
     ship.setPosition(newPosition);
     expect(ship.getPosition()).toBe(newPosition);
   });
+
+  test('should have initial Scanner range of 2', () => {
+    const ship = new Ship(new Position(0, 0, 0));
+    expect(ship.getScanner().getRange()).toBe(2);
+  });
 });

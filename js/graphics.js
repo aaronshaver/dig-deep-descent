@@ -80,7 +80,7 @@ export class Graphics {
         this.#drawRock(rock.getName(), centerX, centerY, rockRadius, rockFlatSide);
 
         const mineral = compositeObject.getMineral();
-        if (mineral) {
+        if (mineral && compositeObject.isScanned()) {
             const mineralRadius = cellSize * mineral.getRadius();
             this.#drawMineral(mineral.getName(), centerX, centerY, mineralRadius);
         }

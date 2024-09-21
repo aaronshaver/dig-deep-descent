@@ -83,7 +83,7 @@ class CompositeObject {
         if (!rock) throw new Error("No rock passed in to CompositeObject constructor");
         this.#rock = rock;
         this.#mineral = mineral;
-        this.#isScanned = true; // hard-coded to true until we're ready to implement Scanner upgrade
+        this.#isScanned = false;
     }
 
     getRock() {
@@ -96,6 +96,10 @@ class CompositeObject {
 
     isScanned() {
         return this.#isScanned;
+    }
+
+    setScanned() {
+        this.#isScanned = true;
     }
 }
 

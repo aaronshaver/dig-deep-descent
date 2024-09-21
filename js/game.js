@@ -82,6 +82,12 @@ export class Game {
         return true;
     }
 
+    #executeMineralScan() {
+        this.ship.getBattery().reduceBattery(BatteryEvents.SCAN_MINERALS);
+        this.grid.updateScannedMinerals(this.ship.getPosition(), this.ship.getScanner().getRange());
+        return true;
+    }
+
     handleKeyPress(key) {
         switch (key) {
             case 'ArrowUp':
@@ -100,6 +106,8 @@ export class Game {
                 return this.#changeShipZLevel(-1);
             case ' ':
                 return this.#changeShipZLevel(1);
+            case 'q':
+                return this.#executeMineralScan();
             default:
                 return false;
         }
