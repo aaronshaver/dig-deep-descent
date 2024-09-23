@@ -1,12 +1,13 @@
-
 # 0.2 - terrain generation system and scanning
 
-* after Scanner (minus visual effects) is done: get suite back up to 100% coverage
-* tweak: (have a TDD func): scale z-level digging by say 50+(abs(z-level) * 10)
+* next step: after Scanner (minus visual effects) is done: get suite back up to 100% coverage
+* tweak: (have a TDD func): scale z-level digging cost by say 50 base cost + (abs(z-level) * 10)
 * bump the version number in index.html
 
 # 0.3 - sell minerals and buy upgrades
 
+* feature: Storage ship part (needed to acquire minerals)
+* make sure once we have increment-minerals functionality that it SKIPS incrementing if the CompositeObject was isScanned===false; player must scan to be able to reap the reward of mining, not just blindly dig
 * feature: able to sell minerals
 * feature: able to buy a single upgrade at the surface and use it
 * feature: tips screen overlay/popup when game load with reminders like "battery can only be recharged at the surface"
@@ -25,7 +26,13 @@
 # 0.5 - add hazards
 
 * feature: at least one hazard
-
+* ideas:
+    - **Lava Pockets**: Damage the player on contact.
+    - **Explosive Gas Spots**: Detonate when mined or disturbed nearby.
+    - **Extreme Heat Areas**: Overheat equipment unless cooled.
+    - **Cave-ins**: Falling rocks that block paths or cause damage.
+    - **Magnetic Fields**: Disrupt navigation systems or drain energy.
+    - **Radiation Zones**: Require protective gear to pass safely.
 
 # 0.6 - small visual improvements
 
