@@ -1,11 +1,18 @@
 import { Battery, BatteryEvents } from '../js/ship-systems/battery.js';
 
 describe('Battery', () => {
-    test('battery drains when event reduceBattery is called with an event', () => {
+    test('battery drains as expected when reduceBattery is called with lateral move', () => {
         const battery = new Battery();
         expect(battery.getLevel()).toBe(1000);
         battery.reduceBattery(BatteryEvents.LATERAL_MOVE);
         expect(battery.getLevel()).toBe(995);
+    });
+
+    test('battery drains as expected when reduceBattery is called with z move', () => {
+        const battery = new Battery();
+        expect(battery.getLevel()).toBe(1000);
+        battery.reduceBattery(BatteryEvents.Z_MOVE, 3);
+        expect(battery.getLevel()).toBe(920);
     });
 
     test('battery never drains below 0, because negative values do not make sense', () => {
@@ -26,9 +33,16 @@ describe('Battery', () => {
         expect(battery.getLevel()).toBe(1000);
     });
 
-    test('battery reduction takes z-level into account when moving z-levels', () => {
+    test('getScaledZMove produces expected number when called with a z-level', () => {
         const battery = new Battery();
         const zLevel = 10;
         expect(battery.getScaledZMove(zLevel)).toBe(150);
+    });
+
+    test('throws error when event is Z_MOVE but no z-level passed in', () => {
+        const battery = new Battery();
+        expect(() => {
+            battery.reduceBattery(BatteryEvents.Z_MOVE);
+        }).toThrow('No z-level passed in to reduceBattery');
     });
 });

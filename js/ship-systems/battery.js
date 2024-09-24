@@ -33,6 +33,7 @@ export class Battery {
             throw new Error(`Unknown battery event`);
         }
         if (event === 'Z_MOVE') {
+            if (!zLevel) throw new Error("No z-level passed in to reduceBattery");
             this.#level -= this.getScaledZMove(zLevel);
         }
         else {
