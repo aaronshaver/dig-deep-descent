@@ -98,6 +98,15 @@ describe('CompositeObject', () => {
     expect(compositeObject.isScanned()).toBe(false);
   });
 
+  test('setScanned changes scanned state', () => {
+    const rock = new Rock("test rock name", new Position(1, 2, 3), 333, 0.33);
+    const mineral = new Mineral("test mineral name", new Position(1, 2, 3), 0.44, 100);
+    const compositeObject = new CompositeObject(rock, mineral);
+    expect(compositeObject.isScanned()).toBe(false);
+    expect(compositeObject.setScanned());
+    expect(compositeObject.isScanned()).toBe(true);
+  });
+
   test('getMineral returns a mineral', () => {
     const mineral = new Mineral("test mineral name", new Position(1, 2, 3), 0.44, 100);
     expect(() => {

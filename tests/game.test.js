@@ -29,6 +29,7 @@ describe('Game', () => {
       getGridSize: jest.fn().mockReturnValue(11),
       getObject: jest.fn(),
       removeObject: jest.fn(),
+      updateScannedMinerals: jest.fn(),
     };
     Grid.mockImplementation(() => mockGrid);
 
