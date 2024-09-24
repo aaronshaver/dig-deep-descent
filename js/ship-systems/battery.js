@@ -7,9 +7,9 @@ export const BatteryEvents = {
 
 const BATTERY_DRAIN = {
     [BatteryEvents.LATERAL_MOVE]: 5,
-    [BatteryEvents.Z_MOVE]: 100,
     [BatteryEvents.DIG_ROCK]: 10,
     [BatteryEvents.SCAN_MINERALS]: 5,
+    [BatteryEvents.Z_MOVE]: null,
 };
 
 export class Battery {
@@ -23,11 +23,21 @@ export class Battery {
         return this.#level;
     }
 
-    reduceBattery(event) {
+    // scales the digging difficulty by taking z-level into account so that deeper digging is more expensive
+    getScaledZMove(zLevel) {
+        return 50 + (Math.abs(zLevel) * 10);
+    }
+
+    reduceBattery(event, zLevel=null) {
         if (!(event in BATTERY_DRAIN)) {
             throw new Error(`Unknown battery event`);
         }
-        this.#level -= BATTERY_DRAIN[event];
+        if (event === 'Z_MOVE') {
+            this.#level -= this.getScaledZMove(zLevel);
+        }
+        else {
+            this.#level -= BATTERY_DRAIN[event];
+        }
         if (this.#level < 0) this.#level = 0; // don't show nonsensical negative battery numbers
     }
 }

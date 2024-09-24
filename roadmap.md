@@ -1,9 +1,3 @@
-# 0.2 - terrain generation system and scanning
-
-* next step: after Scanner (minus visual effects) is done: get suite back up to 100% coverage
-* tweak: (have a TDD func): scale z-level digging cost by say 50 base cost + (abs(z-level) * 10)
-* bump the version number in index.html
-
 # 0.3 - sell minerals and buy upgrades
 
 * feature: Storage ship part (needed to acquire minerals)
@@ -15,12 +9,12 @@
 
 # 0.4 - visual effects + other minor features
 
+* feature: new class: VerticalHole with darker color center, light outline on each affected level (two) to indicate it
 * feature: introduce a slight delay on keypress so that you can't just zip through rocks or fly across the screen
 * feature: suffix battery level with (warning) and (DANGER) for low battery levels
 * feature: visual effects pipeline
     * start using it for random triangles while digging
     * have a system for the chips of rocks that come off when digging where it detects if the base color is more toward FFF or 000 and adds or subtracts accordingly
-* feature: new class: VerticalHole with darker color center, light outline on each affected level (two) to indicate it
 * bump the version number in index.html
 
 # 0.5 - add hazards

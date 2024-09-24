@@ -11,8 +11,8 @@ describe('Battery', () => {
     test('battery never drains below 0, because negative values do not make sense', () => {
         const battery = new Battery();
         expect(battery.getLevel()).toBe(1000);
-        for (let i=0; i<50; i++) {
-            battery.reduceBattery(BatteryEvents.Z_MOVE);
+        for (let i=0; i<1000; i++) {
+            battery.reduceBattery(BatteryEvents.LATERAL_MOVE);
         }
         expect(battery.getLevel()).toBe(0);
     });
@@ -24,5 +24,11 @@ describe('Battery', () => {
             battery.reduceBattery(BatteryEvents.DOES_NOT_EXIST);
         }).toThrow('Unknown battery event');
         expect(battery.getLevel()).toBe(1000);
+    });
+
+    test('battery reduction takes z-level into account when moving z-levels', () => {
+        const battery = new Battery();
+        const zLevel = 10;
+        expect(battery.getScaledZMove(zLevel)).toBe(150);
     });
 });

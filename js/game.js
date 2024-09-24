@@ -75,7 +75,7 @@ export class Game {
     #changeShipZLevel(delta) {
         const newZ = this.ship.getPosition().z + delta;
         if (newZ > 0) return false; // never rise above the surface
-        this.ship.getBattery().reduceBattery(BatteryEvents.Z_MOVE);
+        this.ship.getBattery().reduceBattery(BatteryEvents.Z_MOVE, newZ);
         this.ship.getDrill().setDirection(DrillDirections.CENTER);
         const newPosition = new Position(this.ship.getPosition().x, this.ship.getPosition().y, newZ);
         this.#updateShipPosition(newPosition);
