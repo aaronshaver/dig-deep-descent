@@ -106,6 +106,8 @@ describe('Game', () => {
     expect(mockGrid.removeObject).toHaveBeenCalledWith(rockPosition);
   });
 
+  // Battery reduction tests
+
   test('calls correct battery reduction operation moving into empty grid space', () => {
     mockGrid.getObject.mockReturnValue(null);
     game.handleKeyPress('ArrowRight');
@@ -123,11 +125,18 @@ describe('Game', () => {
     expect(mockShip.getBattery().reduceBattery).toHaveBeenCalledWith(BatteryEvents.LATERAL_MOVE);
   });
 
+  test('calls correct battery reduction operation when scanning minerals', () => {
+    game.handleKeyPress('q');
+    expect(mockShip.getBattery().reduceBattery).toHaveBeenCalledWith(BatteryEvents.SCAN_MINERALS);
+  });
+
   test('handles game over when battery depletes', () => {
     mockShip.getBattery().getLevel.mockReturnValue(0);
     game.updateGameState();
     expect(mockGraphics.displayGameOver).toHaveBeenCalled();
   });
+
+  // key press tests
 
   test('handleKeyPress happy path cases where change (e.g. movement) occurs', () => {
     mockGrid.getObject.mockReturnValue(null);

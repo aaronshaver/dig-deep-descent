@@ -1,5 +1,6 @@
 import { Grid } from '../js/grid.js';
 import Position from '../js/position.js';
+import { Rock, Mineral, CompositeObject } from '../js/solid-objects.js';
 
 describe('Grid', () => {
   let grid;
@@ -104,5 +105,31 @@ describe('Grid', () => {
 
   test('levelExists returns false for uninitialized level', () => {
     expect(grid.levelExists(1)).toBe(false);
+  });
+
+  test('updateScannedMinerals scans minerals within range', () => {
+    const rock = new Rock("Loose Rock", new Position(10, 10, 0), 100, 0.41);
+    const mineral = new Mineral("Red Mineral", new Position(10, 10, 0), 0.3, 100);
+    const compositeObject = new CompositeObject(rock, mineral);
+    const objectPosition = new Position(10, 10, 0);
+    grid.setObject(objectPosition, compositeObject);
+    expect(compositeObject.isScanned()).toBe(false);
+    const shipPosition = new Position(9, 10, 0);
+    const scanRange = 5;
+    grid.updateScannedMinerals(shipPosition, scanRange);
+    expect(compositeObject.isScanned()).toBe(true);
+  });
+
+  test('updateScannedMinerals does not scan minerals out of range', () => {
+    const rock = new Rock("Loose Rock", new Position(10, 10, 0), 100, 0.41);
+    const mineral = new Mineral("Red Mineral", new Position(10, 10, 0), 0.3, 100);
+    const compositeObject = new CompositeObject(rock, mineral);
+    const objectPosition = new Position(10, 10, 0);
+    grid.setObject(objectPosition, compositeObject);
+    expect(compositeObject.isScanned()).toBe(false);
+    const shipPosition = new Position(20, 10, 0);
+    const scanRange = 5;
+    grid.updateScannedMinerals(shipPosition, scanRange);
+    expect(compositeObject.isScanned()).toBe(false);
   });
 });
