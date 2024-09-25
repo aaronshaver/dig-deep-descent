@@ -1,3 +1,8 @@
+
+# 0.2.1
+
+* fix can't move up a level bug
+
 # 0.3 - sell minerals and buy upgrades
 
 * feature: Storage ship part (needed to acquire minerals)
