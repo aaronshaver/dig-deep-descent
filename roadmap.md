@@ -1,8 +1,10 @@
 # 0.3 - sell minerals and buy upgrades
 
-* feature: Storage ship part (needed to acquire minerals)
 * make sure once we have increment-minerals functionality that it SKIPS incrementing if the CompositeObject was isScanned===false; player must scan to be able to reap the reward of mining, not just blindly dig
+* display mined minerals on right column stats
+
 * feature: able to sell minerals
+
 * feature: able to buy a single upgrade at the surface and use it
 * feature: tips screen overlay/popup when game load with reminders like "battery can only be recharged at the surface"
 * bump the version number in index.html

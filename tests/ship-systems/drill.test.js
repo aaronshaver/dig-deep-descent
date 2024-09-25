@@ -1,6 +1,6 @@
-import { Drill, DrillDirections } from '../js/ship-systems/drill.js';
-import { Ship } from '../js/ship.js';
-import Position from '../js/position.js';
+import { Drill, DrillDirections } from '../../js/ship-systems/drill.js';
+import { Ship } from '../../js/ship.js';
+import Position from '../../js/position.js';
 
 describe('Drill', () => {
     test('starts with center direction', () => {

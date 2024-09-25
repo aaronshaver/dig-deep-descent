@@ -30,10 +30,10 @@ export class Battery {
 
     /**
      * Reduces the battery level based on the event.
-     * @param {string} event - The battery event type.
-     * @param {number} [zLevel=null] - The z-level for Z_MOVE events.
-     * @throws Will throw an error if an unknown event is provided.
-     * @throws Will throw an error if Z_MOVE is called without a valid z-level.
+     * @param {string} event - The battery event type
+     * @param {number} [zLevel=null] - The z-level for Z_MOVE events
+     * @throws Will throw an error if an unknown event is provided
+     * @throws Will throw an error if Z_MOVE is called without a valid z-level
      */
     reduceBattery(event, zLevel = null) {
         if (!(event in BATTERY_DRAIN)) {

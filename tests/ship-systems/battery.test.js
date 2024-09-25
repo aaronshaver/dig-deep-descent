@@ -1,4 +1,4 @@
-import { Battery, BatteryEvents } from '../js/ship-systems/battery.js';
+import { Battery, BatteryEvents } from '../../js/ship-systems/battery.js';
 
 describe('Battery', () => {
     test('battery drains as expected when reduceBattery is called with lateral move', () => {
