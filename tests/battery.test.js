@@ -45,4 +45,11 @@ describe('Battery', () => {
             battery.reduceBattery(BatteryEvents.Z_MOVE);
         }).toThrow('No z-level passed in to reduceBattery');
     });
+
+    test('battery drains correctly when reduceBattery is called with zLevel 0', () => {
+        const battery = new Battery();
+        expect(battery.getLevel()).toBe(1000);
+        battery.reduceBattery(BatteryEvents.Z_MOVE, 0);
+        expect(battery.getLevel()).toBe(950);
+    });
 });

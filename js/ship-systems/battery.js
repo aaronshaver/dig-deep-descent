@@ -28,12 +28,19 @@ export class Battery {
         return 50 + (Math.abs(zLevel) * 10);
     }
 
-    reduceBattery(event, zLevel=null) {
+    /**
+     * Reduces the battery level based on the event.
+     * @param {string} event - The battery event type.
+     * @param {number} [zLevel=null] - The z-level for Z_MOVE events.
+     * @throws Will throw an error if an unknown event is provided.
+     * @throws Will throw an error if Z_MOVE is called without a valid z-level.
+     */
+    reduceBattery(event, zLevel = null) {
         if (!(event in BATTERY_DRAIN)) {
             throw new Error(`Unknown battery event`);
         }
-        if (event === 'Z_MOVE') {
-            if (!zLevel) throw new Error("No z-level passed in to reduceBattery");
+        if (event === BatteryEvents.Z_MOVE) {
+            if (zLevel === undefined || zLevel === null) throw new Error("No z-level passed in to reduceBattery");
             this.#level -= this.getScaledZMove(zLevel);
         }
         else {
