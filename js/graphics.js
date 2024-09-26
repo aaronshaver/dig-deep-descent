@@ -13,6 +13,7 @@ export class Graphics {
         this.depthStat = document.getElementById('depthStat');
         this.batteryStat = document.getElementById('batteryStat');
         this.drillPowerStat = document.getElementById('drillPowerStat');
+        this.storageSpaceStat = document.getElementById('storageSpaceStat');
     }
 
     clearPlayableArea () {
@@ -246,6 +247,7 @@ export class Graphics {
         this.depthStat.textContent = ship.getPosition().z * 10; // digging down is meant to be expensive
         this.batteryStat.textContent = ship.getBattery().getLevel();
         this.drillPowerStat.textContent = ship.getDrill().getStrength();
+        this.storageSpaceStat.textContent = ship.getStorage().getFreeSpace();
     }
 
     displayGameOver(reason) {

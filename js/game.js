@@ -14,7 +14,6 @@ export class Game {
         this.gameOverReason = null;
 
         this.ship = new Ship(this.grid.getCenteredInitialShipPosition());
-        // add Ship to the Grid
         this.grid.setObject(this.ship.getPosition(), this.ship);
 
         this.updateGameState();
@@ -49,6 +48,10 @@ export class Game {
         const rock = object.getRock();
         rock.setHitPoints(rock.getHitPoints() - this.ship.getDrill().getStrength());
         if (rock.getHitPoints() <= 0) {
+            if (object.getMineral() && object.isScanned()) {
+                this.ship.getStorage().addMineral(object.getMineral());
+                console.log(this.ship.getStorage().getMinerals())
+            }
             this.grid.removeObject(position);
             this.ship.getBattery().reduceBattery(BatteryEvents.LATERAL_MOVE);
             this.#updateShipPosition(position);
