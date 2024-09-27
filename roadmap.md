@@ -3,6 +3,8 @@
 * refactor: see if we can get rid of main.js now that we know about `@jest-environment jsdom` stuff
 * get test coverage back up to 100%
 * fix: update CSS/etc. so that the mineral stats clearly show three columns instead of the last two fused
+* figure out the real/final mineral colors
+    * update CSS for the unicode square to use the brighter color of the two mineral colors
 
 * feature: able to sell minerals
 * able to buy a single upgrade at the surface and use it
