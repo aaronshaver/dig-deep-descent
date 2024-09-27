@@ -5,7 +5,6 @@ import { TerrainGenerator } from './terrain-generator.js';
 import { PerlinNoise } from './perlin-noise.js';
 import { ZLevelDistribution } from '../js/z-level-distribution.js';
 
-// we separate out DOM stuff because otherwise Jest tests get mad because of conflicting implementation DOM vs test DOM
 document.addEventListener('DOMContentLoaded', () => {
     const grid = new Grid();
     const graphics = new Graphics(grid);
@@ -19,4 +18,6 @@ document.addEventListener('DOMContentLoaded', () => {
             game.updateGameState();
         }
     });
+
+    window.addEventListener('storageFull', graphics.showStorageWarning.bind(graphics));
 });

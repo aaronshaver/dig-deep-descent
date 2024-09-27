@@ -14,6 +14,18 @@ export class Graphics {
         this.batteryStat = document.getElementById('batteryStat');
         this.drillPowerStat = document.getElementById('drillPowerStat');
         this.storageSpaceStat = document.getElementById('storageSpaceStat');
+
+        this.isStorageWarningActive = false;
+    }
+
+    showStorageWarning() {
+        this.isStorageWarningActive = true;
+        this.storageSpaceStat.classList.add('storage-warning');
+        this.storageSpaceStat.textContent = 'NOT ENOUGH SPACE';
+        setTimeout(() => {
+            this.isStorageWarningActive = false;
+            this.storageSpaceStat.classList.remove('storage-warning');
+        }, 3000);
     }
 
     clearPlayableArea () {
@@ -243,11 +255,77 @@ export class Graphics {
         return 0;
     }
 
+    #updateMineralDisplay(ship) {
+        const minerals = ship.getStorage().getMinerals();
+        const mineralCountMap = {};
+
+        // Count each mineral type and store sellValue
+        minerals.forEach(mineral => {
+            const name = mineral.getName();
+            const sellValue = mineral.getSellValue();
+            if (mineralCountMap[name]) {
+                mineralCountMap[name].count++;
+            } else {
+                mineralCountMap[name] = { count: 1, sellValue };
+            }
+        });
+
+        // Convert to array
+        const mineralArray = Object.keys(mineralCountMap).map(name => ({
+            name,
+            count: mineralCountMap[name].count,
+            sellValue: mineralCountMap[name].sellValue
+        }));
+
+        // Sort by sellValue ascending
+        mineralArray.sort((a, b) => a.sellValue - b.sellValue);
+
+        // Get the minerals table
+        const table = document.getElementById('mineralsTable');
+
+        // Clear existing rows
+        table.innerHTML = '';
+
+        // Populate the table with sorted minerals
+        mineralArray.forEach(mineral => {
+            const row = document.createElement('tr');
+
+            // Color Cell
+            const colorCell = document.createElement('td');
+            const colorSpan = document.createElement('span');
+            // Extract the color part from the mineral name (e.g., "Red" from "Red Mineral")
+            const color = mineral.name.split(' ')[0].toLowerCase();
+            colorSpan.classList.add('mineral-color', `mineral-${color}`);
+            colorSpan.textContent = '■';
+            colorCell.appendChild(colorSpan);
+            row.appendChild(colorCell);
+
+            // Name Cell
+            const nameCell = document.createElement('td');
+            nameCell.textContent = mineral.name.replace(' Mineral', '');
+            row.appendChild(nameCell);
+
+            // Count Cell
+            const countCell = document.createElement('td');
+            countCell.textContent = mineral.count;
+            row.appendChild(countCell);
+
+            table.appendChild(row);
+        });
+    }
+
     updateStats(ship) {
         this.depthStat.textContent = ship.getPosition().z * 10; // digging down is meant to be expensive
         this.batteryStat.textContent = ship.getBattery().getLevel();
         this.drillPowerStat.textContent = ship.getDrill().getStrength();
-        this.storageSpaceStat.textContent = ship.getStorage().getFreeSpace();
+        this.#updateStorageStat(ship);
+        this.#updateMineralDisplay(ship);
+    }
+
+    #updateStorageStat(ship) {
+        if (!this.isStorageWarningActive) {
+            this.storageSpaceStat.textContent = ship.getStorage().getFreeSpace();
+        }
     }
 
     displayGameOver(reason) {

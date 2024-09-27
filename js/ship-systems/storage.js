@@ -14,7 +14,10 @@ export class Storage {
     addMineral(mineral) {
         if (!mineral) throw new Error("No Mineral passed in to addMineral");
         const mineralStorageAmount = mineral.getSellValue() / 10;
-        if (this.#freeSpace < mineralStorageAmount) return; // don't store if there's no room
+        if (this.#freeSpace < mineralStorageAmount) {
+            window.dispatchEvent(new Event('storageFull'));
+            return; // don't store if there's no room
+        }
         this.#minerals.push(mineral);
         this.#freeSpace -= mineralStorageAmount;
     }

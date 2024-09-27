@@ -1,7 +1,8 @@
 # 0.3 - sell minerals and buy upgrades
 
-* display mined minerals on right column stats
-    * order by sell value ascending!!
+* refactor: see if we can get rid of main.js now that we know about `@jest-environment jsdom` stuff
+* get test coverage back up to 100%
+* fix: update CSS/etc. so that the mineral stats clearly show three columns instead of the last two fused
 
 * feature: able to sell minerals
 * able to buy a single upgrade at the surface and use it

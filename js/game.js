@@ -50,7 +50,6 @@ export class Game {
         if (rock.getHitPoints() <= 0) {
             if (object.getMineral() && object.isScanned()) {
                 this.ship.getStorage().addMineral(object.getMineral());
-                console.log(this.ship.getStorage().getMinerals())
             }
             this.grid.removeObject(position);
             this.ship.getBattery().reduceBattery(BatteryEvents.LATERAL_MOVE);

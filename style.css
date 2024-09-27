@@ -116,3 +116,42 @@ tr td:nth-child(2) {
     align-items: center;
     scrollbar-color: #888 #2a2a2a;
 }
+
+/* Mineral Color Classes */
+.mineral-red {
+    color: #FF0000;
+}
+
+.mineral-blue {
+    color: #0000FF;
+}
+
+.mineral-orange {
+    color: #FFAC1C;
+}
+
+.mineral-white {
+    color: #FFFFFF;
+}
+
+.mineral-green {
+    color: #00FF00;
+}
+
+.mineral-purple {
+    color: #663399;
+}
+
+.mineral-yellow {
+    color: #FFFF00;
+}
+
+/* Optional: Styling for the Unicode square */
+.mineral-color {
+    font-size: 1.8em;
+    text-align: center;
+}
+
+.storage-warning {
+    font-weight: bold;
+}

@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import { Storage } from '../../js/ship-systems/storage.js';
 import { Mineral } from '../../js/solid-objects.js';
 import Position from '../../js/position.js';
