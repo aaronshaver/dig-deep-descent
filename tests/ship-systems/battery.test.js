@@ -1,23 +1,21 @@
-import { Battery, BatteryEvents } from '../../js/ship-systems/battery.js';
+import { Battery, BatteryEvents, BATTERY_DRAIN } from '../../js/ship-systems/battery.js';
 
 describe('Battery', () => {
     test('battery drains as expected when reduceBattery is called with lateral move', () => {
         const battery = new Battery();
-        expect(battery.getLevel()).toBe(1000);
+        const initialAmount = battery.getLevel();
         battery.reduceBattery(BatteryEvents.LATERAL_MOVE);
-        expect(battery.getLevel()).toBe(995);
+        expect(battery.getLevel()).toBe(initialAmount - BATTERY_DRAIN[BatteryEvents.LATERAL_MOVE]);
     });
 
     test('battery drains as expected when reduceBattery is called with z move', () => {
         const battery = new Battery();
-        expect(battery.getLevel()).toBe(1000);
         battery.reduceBattery(BatteryEvents.Z_MOVE, 3);
-        expect(battery.getLevel()).toBe(920);
+        expect(battery.getLevel()).toBe(1420);
     });
 
     test('battery never drains below 0, because negative values do not make sense', () => {
         const battery = new Battery();
-        expect(battery.getLevel()).toBe(1000);
         for (let i=0; i<1000; i++) {
             battery.reduceBattery(BatteryEvents.LATERAL_MOVE);
         }
@@ -26,11 +24,11 @@ describe('Battery', () => {
 
     test('battery throws error when non-existent event is attempted', () => {
         const battery = new Battery();
-        expect(battery.getLevel()).toBe(1000);
+        const initialAmount = battery.getLevel();
         expect(() => {
             battery.reduceBattery(BatteryEvents.DOES_NOT_EXIST);
         }).toThrow('Unknown battery event');
-        expect(battery.getLevel()).toBe(1000);
+        expect(battery.getLevel()).toBe(initialAmount);
     });
 
     test('getScaledZMove produces expected number when called with a z-level', () => {
@@ -48,8 +46,7 @@ describe('Battery', () => {
 
     test('battery drains correctly when reduceBattery is called with zLevel 0', () => {
         const battery = new Battery();
-        expect(battery.getLevel()).toBe(1000);
         battery.reduceBattery(BatteryEvents.Z_MOVE, 0);
-        expect(battery.getLevel()).toBe(950);
+        expect(battery.getLevel()).toBe(1450);
     });
 });

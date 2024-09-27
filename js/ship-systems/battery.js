@@ -5,7 +5,7 @@ export const BatteryEvents = {
     SCAN_MINERALS: 'SCAN_MINERALS',
 };
 
-const BATTERY_DRAIN = {
+export const BATTERY_DRAIN = {
     [BatteryEvents.LATERAL_MOVE]: 5,
     [BatteryEvents.DIG_ROCK]: 10,
     [BatteryEvents.SCAN_MINERALS]: 5,
@@ -16,7 +16,7 @@ export class Battery {
     #level;
 
     constructor() {
-        this.#level = 1000;
+        this.#level = 1500;
     }
 
     getLevel() {
