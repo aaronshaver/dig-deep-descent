@@ -1,7 +1,6 @@
 # 0.3 - sell minerals and buy upgrades
 
 * get test coverage back up to 100%
-* fix: update CSS/etc. so that the mineral stats clearly show three columns instead of the last two fused
 * figure out the real/final mineral colors
     * update CSS for the unicode square to use the brighter color of the two mineral colors
 
