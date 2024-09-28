@@ -296,7 +296,7 @@ export class Graphics {
             // Extract the color part from the mineral name (e.g., "Red" from "Red Mineral")
             const color = mineral.name.split(' ')[0].toLowerCase();
             colorSpan.classList.add('mineral-color', `mineral-${color}`);
-            colorSpan.textContent = '■';
+            colorSpan.textContent = '◈';
             colorCell.appendChild(colorSpan);
             row.appendChild(colorCell);
 

@@ -1,18 +1,20 @@
 # 0.3 - sell minerals and buy upgrades
 
-* refactor: see if we can get rid of main.js now that we know about `@jest-environment jsdom` stuff
 * get test coverage back up to 100%
 * fix: update CSS/etc. so that the mineral stats clearly show three columns instead of the last two fused
 * figure out the real/final mineral colors
     * update CSS for the unicode square to use the brighter color of the two mineral colors
 
-* feature: able to sell minerals
+* feature: add Credits ship-system
+* feature: display net sell value of minerals (to right of sell button)
+* feature: Sell Minerals button that adds credits
 * able to buy a single upgrade at the surface and use it
 * feature: tips screen overlay/popup when game load with reminders like "battery can only be recharged at the surface"
 * bump the version number in index.html
 
 # 0.4 - visual effects + other minor features
 
+* refactor: see if we can get rid of main.js now that we know about `@jest-environment jsdom` stuff
 * feature: new class: VerticalHole with darker color center, light outline on each affected level (two) to indicate it
 * feature: introduce a slight delay on keypress so that you can't just zip through rocks or fly across the screen
 * feature: suffix battery level with (warning) and (DANGER) for low battery levels

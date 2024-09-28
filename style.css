@@ -49,6 +49,10 @@ tr td:nth-child(2) {
     border-left: 8px solid #2a2a2a; /* gap between columns */
 }
 
+tr td:nth-child(3) {
+    border-left: 8px solid #2a2a2a; /* gap between columns */
+}
+
 #gameCanvas {
     height: auto;
     background-color: #222;
@@ -146,10 +150,10 @@ tr td:nth-child(2) {
     color: #FFFF00;
 }
 
-/* Optional: Styling for the Unicode square */
+/* Styling for the Unicode square */
 .mineral-color {
-    font-size: 1.8em;
-    text-align: center;
+    /* font-size: 1.8em; */
+    /* text-align: center; */
 }
 
 .storage-warning {
