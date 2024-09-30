@@ -16,21 +16,20 @@ describe('ZLevelDistribution', () => {
       });
     });
 
-
     test('getObjectProbabilities handles missing types in upper distribution', () => {
-        const probabilities = zLevelDistribution.getObjectProbabilities(110);
+      const probabilities = zLevelDistribution.getObjectProbabilities(27);
 
-        expect(probabilities).toHaveProperty('RedMineral');
-        expect(zLevelDistribution.distributions[120]).not.toHaveProperty('RedMineral');
+      expect(probabilities).toHaveProperty('RedMineral');
+      expect(zLevelDistribution.distributions[30]).not.toHaveProperty('RedMineral');
     });
 
     test('getDominantRockType returns the correct dominant rock type for interpolated z-levels', () => {
       const testCases = [
-        { zLevel: 50, expectedType: 'LooseRock' },
-        { zLevel: 110, expectedType: 'NormalRock' },
-        { zLevel: 210, expectedType: 'DenseRock' },
-        { zLevel: 310, expectedType: 'VeryDenseRock' },
-        { zLevel: 390, expectedType: 'ExtremelyDenseRock' },
+        { zLevel: 15, expectedType: 'LooseRock' },
+        { zLevel: 27, expectedType: 'NormalRock' },
+        { zLevel: 50, expectedType: 'DenseRock' },
+        { zLevel: 70, expectedType: 'VeryDenseRock' },
+        { zLevel: 110, expectedType: 'ExtremelyDenseRock' },
       ];
 
       testCases.forEach(({ zLevel, expectedType }) => {
@@ -42,15 +41,14 @@ describe('ZLevelDistribution', () => {
       const edgeCases = [
         { zLevel: 0, expectedType: 'LooseRock' },
         { zLevel: 20, expectedType: 'LooseRock' },
-        { zLevel: 120, expectedType: 'NormalRock' },
-        { zLevel: 220, expectedType: 'DenseRock' },
-        { zLevel: 300, expectedType: 'VeryDenseRock' },
-        { zLevel: 380, expectedType: 'ExtremelyDenseRock' },
+        { zLevel: 30, expectedType: 'NormalRock' },
+        { zLevel: 55, expectedType: 'DenseRock' },
+        { zLevel: 75, expectedType: 'VeryDenseRock' },
+        { zLevel: 95, expectedType: 'ExtremelyDenseRock' },
       ];
 
       edgeCases.forEach(({ zLevel, expectedType }) => {
         expect(zLevelDistribution.getDominantRockType(zLevel)).toBe(expectedType);
       });
     });
-
 });

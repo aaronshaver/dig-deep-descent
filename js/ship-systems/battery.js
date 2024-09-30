@@ -16,7 +16,7 @@ export class Battery {
     #level;
 
     constructor() {
-        this.#level = 1500;
+        this.#level = 40000;
     }
 
     getLevel() {

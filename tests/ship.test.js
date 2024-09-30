@@ -8,9 +8,9 @@ describe('Ship', () => {
     expect(ship.getPosition()).toBe(position);
   });
 
-  test('should have initial battery level of 1500', () => {
+  test('should have expected initial battery level', () => {
     const ship = new Ship(new Position(0, 0, 0));
-    expect(ship.getBattery().getLevel()).toBe(1500);
+    expect(ship.getBattery().getLevel()).toBe(40000);
   });
 
   test('should be able to set a new position', () => {
