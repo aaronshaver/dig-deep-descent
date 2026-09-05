@@ -1,7 +1,8 @@
 class ZLevelDistribution {
     distributions;
 
-    constructor() {
+    constructor(rng = Math.random) {
+        this.rng = rng;
         this.distributions = {
             0: { LooseRock: 0.93, RedMineral: 0.07 },
             5: { LooseRock: 0.83, NormalRock: 0.10, RedMineral: 0.06, WhiteMineral: 0.01 },
@@ -37,6 +38,8 @@ class ZLevelDistribution {
         const lowerLevel = levels.filter(level => level <= zLevel).pop();
         const upperLevel = levels.filter(level => level > zLevel).shift();
 
+        if (upperLevel === undefined) return { ...this.distributions[lowerLevel] };
+
         const factor = (zLevel - lowerLevel) / (upperLevel - lowerLevel);
         const lowerDist = this.distributions[lowerLevel];
         const upperDist = this.distributions[upperLevel];
@@ -62,7 +65,7 @@ class ZLevelDistribution {
 
     selectObjectType(zLevel) {
         const probabilities = this.getObjectProbabilities(zLevel);
-        const rand = Math.random();
+        const rand = this.rng();
         let cumulative = 0;
 
         for (const [objType, prob] of Object.entries(probabilities)) {

@@ -1,80 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dig: Deep Descent</title>
-    <link rel="stylesheet" href="style.css">
-    <script type="module" src="js/main.js"></script>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="theme-color" content="#101719">
+<meta name="description" content="A solitary mining expedition beneath an unquiet moon. An offline sci-fi exploration game.">
+<title>Dig: Deep Descent — 0.3.0</title><link rel="stylesheet" href="style.css"><script defer src="game.bundle.js"></script>
 </head>
 <body>
-    <div class="container">
-        <div class="column left">
-            <img src="logo.webp">
-            <h6>version 0.2.1</h6>
-            <h3>Controls</h3>
-            <table>
-                <tr>
-                    <td>Move + Dig</td>
-                    <td>WASD, arrow keys</td>
-                </tr>
-                <tr>
-                    <td>Dig Down / Descend</td>
-                    <td>C</td>
-                </tr>
-                <tr>
-                    <td>Dig Up / Ascend</td>
-                    <td>&lt;space&gt;</td>
-                </tr>
-                <tr>
-                    <td>Scan Minerals</td>
-                    <td>Q</td>
-                </tr>
-            </table>
-            <h3>Recommended background music</h3>
-            <p><ul><li><a href="https://www.youtube.com/watch?v=EtADp4pZU2s">ALPHA 2: Space station mining facility</a></li></ul></p>
-            <h3>System Requirements</h3>
-            <ul>
-                <li>Desktop or laptop web browser</li>
-                <li>1680x945 resolution or higher</li>
-                <li>4K and above monitor users: increase browser zoom to 150-200% (&lt;ctrl&gt;++ 3-5 times)</li>
-            </ul>
-        </div>
-        <div class="column center">
-            <div id="gameOverScreen" class="hidden">
-                <h1>GAME OVER</h1>
-                <p id="gameOverReason">reason text</p>
-            </div>
-            <canvas id="gameCanvas"></canvas>
-        </div>
-        <div class="column right">
-            <h3>Ship Data</h3>
-            <table>
-                <tr>
-                    <td>Depth</td>
-                    <td id="depthStat"></td>
-                </tr>
-                <tr>
-                    <td>Battery</td>
-                    <td id="batteryStat"></td>
-                </tr>
-                <tr>
-                    <td>Drill Power</td>
-                    <td id="drillPowerStat"></td>
-                </tr>
-                <tr>
-                    <td>Storage Space</td>
-                    <td id="storageSpaceStat"></td>
-                </tr>
-            </table>
-
-            <h3>Minerals</h3>
-            <table id="mineralsTable">
-            </table>
-
-            <h3>Orbital Shop</h3>
-
-        </div>
-    </div>
-</body>
-</html>
+<svg class="symbols" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs>
+<symbol id="i-depth" viewBox="0 0 24 24"><path d="M12 3v17m-6-6 6 6 6-6M5 4H2m20 0h-3"/></symbol>
+<symbol id="i-scan" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><path d="m12 12 7-7M12 1v3M1 12h3m8 8v3m8-11h3"/></symbol>
+<symbol id="i-battery" viewBox="0 0 24 24"><path d="M3 7h16v12H3zM7 4h8M13 9l-4 5h5l-3 4"/></symbol>
+<symbol id="i-cargo" viewBox="0 0 24 24"><path d="m3 7 9-5 9 5v11l-9 4-9-4V7Zm0 0 9 5 9-5M12 12v10M7 4l10 6"/></symbol>
+<symbol id="i-hull" viewBox="0 0 24 24"><path d="m12 2 9 4v6c0 5-9 10-9 10S3 17 3 12V6l9-4Z"/><path d="m8 12 3 3 5-6"/></symbol>
+<symbol id="i-drill" viewBox="0 0 24 24"><path d="m6 3 15 15-3 3L3 6l3-3Zm-1 8 6-6m-2 10 6-6m-2 10 6-6M3 21l4-4"/></symbol>
+<symbol id="i-sound" viewBox="0 0 24 24"><path d="M3 9h4l5-5v16l-5-5H3V9Zm13-2a7 7 0 0 1 0 10m3-13a11 11 0 0 1 0 16"/></symbol>
+<symbol id="i-book" viewBox="0 0 24 24"><path d="M5 3h15v18H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Zm-2 14h17M8 7h8m-8 4h6"/></symbol>
+<symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></symbol>
+<symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4 12h16m-6-6 6 6-6 6"/></symbol>
+<symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9 8a3 3 0 0 1 6 1c0 2-3 2-3 5m0 2v1"/></symbol>
+<symbol id="i-orbit" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><ellipse cx="12" cy="12" rx="11" ry="5" transform="rotate(-35 12 12)"/></symbol>
+</defs></svg>
+<header class="topbar">
+<a class="brand" href="#" aria-label="Dig: Deep Descent home"><strong>DIG<span>:</span></strong><span class="brand-name">DEEP<br>DESCENT</span><span class="version">0.3.0</span></a>
+<div class="header-location">SELENE–9 <span class="divider">/</span> EXTRACTIVE OPERATIONS <span class="serial">EST. 2086</span></div>
+<nav aria-label="Game menus"><button id="soundButton" class="icon-button" aria-label="Mute audio" title="Mute audio (M)"><svg><use href="#i-sound"/></svg></button><button data-panel="help" class="icon-button" aria-label="Controls" title="Controls (H)"><svg><use href="#i-help"/></svg></button><button data-panel="menu" class="icon-button" aria-label="Flight menu" title="Flight menu (Escape)"><svg><use href="#i-menu"/></svg></button></nav>
+</header>
+<main id="gameArea">
+<canvas id="gameCanvas" aria-label="Mining terrain. Use WASD or arrow keys to move and drill. Press H for all controls." tabindex="0"></canvas>
+<div class="scene-heading"><h1 id="biomeName">The surface<span>.</span></h1><p id="biomeSubtitle">Free repairs and recharging</p></div>
+<aside class="mission-panel">
+<div class="panel-heading">DEPTH</div>
+<div class="depth-readout"><span id="depthValue">000</span><small>m</small></div>
+<div class="depth-label">Below surface <span id="risk">Safe</span></div>
+<div id="ascentBudget" class="ascent-budget" title="Energy needed to ascend straight to the surface here, accounting for existing shafts."><span>Ascent cost</span><b id="ascentCost">0 energy</b></div>
+<div class="depth-track"><i id="depthMarker"></i></div><div class="depth-scale"><span>000</span><span>100</span><span>200</span></div>
+<div class="section-label">Explored terrain</div>
+<canvas id="minimap" width="150" height="150" aria-label="Scanned terrain map"></canvas><div class="map-key"><i></i> You <span id="scanStatus">Q to scan</span></div>
+<div class="objective"><div class="section-label">ACTIVE CONTRACT</div><h3 id="contractTitle">A foothold in the dark</h3><p id="contractText">Sell 4 minerals at the orbital shop.</p><div class="objective-bottom"><span id="contractProgress">0 / 4</span><b id="contractReward">+100 CR</b></div></div>
+<button id="shopButton" data-panel="shop" class="shop-link"><svg><use href="#i-orbit"/></svg> Orbital shop <kbd>E</kbd></button>
+</aside>
+<div class="signal-strip"><span id="signalText">Surface reached. Repairs and recharging are free.</span></div>
+<section id="briefing" class="briefing"><h2>Some things<br>are better left buried.</h2><p>Mine the moon. Upgrade your ship.<br>Find out what is calling from below.</p><button id="beginButton" class="primary">Begin descent <svg><use href="#i-arrow"/></svg></button><button id="exploreButton" class="text-button">Explore the surface first</button><small>WASD to move & drill · H for controls</small></section>
+<div id="toasts" class="toasts" role="status" aria-live="polite"></div>
+<div class="bottom-dock">
+<div class="instrument"><div><svg><use href="#i-battery"/></svg><span>ENERGY</span><b id="energyValue">100%</b></div><meter id="energyMeter" min="0" max="100" value="100" aria-label="Battery energy"></meter></div>
+<div class="instrument"><div><svg><use href="#i-hull"/></svg><span>HULL</span><b id="hullValue">100%</b></div><meter id="hullMeter" min="0" max="100" value="100" aria-label="Hull integrity"></meter></div>
+<button data-panel="cargo" class="instrument cargo-instrument"><div><svg><use href="#i-cargo"/></svg><span>CARGO</span><b id="cargoValue">0 / 12</b></div><meter id="cargoMeter" min="0" max="100" value="0" aria-label="Cargo used"></meter></button>
+<div class="instrument heat-instrument"><div><svg><use href="#i-drill"/></svg><span>DRILL HEAT</span><b id="heatValue">0%</b></div><meter id="heatMeter" min="0" max="100" value="0" aria-label="Drill heat"></meter></div>
+<div class="credit-display"><small>CREDITS</small><b id="credits">0 <span>CR</span></b></div>
+</div>
+<div class="actionbar"><div><button data-action="descend"><kbd>C</kbd> Descend</button><button data-action="ascend"><kbd>SPACE</kbd> Ascend</button><button data-action="scan"><kbd>Q</kbd> Pulse scan</button></div><div><button data-panel="journal"><svg><use href="#i-book"/></svg> Black boxes <span id="recordCount">0/4</span></button><button data-panel="help"><kbd>H</kbd> Controls</button></div></div>
+<div class="touch-controls" aria-label="Movement controls"><button data-action="up" aria-label="Move up">W</button><button data-action="left" aria-label="Move left">A</button><button data-action="down" aria-label="Move down">S</button><button data-action="right" aria-label="Move right">D</button></div>
+</main>
+<dialog id="panel" aria-labelledby="panelTitle"><div class="dialog-top"><h2 id="panelTitle">Flight menu</h2><button id="closePanel" class="close-button" aria-label="Close menu">×</button></div><div id="panelContent"></div><div class="dialog-footer">Game paused <span>Esc to return</span></div></dialog>
+<input id="importSave" type="file" accept="application/json,.json" hidden>
+<noscript>This game needs JavaScript enabled. Open index.html in a modern desktop browser.</noscript>
+</body></html>

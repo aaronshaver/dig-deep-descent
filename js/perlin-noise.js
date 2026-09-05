@@ -1,5 +1,6 @@
 export class PerlinNoise {
-  constructor() {
+  constructor(rng = Math.random) {
+    this.rng = rng;
     this.p = this.#generatePermutationTable();
     this.permutation = this.p.concat(this.p);
   }
@@ -7,7 +8,7 @@ export class PerlinNoise {
   #generatePermutationTable() {
     const p = Array.from({length: 256}, (_, i) => i);
     for (let i = p.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
+      const j = Math.floor(this.rng() * (i + 1));
       [p[i], p[j]] = [p[j], p[i]];
     }
     return p;
