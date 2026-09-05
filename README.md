@@ -1,5 +1,9 @@
 # Dig: Deep Descent
 
+## Play it
+
+https://aaronshaver.github.io/dig-deep-descent/
+
 ## Status update 2026-09-05
 
 GPT-6 Astra High updated the game to version 0.3.0, building out the orbital shop, ship upgrades, progression contracts, hazards, animated mining, detailed Canvas graphics, and an original procedural sci-fi soundtrack. The overhaul adds a black-box mystery, experimental ship modules, permadeath, accessible pop-up controls, and portable saves while preserving direct `index.html` play and expanding the modular unit and browser tests.
